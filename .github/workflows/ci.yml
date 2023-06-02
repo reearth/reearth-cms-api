@@ -19,8 +19,10 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v36
         with:
-          files: go
-  lint:
+          files: |
+            go
+            .github/workflows/ci.yml
+  go-lint:
     runs-on: ubuntu-latest
     needs: check
     if: needs.check.outputs.any_changed == 'true'
@@ -33,10 +35,10 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: latest
+          version: v1.52
           working-directory: go
           args: --timeout=5m
-  test:
+  go-test:
     runs-on: ubuntu-latest
     needs: check
     if: needs.check.outputs.any_changed == 'true'
