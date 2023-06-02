@@ -1,4 +1,4 @@
-module github.com/reearth/reearth-cms-api
+module github.com/reearth/reearth-cms-api/go
 
 go 1.20
 

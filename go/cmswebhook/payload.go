@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	reearthcmsapi "github.com/reearth/reearth-cms-api"
+	cms "github.com/reearth/reearth-cms-api/go"
 )
 
 type Payload struct {
@@ -95,9 +95,9 @@ type Integration struct {
 type Machine struct{}
 
 type ItemData struct {
-	Item   *reearthcmsapi.Item   `json:"item,omitempty"`
-	Model  *reearthcmsapi.Model  `json:"model,omitempty"`
-	Schema *reearthcmsapi.Schema `json:"schema,omitempty"`
+	Item   *cms.Item   `json:"item,omitempty"`
+	Model  *cms.Model  `json:"model,omitempty"`
+	Schema *cms.Schema `json:"schema,omitempty"`
 }
 
-type AssetData reearthcmsapi.Asset
+type AssetData cms.Asset

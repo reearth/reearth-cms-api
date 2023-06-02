@@ -1,4 +1,4 @@
-package reearthcmsapi
+package cms
 
 import (
 	"bytes"

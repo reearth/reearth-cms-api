@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	reearthcmsapi "github.com/reearth/reearth-cms-api"
+	cms "github.com/reearth/reearth-cms-api/go"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +14,7 @@ func TestPayload_UnmarshalJSON(t *testing.T) {
 	assert.Equal(t, Payload{
 		Type: "item.update",
 		ItemData: &ItemData{
-			Item: &reearthcmsapi.Item{
+			Item: &cms.Item{
 				ID: "i",
 			},
 		},
