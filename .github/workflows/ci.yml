@@ -19,12 +19,13 @@ jobs:
         with:
           files: |
             go
-            .github/workflows/ci.yml
+            .github/workflows/ci-go.yml
   ci-go:
     uses: ./.github/workflows/ci-go.yml
   ci:
     runs-on: ubuntu-latest
-    needs: [go-lint, go-test]
+    needs:
+      - ci-go
     if: '!failure()'
     steps:
       - run: echo "OK"
