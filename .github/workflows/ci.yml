@@ -21,6 +21,7 @@ jobs:
             go
             .github/workflows/ci-go.yml
   ci-go:
+    if: needs.check.outputs.go == 'true'
     uses: ./.github/workflows/ci-go.yml
   ci:
     runs-on: ubuntu-latest
