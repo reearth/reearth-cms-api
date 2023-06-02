@@ -1,4 +1,4 @@
-package reearthcmsapiwebhook
+package cmswebhook
 
 import (
 	"encoding/json"
