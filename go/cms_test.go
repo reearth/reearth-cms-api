@@ -261,6 +261,12 @@ func TestCMS_GetItemsByKeyInParallel(t *testing.T) {
 		PerPage:    100,
 		TotalCount: len(testItems),
 	}, items)
+
+	// empty
+	items, err = c.GetItemsByKeyInParallel(ctx, "ppp", "empty", false, 5)
+	assert.Equal(t, 1, call("GET /api/projects/ppp/models/empty/items"))
+	assert.NoError(t, err)
+	assert.Nil(t, items)
 }
 
 func mockCMS(t *testing.T, host, token string) func(string) int {
@@ -323,10 +329,30 @@ func mockCMS(t *testing.T, host, token string) func(string) int {
 		}, nil
 	})
 
+	emptyItemsResponder := checkHeader(func(r *http.Request) (any, error) {
+		page, _ := strconv.Atoi(r.URL.Query().Get("page"))
+		perPage, _ := strconv.Atoi(r.URL.Query().Get("perPage"))
+		if page < 1 {
+			page = 1
+		}
+		if perPage < 1 {
+			perPage = 50
+		}
+
+		return map[string]any{
+			"items":      nil,
+			"page":       page,
+			"perPage":    perPage,
+			"totalCount": 0,
+		}, nil
+	})
+
 	httpmock.RegisterResponder("GET", host+"/api/projects/ppp/models/mmm", modelResponder)
 	httpmock.RegisterResponder("GET", host+"/api/models/mmm", modelResponder)
 	httpmock.RegisterResponder("GET", host+"/api/projects/ppp/models/mmm/items", itemsResponder)
+	httpmock.RegisterResponder("GET", host+"/api/projects/ppp/models/empty/items", emptyItemsResponder)
 	httpmock.RegisterResponder("GET", host+"/api/models/mmm/items", itemsResponder)
+	httpmock.RegisterResponder("GET", host+"/api/models/empty/items", emptyItemsResponder)
 
 	httpmock.RegisterResponder("POST", host+"/api/projects/ppp/models/mmm/items", checkHeader(func(r *http.Request) (any, error) {
 		return map[string]any{

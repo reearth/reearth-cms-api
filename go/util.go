@@ -9,6 +9,9 @@ func parallel[T any](limit int, fn func(int) (T, int, error)) ([]T, error) {
 	if err != nil {
 		return nil, err
 	}
+	if maxPage == 0 {
+		return nil, nil
+	}
 
 	res := make([]T, maxPage)
 	res[0] = r

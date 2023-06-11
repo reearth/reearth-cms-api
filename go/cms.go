@@ -275,6 +275,10 @@ func (c *CMS) GetItemsByKeyInParallel(ctx context.Context, projectIDOrAlias, mod
 		return nil, err
 	}
 
+	if len(res) == 0 {
+		return nil, nil
+	}
+
 	res2 := res[0]
 	res2.Items = lo.FlatMap(res, func(i *Items, _ int) []Item {
 		if i == nil {

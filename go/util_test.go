@@ -23,4 +23,10 @@ func TestParallel(t *testing.T) {
 	})
 	assert.Same(t, expectedErr, err)
 	assert.Nil(t, res)
+
+	res, err = parallel(2, func(p int) (int, int, error) {
+		return p + 1, 0, nil
+	})
+	assert.NoError(t, err)
+	assert.Nil(t, res)
 }
