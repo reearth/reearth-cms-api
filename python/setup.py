@@ -29,10 +29,18 @@ REQUIRES = [
     "urllib3 ~= 1.26.7",
 ]
 
+def read_file(filename):
+    with open(filename, 'r', encoding='utf-8') as f:
+        return f.read()
+
 setup(
     name=NAME,
     version=VERSION,
     description="ReEarth-CMS Integration API",
+    long_description=read_file('README.md'),
+    long_description_content_type='text/markdown',
+    license='MIT',
+    license_file='LICENSE',
     author="Eukarya Inc.",
     url="https://github.com/reearth/reearth-cms-api",
     keywords=["OpenAPI", "OpenAPI-Generator", "ReEarth-CMS Integration API"],
@@ -40,7 +48,5 @@ setup(
     install_requires=REQUIRES,
     packages=find_packages(exclude=["test", "tests"]),
     include_package_data=True,
-    long_description="""\
-    ReEarth-CMS Integration API
-    """
+    setup_requires=['wheel']
 )
