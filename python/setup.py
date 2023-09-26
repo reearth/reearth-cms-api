@@ -12,7 +12,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "reearthcmsapi"
-VERSION = "0.0.2"
+VERSION = "0.0.3"
 # To install the library, run the following
 #
 # python setup.py install
@@ -22,11 +22,11 @@ VERSION = "0.0.2"
 
 REQUIRES = [
     "certifi >= 14.5.14",
-    "frozendict ~= 2.3.4",
-    "python-dateutil ~= 2.7.0",
+    "frozendict >= 2.3.4",
+    "python-dateutil >= 2.7.0",
     "setuptools >= 21.0.0",
-    "typing_extensions ~= 4.3.0",
-    "urllib3 ~= 1.26.7",
+    "typing_extensions >= 4.3.0",
+    "urllib3 >= 1.26.7 < 2.1.0",
 ]
 
 def read_file(filename):
