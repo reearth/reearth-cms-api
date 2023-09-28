@@ -1,14 +1,22 @@
-# Python APIの自動生成方法
+# How to automatically generate Python API
 
-OpenAPI Generator v6.6.0を用いる。現状の最新版(v7.0.0)ではバイナリをうまく取り扱えない。
+We use OpenAPI Generator v6.6.0 to generate the Python API using integration.yml. We currently do not use v7.0.0 because it cannot handle binary files described in integration.yml.  If integration.yml is changed, we need to generate new API source code.
 
 https://github.com/OpenAPITools/openapi-generator
 
-## 生成
+## Preparation
 
-まず、setup.pyとLICENSEをどこかに移動させる。
+First, we have modified and added some files from the original generated source code.  So we need to make a backup of these files:
 
-integration.ymlのあるディレクトリで
+```
+setup.py
+LICENSE
+requirements.txt
+```
+
+## Code Generation
+
+Run this command in the directory that contains integration.yml.
 
 ```
 $ docker run --rm \
@@ -18,27 +26,29 @@ $ docker run --rm \
   -o /local/python --package-name reearthcmsapi
 ```
 
-を実行すると、pythonディレクトリにコードが生成される。
+The source code will be generated in the `python` directory.  Copy it to this repository.
 
-## 修正
+## Modify bug
 
-`reearthcmsapi/configuration.py`にバグがあるため、以下の箇所を
+Since `reearthcmsapi/configuration.py` has a bug, we need to modify this line
 
 ```
 self.access_token = None
 ```
 
-以下のように変更する。
+to this.
 
 ```
 self.access_token = access_token
 ```
 
-コードをコピーし、さらに先ほど移動させたsetup.pyとLICENSEをコピーする。setup.pyのバージョンの内容などは適宜変更する。
+## Copying files
 
-## リリース
+Then, copy the backup files to the `python` directory.
 
-まず形式のチェックを行う。
+## Release
+
+To release, we need to check that the project structure is valid.
 
 ```
 pip install wheel twine
@@ -47,6 +57,6 @@ python setup.py bdist_wheel
 twine check dist/*
 ```
 
-以下を参考にリリースを行う。
+Then publish the package by following this URL.
 
 https://packaging.python.org/en/latest/tutorials/packaging-projects/
