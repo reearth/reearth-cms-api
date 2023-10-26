@@ -16,6 +16,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		BBB []string       `cms:"bbb"`
 		CCC []str          `cms:"ccc"`
 		DDD map[string]any `cms:"ddd"`
+		EEE string         `cms:"eee,,metadata"`
 	}
 	s := S{}
 
@@ -27,6 +28,9 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "ccc", Value: []string{"a", "b"}},
 			{Key: "ddd", Value: map[string]any{"a": "b"}},
 		},
+		MetadataFields: []Field{
+			{Key: "eee", Value: "xxx"},
+		},
 	}.Unmarshal(&s)
 	assert.Equal(t, S{
 		ID:  "xxx",
@@ -34,6 +38,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		BBB: []string{"ccc", "bbb"},
 		CCC: []str{"a", "b"},
 		DDD: map[string]any{"a": "b"},
+		EEE: "xxx",
 	}, s)
 
 	// no panic
@@ -51,6 +56,7 @@ func TestMarshal(t *testing.T) {
 		CCC str      `cms:"ccc"`
 		DDD []str    `cms:"ddd"`
 		EEE string   `cms:"eee,text"`
+		FFF string   `cms:"fff,text,metadata"`
 	}
 	s := S{
 		ID:  "xxx",
@@ -58,6 +64,7 @@ func TestMarshal(t *testing.T) {
 		BBB: []string{"ccc", "bbb"},
 		CCC: str("x"),
 		DDD: []str{"1", "2"},
+		FFF: "fff",
 	}
 	i := &Item{
 		ID: "xxx",
@@ -67,6 +74,9 @@ func TestMarshal(t *testing.T) {
 			{Key: "ccc", Type: "", Value: "x"},
 			{Key: "ddd", Type: "", Value: []string{"1", "2"}},
 			// no field for eee
+		},
+		MetadataFields: []Field{
+			{Key: "fff", Type: "text", Value: "fff"},
 		},
 	}
 
@@ -102,6 +112,23 @@ func TestItem_Field(t *testing.T) {
 	}.Field("ccc"))
 }
 
+func TestItem_MetadataField(t *testing.T) {
+	assert.Equal(t, &Field{
+		ID: "bbb", Value: "ccc", Type: "string",
+	}, Item{
+		MetadataFields: []Field{
+			{ID: "aaa", Value: "bbb", Type: "string"},
+			{ID: "bbb", Value: "ccc", Type: "string"},
+		},
+	}.MetadataField("bbb"))
+	assert.Nil(t, Item{
+		MetadataFields: []Field{
+			{ID: "aaa", Key: "bbb", Type: "string"},
+			{ID: "bbb", Key: "ccc", Type: "string"},
+		},
+	}.MetadataField("ccc"))
+}
+
 func TestItem_FieldByKey(t *testing.T) {
 	assert.Equal(t, &Field{
 		ID: "bbb", Key: "ccc", Type: "string",
@@ -117,6 +144,23 @@ func TestItem_FieldByKey(t *testing.T) {
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
 	}.FieldByKey("bbb"))
+}
+
+func TestItem_MetadataFieldByKey(t *testing.T) {
+	assert.Equal(t, &Field{
+		ID: "bbb", Key: "ccc", Type: "string",
+	}, Item{
+		MetadataFields: []Field{
+			{ID: "aaa", Key: "bbb", Type: "string"},
+			{ID: "bbb", Key: "ccc", Type: "string"},
+		},
+	}.MetadataFieldByKey("ccc"))
+	assert.Nil(t, Item{
+		MetadataFields: []Field{
+			{ID: "aaa", Key: "aaa", Type: "string"},
+			{ID: "bbb", Key: "ccc", Type: "string"},
+		},
+	}.MetadataFieldByKey("bbb"))
 }
 
 func TestField_ValueString(t *testing.T) {

@@ -96,7 +96,7 @@ type Item struct {
 	ID             string  `json:"id"`
 	ModelID        string  `json:"modelId"`
 	Fields         []Field `json:"fields"`
-	MetadataFields []Field `json:"metadataFields"`
+	MetadataFields []Field `json:"metadataFields,omitempty"`
 }
 
 func (i *Item) Clone() *Item {
@@ -118,8 +118,24 @@ func (i Item) Field(id string) *Field {
 	return nil
 }
 
+func (i Item) MetadataField(id string) *Field {
+	f, ok := lo.Find(i.MetadataFields, func(f Field) bool { return f.ID == id })
+	if ok {
+		return &f
+	}
+	return nil
+}
+
 func (i Item) FieldByKey(key string) *Field {
 	f, ok := lo.Find(i.Fields, func(f Field) bool { return f.Key == key })
+	if ok {
+		return &f
+	}
+	return nil
+}
+
+func (i Item) MetadataFieldByKey(key string) *Field {
+	f, ok := lo.Find(i.MetadataFields, func(f Field) bool { return f.Key == key })
 	if ok {
 		return &f
 	}
@@ -146,10 +162,12 @@ func (d Item) Unmarshal(i any) {
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		tag := f.Tag.Get(tag)
-		key, _, _ := strings.Cut(tag, ",")
+		key, opts, _ := strings.Cut(tag, ",")
 		if key == "" || key == "-" {
 			continue
 		}
+
+		isMetadata := strings.Contains(opts, ",metadata")
 
 		vf := v.FieldByName(f.Name)
 		if !vf.CanSet() {
@@ -163,7 +181,14 @@ func (d Item) Unmarshal(i any) {
 			continue
 		}
 
-		if itf := d.FieldByKey(key); itf != nil {
+		var itf *Field
+		if isMetadata {
+			itf = d.MetadataFieldByKey(key)
+		} else {
+			itf = d.FieldByKey(key)
+		}
+
+		if itf != nil {
 			if f.Type.Kind() == reflect.String {
 				if itfv := itf.ValueString(); itfv != nil {
 					vf.SetString(*itfv)
@@ -210,10 +235,13 @@ func Marshal(i any, item *Item) {
 	for i := 0; i < t.NumField(); i++ {
 		f := t.Field(i)
 		tag := f.Tag.Get(tag)
-		key, ty, _ := strings.Cut(tag, ",")
+		key, opts, _ := strings.Cut(tag, ",")
 		if key == "" || key == "-" {
 			continue
 		}
+
+		isMetadata := strings.Contains(opts, ",metadata")
+		ty, _, _ := strings.Cut(opts, ",")
 
 		vf := v.FieldByName(f.Name)
 		if key == "id" {
@@ -239,11 +267,17 @@ func Marshal(i any, item *Item) {
 		}
 
 		if i != nil {
-			ni.Fields = append(ni.Fields, Field{
+			f := Field{
 				Key:   key,
 				Type:  ty,
 				Value: i,
-			})
+			}
+
+			if isMetadata {
+				ni.MetadataFields = append(ni.MetadataFields, f)
+			} else {
+				ni.Fields = append(ni.Fields, f)
+			}
 		}
 	}
 
