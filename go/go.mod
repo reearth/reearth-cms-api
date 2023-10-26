@@ -6,7 +6,7 @@ require (
 	github.com/jarcoal/httpmock v1.3.0
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1
+	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 )
 
 require (

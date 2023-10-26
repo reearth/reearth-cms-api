@@ -30,9 +30,9 @@ type Interface interface {
 	GetItemsPartiallyByKey(ctx context.Context, projectIDOrAlias, modelIDOrKey string, page, perPage int, asset bool) (*Items, error)
 	GetItemsByKey(ctx context.Context, projectIDOrAlias, modelIDOrKey string, asset bool) (*Items, error)
 	GetItemsByKeyInParallel(ctx context.Context, projectIDOrAlias, modelIDOrKey string, asset bool, limit int) (*Items, error)
-	CreateItem(ctx context.Context, modelID string, fields []Field) (*Item, error)
-	CreateItemByKey(ctx context.Context, projectID, modelID string, fields []Field) (*Item, error)
-	UpdateItem(ctx context.Context, itemID string, fields []Field) (*Item, error)
+	CreateItem(ctx context.Context, modelID string, fields []Field, metadataFields []Field) (*Item, error)
+	CreateItemByKey(ctx context.Context, projectID, modelID string, fields []Field, metadataFields []Field) (*Item, error)
+	UpdateItem(ctx context.Context, itemID string, fields []Field, metadataFields []Field) (*Item, error)
 	DeleteItem(ctx context.Context, itemID string) error
 	Asset(ctx context.Context, id string) (*Asset, error)
 	UploadAsset(ctx context.Context, projectID, url string) (string, error)
@@ -289,9 +289,10 @@ func (c *CMS) GetItemsByKeyInParallel(ctx context.Context, projectIDOrAlias, mod
 	return res2, nil
 }
 
-func (c *CMS) CreateItem(ctx context.Context, modelID string, fields []Field) (*Item, error) {
+func (c *CMS) CreateItem(ctx context.Context, modelID string, fields []Field, metadataFields []Field) (*Item, error) {
 	rb := map[string]any{
-		"fields": fields,
+		"fields":         fields,
+		"metadataFields": metadataFields,
 	}
 
 	b, err := c.send(ctx, http.MethodPost, []string{"api", "models", modelID, "items"}, "", rb)
@@ -308,9 +309,10 @@ func (c *CMS) CreateItem(ctx context.Context, modelID string, fields []Field) (*
 	return item, nil
 }
 
-func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fields []Field) (*Item, error) {
+func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fields []Field, metadataFields []Field) (*Item, error) {
 	rb := map[string]any{
-		"fields": fields,
+		"fields":         fields,
+		"metadataFields": metadataFields,
 	}
 
 	b, err := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "models", modelID, "items"}, "", rb)
@@ -327,9 +329,10 @@ func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fi
 	return item, nil
 }
 
-func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []Field) (*Item, error) {
+func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []Field, metadataFields []Field) (*Item, error) {
 	rb := map[string]any{
-		"fields": fields,
+		"fields":         fields,
+		"metadataFields": metadataFields,
 	}
 
 	b, err := c.send(ctx, http.MethodPatch, []string{"api", "items", itemID}, "", rb)

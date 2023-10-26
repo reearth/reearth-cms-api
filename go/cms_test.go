@@ -52,7 +52,7 @@ func TestCMS(t *testing.T) {
 		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
-	item, err = c.CreateItem(ctx, "a", nil)
+	item, err = c.CreateItem(ctx, "a", nil, nil)
 	assert.Equal(t, 1, call("POST /api/models/a/items"))
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
@@ -60,7 +60,7 @@ func TestCMS(t *testing.T) {
 		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
-	item, err = c.CreateItemByKey(ctx, "ppp", "mmm", nil)
+	item, err = c.CreateItemByKey(ctx, "ppp", "mmm", nil, nil)
 	assert.Equal(t, 1, call("POST /api/projects/ppp/models/mmm/items"))
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
@@ -68,7 +68,7 @@ func TestCMS(t *testing.T) {
 		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
-	item, err = c.UpdateItem(ctx, "a", nil)
+	item, err = c.UpdateItem(ctx, "a", nil, nil)
 	assert.Equal(t, 1, call("PATCH /api/items/a"))
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
@@ -138,17 +138,17 @@ func TestCMS(t *testing.T) {
 	assert.Nil(t, items)
 	assert.ErrorContains(t, err, "failed to request: code=401")
 
-	item, err = c.CreateItemByKey(ctx, "ppp", "mmm", nil)
+	item, err = c.CreateItemByKey(ctx, "ppp", "mmm", nil, nil)
 	assert.Equal(t, 1, call("POST /api/projects/ppp/models/mmm/items"))
 	assert.Nil(t, item)
 	assert.ErrorContains(t, err, "failed to request: code=401")
 
-	item, err = c.CreateItem(ctx, "a", nil)
+	item, err = c.CreateItem(ctx, "a", nil, nil)
 	assert.Equal(t, 1, call("POST /api/models/a/items"))
 	assert.Nil(t, item)
 	assert.ErrorContains(t, err, "failed to request: code=401")
 
-	item, err = c.UpdateItem(ctx, "a", nil)
+	item, err = c.UpdateItem(ctx, "a", nil, nil)
 	assert.Equal(t, 1, call("PATCH /api/items/a"))
 	assert.Nil(t, item)
 	assert.ErrorContains(t, err, "failed to request: code=401")

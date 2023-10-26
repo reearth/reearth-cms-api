@@ -93,9 +93,10 @@ func (r Items) HasNext() bool {
 }
 
 type Item struct {
-	ID      string  `json:"id"`
-	ModelID string  `json:"modelId"`
-	Fields  []Field `json:"fields"`
+	ID             string  `json:"id"`
+	ModelID        string  `json:"modelId"`
+	Fields         []Field `json:"fields"`
+	MetadataFields []Field `json:"metadataFields"`
 }
 
 func (i *Item) Clone() *Item {
@@ -328,6 +329,7 @@ type Schema struct {
 	ID        string        `json:"id"`
 	Fields    []SchemaField `json:"fields"`
 	ProjectID string        `json:"projectId"`
+	Meta      *Schema       `json:"meta"`
 }
 
 func (d Schema) FieldIDByKey(k string) string {
