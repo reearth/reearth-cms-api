@@ -184,6 +184,15 @@ func TestField_ValueStrings(t *testing.T) {
 	}).ValueStrings())
 }
 
+func TestField_ValueBool(t *testing.T) {
+	assert.Equal(t, lo.ToPtr(true), (&Field{
+		Value: true,
+	}).ValueBool())
+	assert.Nil(t, (&Field{
+		Value: 1,
+	}).ValueBool())
+}
+
 func TestField_ValueInt(t *testing.T) {
 	assert.Equal(t, lo.ToPtr(100), (&Field{
 		Value: 100,
@@ -193,12 +202,32 @@ func TestField_ValueInt(t *testing.T) {
 	}).ValueInt())
 }
 
+func TestField_ValueFloat(t *testing.T) {
+	assert.Equal(t, lo.ToPtr(100.1), (&Field{
+		Value: 100.1,
+	}).ValueFloat())
+	assert.Nil(t, (&Field{
+		Value: 100,
+	}).ValueFloat())
+	assert.Nil(t, (&Field{
+		Value: "100.1",
+	}).ValueFloat())
+}
+
 func TestField_ValueJSON(t *testing.T) {
 	r, err := (&Field{
 		Value: `{"foo":"bar"}`,
 	}).ValueJSON()
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"foo": "bar"}, r)
+}
+
+func TestField_ValueJSONs(t *testing.T) {
+	r, err := (&Field{
+		Value: []string{`{"foo":"bar"}`, `{"foo":"hoge"}`},
+	}).ValueJSONs()
+	assert.NoError(t, err)
+	assert.Equal(t, []any{map[string]any{"foo": "bar"}, map[string]any{"foo": "hoge"}}, r)
 }
 
 func TestItems_HasNext(t *testing.T) {

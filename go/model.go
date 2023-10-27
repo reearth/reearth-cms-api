@@ -292,45 +292,35 @@ type Field struct {
 }
 
 func (f *Field) ValueString() *string {
-	if f == nil {
-		return nil
-	}
-
-	if v, ok := f.Value.(string); ok {
-		return &v
-	}
-
-	return nil
+	return FieldValue[string](f)
 }
 
 func (f *Field) ValueStrings() []string {
-	if f == nil {
-		return nil
-	}
+	return FieldValues[string](f)
+}
 
-	if v, ok := f.Value.([]string); ok {
-		return v
-	}
+func (f *Field) ValueBool() *bool {
+	return FieldValue[bool](f)
+}
 
-	if v, ok := f.Value.([]any); ok {
-		return lo.FilterMap(v, func(e any, _ int) (string, bool) {
-			s, ok := e.(string)
-			return s, ok
-		})
-	}
-
-	return nil
+func (f *Field) ValueBools() []bool {
+	return FieldValues[bool](f)
 }
 
 func (f *Field) ValueInt() *int {
-	if f == nil {
-		return nil
-	}
+	return FieldValue[int](f)
+}
 
-	if v, ok := f.Value.(int); ok {
-		return &v
-	}
-	return nil
+func (f *Field) ValueInts() []int {
+	return FieldValues[int](f)
+}
+
+func (f *Field) ValueFloat() *float64 {
+	return FieldValue[float64](f)
+}
+
+func (f *Field) ValueFloats() []float64 {
+	return FieldValues[float64](f)
 }
 
 func (f *Field) ValueJSON() (any, error) {
@@ -347,6 +337,26 @@ func (f *Field) ValueJSON() (any, error) {
 	return j, err
 }
 
+func (f *Field) ValueJSONs() ([]any, error) {
+	if f == nil {
+		return nil, nil
+	}
+	values := f.ValueStrings()
+	if values == nil {
+		return nil, nil
+	}
+
+	var res []any
+	for _, v := range values {
+		var r any
+		if err := json.Unmarshal([]byte(v), &r); err != nil {
+			return nil, err
+		}
+		res = append(res, r)
+	}
+	return res, nil
+}
+
 func (f *Field) Clone() *Field {
 	if f == nil {
 		return nil
@@ -357,6 +367,37 @@ func (f *Field) Clone() *Field {
 		Value: f.Value,
 		Key:   f.Key,
 	}
+}
+
+func FieldValue[T any](f *Field) *T {
+	if f == nil {
+		return nil
+	}
+
+	if v, ok := f.Value.(T); ok {
+		return &v
+	}
+
+	return nil
+}
+
+func FieldValues[T any](f *Field) []T {
+	if f == nil {
+		return nil
+	}
+
+	if v, ok := f.Value.([]T); ok {
+		return v
+	}
+
+	if v, ok := f.Value.([]any); ok {
+		return lo.FilterMap(v, func(e any, _ int) (T, bool) {
+			s, ok := e.(T)
+			return s, ok
+		})
+	}
+
+	return nil
 }
 
 type Schema struct {
