@@ -111,15 +111,27 @@ func (i *Item) Clone() *Item {
 }
 
 func (i Item) Field(id string) *Field {
-	f, ok := lo.Find(i.Fields, func(f Field) bool { return f.ID == id })
+	return i.FieldByGroup(id, "")
+}
+
+func (i Item) MetadataField(id string) *Field {
+	return i.MetadataFieldByGroup(id, "")
+}
+
+func (i Item) FieldByGroup(id, group string) *Field {
+	f, ok := lo.Find(i.Fields, func(f Field) bool {
+		return f.ID == id && f.Group == group
+	})
 	if ok {
 		return &f
 	}
 	return nil
 }
 
-func (i Item) MetadataField(id string) *Field {
-	f, ok := lo.Find(i.MetadataFields, func(f Field) bool { return f.ID == id })
+func (i Item) MetadataFieldByGroup(id, group string) *Field {
+	f, ok := lo.Find(i.MetadataFields, func(f Field) bool {
+		return f.ID == id && f.Group == group
+	})
 	if ok {
 		return &f
 	}
@@ -127,7 +139,13 @@ func (i Item) MetadataField(id string) *Field {
 }
 
 func (i Item) FieldByKey(key string) *Field {
-	f, ok := lo.Find(i.Fields, func(f Field) bool { return f.Key == key })
+	return i.FieldByKeyAndGroup(key, "")
+}
+
+func (i Item) FieldByKeyAndGroup(key, group string) *Field {
+	f, ok := lo.Find(i.Fields, func(f Field) bool {
+		return f.Key == key && f.Group == group
+	})
 	if ok {
 		return &f
 	}
@@ -135,11 +153,42 @@ func (i Item) FieldByKey(key string) *Field {
 }
 
 func (i Item) MetadataFieldByKey(key string) *Field {
-	f, ok := lo.Find(i.MetadataFields, func(f Field) bool { return f.Key == key })
+	return i.MetadataFieldByKeyAndGroup(key, "")
+}
+
+func (i Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
+	f, ok := lo.Find(i.MetadataFields, func(f Field) bool {
+		return f.Key == key && f.Group == group
+	})
 	if ok {
 		return &f
 	}
 	return nil
+}
+
+func (i Item) Group(g string) Item {
+	fields := lo.Filter(i.Fields, func(f Field, _ int) bool {
+		return f.Group == g
+	})
+
+	metadataFields := lo.Filter(i.MetadataFields, func(f Field, _ int) bool {
+		return f.Group == g
+	})
+
+	for i := range fields {
+		fields[i].Group = ""
+	}
+
+	for i := range metadataFields {
+		metadataFields[i].Group = ""
+	}
+
+	return Item{
+		ID:             g,
+		ModelID:        i.ModelID,
+		Fields:         fields,
+		MetadataFields: metadataFields,
+	}
 }
 
 func (d Item) Unmarshal(i any) {
@@ -168,11 +217,7 @@ func (d Item) Unmarshal(i any) {
 		}
 
 		isMetadata := strings.Contains(opts, ",metadata")
-
 		vf := v.FieldByName(f.Name)
-		if !vf.CanSet() {
-			continue
-		}
 
 		if key == "id" {
 			if f.Type.Kind() == reflect.String {
@@ -186,6 +231,61 @@ func (d Item) Unmarshal(i any) {
 			itf = d.MetadataFieldByKey(key)
 		} else {
 			itf = d.FieldByKey(key)
+		}
+
+		if itf != nil && itf.Type == "group" {
+			groupIDs := itf.ValueStrings()
+			if len(groupIDs) == 0 {
+				if groupID := itf.ValueString(); groupID != nil {
+					groupIDs = []string{*groupID}
+				}
+			}
+
+			groups := make([]Item, 0, len(groupIDs))
+			for _, g := range groupIDs {
+				group := d.Group(g)
+				groups = append(groups, group)
+			}
+
+			if len(groups) == 0 {
+				continue
+			}
+
+			if f.Type.Kind() == reflect.Slice &&
+				(f.Type.Elem().Kind() == reflect.Struct ||
+					f.Type.Elem().Kind() == reflect.Ptr &&
+						f.Type.Elem().Elem().Kind() == reflect.Struct) {
+				s := reflect.MakeSlice(f.Type, 0, len(groups))
+				isPointer := f.Type.Elem().Kind() == reflect.Ptr
+
+				for _, g := range groups {
+					var rv reflect.Value
+					if isPointer {
+						rv = reflect.New(f.Type.Elem().Elem())
+					} else {
+						rv = reflect.New(f.Type.Elem())
+					}
+
+					i := rv.Interface()
+					g.Unmarshal(i)
+
+					if isPointer {
+						s = reflect.Append(s, rv)
+					} else {
+						s = reflect.Append(s, rv.Elem())
+					}
+				}
+
+				vf.Set(s)
+			} else if f.Type.Kind() == reflect.Struct {
+				groups[0].Unmarshal(vf.Addr().Interface())
+			} else if f.Type.Kind() == reflect.Pointer && f.Type.Elem().Kind() == reflect.Struct {
+				groups[0].Unmarshal(vf.Interface())
+			}
+		}
+
+		if !vf.CanSet() {
+			continue
 		}
 
 		if itf != nil {
@@ -250,11 +350,11 @@ func Marshal(i any, item *Item) {
 		}
 
 		vft := vf.Type()
-		var i any
+		var value any
 		if vft.Kind() == reflect.String {
 			v := vf.Convert(reflect.TypeOf("")).Interface()
 			if v != "" {
-				i = v
+				value = v
 			}
 		} else if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
 			st := reflect.TypeOf("")
@@ -263,14 +363,81 @@ func Marshal(i any, item *Item) {
 				vfs := vf.Index(i).Convert(st)
 				v = append(v, vfs.String())
 			}
-			i = v
+			value = v
+		} else if vft.Kind() == reflect.Slice && vf.Len() > 0 && (vft.Elem().Kind() == reflect.Struct ||
+			vft.Elem().Kind() == reflect.Ptr && vft.Elem().Elem().Kind() == reflect.Struct) {
+			isPointer := vft.Elem().Kind() == reflect.Ptr
+
+			v := make([]string, 0, vf.Len())
+			for i := 0; i < cap(v); i++ {
+				var in any
+				if isPointer {
+					in = vf.Index(i).Interface()
+				} else {
+					in = vf.Index(i).Addr().Interface()
+				}
+
+				item := Item{}
+				Marshal(in, &item)
+				if item.ID == "" {
+					continue
+				}
+
+				// assign group
+				for i := range item.Fields {
+					item.Fields[i].Group = item.ID
+				}
+				for i := range item.MetadataFields {
+					item.Fields[i].Group = item.ID
+				}
+
+				// merge i to ni
+				ni.Fields = append(ni.Fields, item.Fields...)
+				ni.MetadataFields = append(ni.MetadataFields, item.MetadataFields...)
+
+				v = append(v, item.ID)
+			}
+
+			if len(v) > 0 {
+				value = v
+				ty = "group"
+			}
+		} else if vft.Kind() == reflect.Struct || vft.Kind() == reflect.Ptr && vft.Elem().Kind() == reflect.Struct {
+			isPointer := vft.Kind() == reflect.Ptr
+			var v any
+			if isPointer {
+				v = vf.Interface()
+			} else {
+				v = vf.Addr().Interface()
+			}
+
+			item := Item{}
+			Marshal(v, &item)
+			if item.ID == "" {
+				continue
+			}
+
+			// assign group
+			for i := range item.Fields {
+				item.Fields[i].Group = item.ID
+			}
+			for i := range item.MetadataFields {
+				item.Fields[i].Group = item.ID
+			}
+
+			// merge i to ni
+			ni.Fields = append(ni.Fields, item.Fields...)
+			ni.MetadataFields = append(ni.MetadataFields, item.MetadataFields...)
+
+			value = item.ID
+			ty = "group"
 		}
 
-		if i != nil {
+		if value != nil {
 			f := Field{
 				Key:   key,
 				Type:  ty,
-				Value: i,
+				Value: value,
 			}
 
 			if isMetadata {
@@ -286,9 +453,10 @@ func Marshal(i any, item *Item) {
 
 type Field struct {
 	ID    string `json:"id,omitempty"`
+	Key   string `json:"key,omitempty"`
+	Group string `json:"group,omitempty"`
 	Type  string `json:"type"`
 	Value any    `json:"value"`
-	Key   string `json:"key,omitempty"`
 }
 
 func (f *Field) ValueString() *string {

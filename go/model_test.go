@@ -7,8 +7,41 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestItem_Group(t *testing.T) {
+	item := Item{
+		ID:      "xxx",
+		ModelID: "xxx",
+		Fields: []Field{
+			{Key: "aaa", Value: "bbb"},
+			{Key: "bbb", Value: []string{"ccc", "bbb"}},
+			{Key: "ccc", Value: []string{"a", "b"}},
+			{Key: "ddd", Value: map[string]any{"a": "b"}},
+			{Key: "ggg", Value: []string{"1", "2"}},
+			{Key: "aaa", Group: "1", Value: "123"},
+		},
+		MetadataFields: []Field{
+			{Key: "eee", Value: "xxx"},
+		},
+	}
+
+	g := item.Group("1")
+	assert.Equal(t, Item{
+		ID:      "1",
+		ModelID: "xxx",
+		Fields: []Field{
+			{Key: "aaa", Value: "123"},
+		},
+		MetadataFields: []Field{},
+	}, g)
+}
+
 func TestItem_Unmarshal(t *testing.T) {
 	type str string
+
+	type G struct {
+		ID  string `cms:"id"`
+		AAA string `cms:"aaa,text"`
+	}
 
 	type S struct {
 		ID  string         `cms:"id"`
@@ -17,6 +50,8 @@ func TestItem_Unmarshal(t *testing.T) {
 		CCC []str          `cms:"ccc"`
 		DDD map[string]any `cms:"ddd"`
 		EEE string         `cms:"eee,,metadata"`
+		GGG []*G           `cms:"ggg,group"`
+		HHH []G            `cms:"hhh,group"`
 	}
 	s := S{}
 
@@ -27,11 +62,15 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "bbb", Value: []string{"ccc", "bbb"}},
 			{Key: "ccc", Value: []string{"a", "b"}},
 			{Key: "ddd", Value: map[string]any{"a": "b"}},
+			{Key: "ggg", Type: "group", Value: []string{"1", "2"}},
+			{Key: "hhh", Type: "group", Value: []string{"1"}},
+			{Key: "aaa", Group: "1", Value: "123"},
 		},
 		MetadataFields: []Field{
 			{Key: "eee", Value: "xxx"},
 		},
 	}.Unmarshal(&s)
+
 	assert.Equal(t, S{
 		ID:  "xxx",
 		AAA: "bbb",
@@ -39,6 +78,8 @@ func TestItem_Unmarshal(t *testing.T) {
 		CCC: []str{"a", "b"},
 		DDD: map[string]any{"a": "b"},
 		EEE: "xxx",
+		GGG: []*G{{ID: "1", AAA: "123"}, {ID: "2"}},
+		HHH: []G{{ID: "1", AAA: "123"}},
 	}, s)
 
 	// no panic
@@ -49,6 +90,11 @@ func TestItem_Unmarshal(t *testing.T) {
 func TestMarshal(t *testing.T) {
 	type str string
 
+	type G struct {
+		ID  string `cms:"id"`
+		AAA string `cms:"aaa,text"`
+	}
+
 	type S struct {
 		ID  string   `cms:"id"`
 		AAA string   `cms:"aaa,text"`
@@ -57,7 +103,10 @@ func TestMarshal(t *testing.T) {
 		DDD []str    `cms:"ddd"`
 		EEE string   `cms:"eee,text"`
 		FFF string   `cms:"fff,text,metadata"`
+		GGG []G      `cms:"ggg"`
+		HHH []*G     `cms:"hhh"`
 	}
+
 	s := S{
 		ID:  "xxx",
 		AAA: "bbb",
@@ -65,8 +114,11 @@ func TestMarshal(t *testing.T) {
 		CCC: str("x"),
 		DDD: []str{"1", "2"},
 		FFF: "fff",
+		GGG: []G{{ID: "1", AAA: "ggg"}},
+		HHH: []*G{{ID: "2", AAA: "hhh"}, nil},
 	}
-	i := &Item{
+
+	expected := &Item{
 		ID: "xxx",
 		Fields: []Field{
 			{Key: "aaa", Type: "text", Value: "bbb"},
@@ -74,6 +126,10 @@ func TestMarshal(t *testing.T) {
 			{Key: "ccc", Type: "", Value: "x"},
 			{Key: "ddd", Type: "", Value: []string{"1", "2"}},
 			// no field for eee
+			{Key: "aaa", Group: "1", Type: "text", Value: "ggg"},
+			{Key: "ggg", Type: "group", Value: []string{"1"}},
+			{Key: "aaa", Group: "2", Type: "text", Value: "hhh"},
+			{Key: "hhh", Type: "group", Value: []string{"2"}},
 		},
 		MetadataFields: []Field{
 			{Key: "fff", Type: "text", Value: "fff"},
@@ -82,11 +138,11 @@ func TestMarshal(t *testing.T) {
 
 	item := &Item{}
 	Marshal(s, item)
-	assert.Equal(t, i, item)
+	assert.Equal(t, expected, item)
 
 	item2 := &Item{}
 	Marshal(&s, item2)
-	assert.Equal(t, i, item2)
+	assert.Equal(t, item, item2)
 
 	// no panic
 	Marshal(nil, nil)
