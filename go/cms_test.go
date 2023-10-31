@@ -49,7 +49,7 @@ func TestCMS(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
 		ID:     "a",
-		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
 	item, err = c.CreateItem(ctx, "a", nil, nil)
@@ -57,7 +57,7 @@ func TestCMS(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
 		ID:     "a",
-		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
 	item, err = c.CreateItemByKey(ctx, "ppp", "mmm", nil, nil)
@@ -65,7 +65,7 @@ func TestCMS(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
 		ID:     "a",
-		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
 	item, err = c.UpdateItem(ctx, "a", nil, nil)
@@ -73,7 +73,7 @@ func TestCMS(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, &Item{
 		ID:     "a",
-		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
 	}, item)
 
 	err = c.DeleteItem(ctx, "a")
@@ -431,6 +431,6 @@ func parseToken(r *http.Request) string {
 var testItems = lo.Map(lo.Range(500), func(i, _ int) Item {
 	return Item{
 		ID:     strconv.Itoa(i),
-		Fields: []Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
 	}
 })

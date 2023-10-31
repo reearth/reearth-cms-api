@@ -11,7 +11,7 @@ func TestItem_Group(t *testing.T) {
 	item := Item{
 		ID:      "xxx",
 		ModelID: "xxx",
-		Fields: []Field{
+		Fields: []*Field{
 			{Key: "aaa", Value: "bbb"},
 			{Key: "bbb", Value: []string{"ccc", "bbb"}},
 			{Key: "ccc", Value: []string{"a", "b"}},
@@ -19,7 +19,7 @@ func TestItem_Group(t *testing.T) {
 			{Key: "ggg", Value: []string{"1", "2"}},
 			{Key: "aaa", Group: "1", Value: "123"},
 		},
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{Key: "eee", Value: "xxx"},
 		},
 	}
@@ -28,10 +28,10 @@ func TestItem_Group(t *testing.T) {
 	assert.Equal(t, Item{
 		ID:      "1",
 		ModelID: "xxx",
-		Fields: []Field{
+		Fields: []*Field{
 			{Key: "aaa", Value: "123"},
 		},
-		MetadataFields: []Field{},
+		MetadataFields: []*Field{},
 	}, g)
 }
 
@@ -57,7 +57,7 @@ func TestItem_Unmarshal(t *testing.T) {
 
 	Item{
 		ID: "xxx",
-		Fields: []Field{
+		Fields: []*Field{
 			{Key: "aaa", Value: "bbb"},
 			{Key: "bbb", Value: []string{"ccc", "bbb"}},
 			{Key: "ccc", Value: []string{"a", "b"}},
@@ -66,7 +66,7 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "hhh", Type: "group", Value: []string{"1"}},
 			{Key: "aaa", Group: "1", Value: "123"},
 		},
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{Key: "eee", Value: "xxx"},
 		},
 	}.Unmarshal(&s)
@@ -120,7 +120,7 @@ func TestMarshal(t *testing.T) {
 
 	expected := &Item{
 		ID: "xxx",
-		Fields: []Field{
+		Fields: []*Field{
 			{Key: "aaa", Type: "text", Value: "bbb"},
 			{Key: "bbb", Type: "select", Value: []string{"ccc", "bbb"}},
 			{Key: "ccc", Type: "", Value: "x"},
@@ -131,7 +131,7 @@ func TestMarshal(t *testing.T) {
 			{Key: "aaa", Group: "2", Type: "text", Value: "hhh"},
 			{Key: "hhh", Type: "group", Value: []string{"2"}},
 		},
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{Key: "fff", Type: "text", Value: "fff"},
 		},
 	}
@@ -155,13 +155,13 @@ func TestItem_Field(t *testing.T) {
 	assert.Equal(t, &Field{
 		ID: "bbb", Value: "ccc", Type: "string",
 	}, Item{
-		Fields: []Field{
+		Fields: []*Field{
 			{ID: "aaa", Value: "bbb", Type: "string"},
 			{ID: "bbb", Value: "ccc", Type: "string"},
 		},
 	}.Field("bbb"))
 	assert.Nil(t, Item{
-		Fields: []Field{
+		Fields: []*Field{
 			{ID: "aaa", Key: "bbb", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
@@ -172,13 +172,13 @@ func TestItem_MetadataField(t *testing.T) {
 	assert.Equal(t, &Field{
 		ID: "bbb", Value: "ccc", Type: "string",
 	}, Item{
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{ID: "aaa", Value: "bbb", Type: "string"},
 			{ID: "bbb", Value: "ccc", Type: "string"},
 		},
 	}.MetadataField("bbb"))
 	assert.Nil(t, Item{
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{ID: "aaa", Key: "bbb", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
@@ -189,13 +189,13 @@ func TestItem_FieldByKey(t *testing.T) {
 	assert.Equal(t, &Field{
 		ID: "bbb", Key: "ccc", Type: "string",
 	}, Item{
-		Fields: []Field{
+		Fields: []*Field{
 			{ID: "aaa", Key: "bbb", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
 	}.FieldByKey("ccc"))
 	assert.Nil(t, Item{
-		Fields: []Field{
+		Fields: []*Field{
 			{ID: "aaa", Key: "aaa", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
@@ -206,13 +206,13 @@ func TestItem_MetadataFieldByKey(t *testing.T) {
 	assert.Equal(t, &Field{
 		ID: "bbb", Key: "ccc", Type: "string",
 	}, Item{
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{ID: "aaa", Key: "bbb", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
 	}.MetadataFieldByKey("ccc"))
 	assert.Nil(t, Item{
-		MetadataFields: []Field{
+		MetadataFields: []*Field{
 			{ID: "aaa", Key: "aaa", Type: "string"},
 			{ID: "bbb", Key: "ccc", Type: "string"},
 		},
@@ -222,58 +222,58 @@ func TestItem_MetadataFieldByKey(t *testing.T) {
 func TestField_ValueString(t *testing.T) {
 	assert.Equal(t, lo.ToPtr("ccc"), (&Field{
 		Value: "ccc",
-	}).ValueString())
+	}).GetValue().String())
 	assert.Nil(t, (&Field{
 		Value: 1,
-	}).ValueString())
+	}).GetValue().String())
 }
 
 func TestField_ValueStrings(t *testing.T) {
 	assert.Equal(t, []string{"ccc", "ddd"}, (&Field{
 		Value: []string{"ccc", "ddd"},
-	}).ValueStrings())
+	}).GetValue().Strings())
 	assert.Equal(t, []string{"ccc", "ddd"}, (&Field{
 		Value: []any{"ccc", "ddd", 1},
-	}).ValueStrings())
+	}).GetValue().Strings())
 	assert.Nil(t, (&Field{
 		Value: "ccc",
-	}).ValueStrings())
+	}).GetValue().Strings())
 }
 
 func TestField_ValueBool(t *testing.T) {
 	assert.Equal(t, lo.ToPtr(true), (&Field{
 		Value: true,
-	}).ValueBool())
+	}).GetValue().Bool())
 	assert.Nil(t, (&Field{
 		Value: 1,
-	}).ValueBool())
+	}).GetValue().Bool())
 }
 
 func TestField_ValueInt(t *testing.T) {
 	assert.Equal(t, lo.ToPtr(100), (&Field{
 		Value: 100,
-	}).ValueInt())
+	}).GetValue().Int())
 	assert.Nil(t, (&Field{
 		Value: "100",
-	}).ValueInt())
+	}).GetValue().Int())
 }
 
 func TestField_ValueFloat(t *testing.T) {
 	assert.Equal(t, lo.ToPtr(100.1), (&Field{
 		Value: 100.1,
-	}).ValueFloat())
+	}).GetValue().Float())
 	assert.Nil(t, (&Field{
 		Value: 100,
-	}).ValueFloat())
+	}).GetValue().Float())
 	assert.Nil(t, (&Field{
 		Value: "100.1",
-	}).ValueFloat())
+	}).GetValue().Float())
 }
 
 func TestField_ValueJSON(t *testing.T) {
 	r, err := (&Field{
 		Value: `{"foo":"bar"}`,
-	}).ValueJSON()
+	}).GetValue().JSON()
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"foo": "bar"}, r)
 }
@@ -281,7 +281,7 @@ func TestField_ValueJSON(t *testing.T) {
 func TestField_ValueJSONs(t *testing.T) {
 	r, err := (&Field{
 		Value: []string{`{"foo":"bar"}`, `{"foo":"hoge"}`},
-	}).ValueJSONs()
+	}).GetValue().JSONs()
 	assert.NoError(t, err)
 	assert.Equal(t, []any{map[string]any{"foo": "bar"}, map[string]any{"foo": "hoge"}}, r)
 }

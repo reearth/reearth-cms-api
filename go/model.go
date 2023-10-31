@@ -1,7 +1,6 @@
 package cms
 
 import (
-	"encoding/json"
 	"reflect"
 	"strings"
 	"time"
@@ -68,7 +67,6 @@ func (a *Asset) ToPublic() *PublicAsset {
 		URL:                     a.URL,
 		ContentType:             a.ContentType,
 		ArchiveExtractionStatus: a.ArchiveExtractionStatus,
-		// Files: ,
 	}
 }
 
@@ -93,10 +91,13 @@ func (r Items) HasNext() bool {
 }
 
 type Item struct {
-	ID             string  `json:"id"`
-	ModelID        string  `json:"modelId"`
-	Fields         []Field `json:"fields"`
-	MetadataFields []Field `json:"metadataFields,omitempty"`
+	ID              string   `json:"id"`
+	ModelID         string   `json:"modelId"`
+	Fields          []*Field `json:"fields"`
+	MetadataFields  []*Field `json:"metadataFields,omitempty"`
+	ReferencedItems []*Item  `json:"referencedItems,omitempty"`
+	OriginalItemID  *string  `json:"originalItemId,omitempty"`
+	MetadataItemID  *string  `json:"metadataItemId,omitempty"`
 }
 
 func (i *Item) Clone() *Item {
@@ -119,21 +120,21 @@ func (i Item) MetadataField(id string) *Field {
 }
 
 func (i Item) FieldByGroup(id, group string) *Field {
-	f, ok := lo.Find(i.Fields, func(f Field) bool {
+	f, ok := lo.Find(i.Fields, func(f *Field) bool {
 		return f.ID == id && f.Group == group
 	})
 	if ok {
-		return &f
+		return f
 	}
 	return nil
 }
 
 func (i Item) MetadataFieldByGroup(id, group string) *Field {
-	f, ok := lo.Find(i.MetadataFields, func(f Field) bool {
+	f, ok := lo.Find(i.MetadataFields, func(f *Field) bool {
 		return f.ID == id && f.Group == group
 	})
 	if ok {
-		return &f
+		return f
 	}
 	return nil
 }
@@ -143,11 +144,11 @@ func (i Item) FieldByKey(key string) *Field {
 }
 
 func (i Item) FieldByKeyAndGroup(key, group string) *Field {
-	f, ok := lo.Find(i.Fields, func(f Field) bool {
+	f, ok := lo.Find(i.Fields, func(f *Field) bool {
 		return f.Key == key && f.Group == group
 	})
 	if ok {
-		return &f
+		return f
 	}
 	return nil
 }
@@ -157,31 +158,31 @@ func (i Item) MetadataFieldByKey(key string) *Field {
 }
 
 func (i Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
-	f, ok := lo.Find(i.MetadataFields, func(f Field) bool {
+	f, ok := lo.Find(i.MetadataFields, func(f *Field) bool {
 		return f.Key == key && f.Group == group
 	})
 	if ok {
-		return &f
+		return f
 	}
 	return nil
 }
 
 func (i Item) Group(g string) Item {
-	fields := lo.Filter(i.Fields, func(f Field, _ int) bool {
+	fields := lo.Map(lo.Filter(i.Fields, func(f *Field, _ int) bool {
 		return f.Group == g
+	}), func(f *Field, _ int) *Field {
+		g := f.Clone()
+		g.Group = ""
+		return g
 	})
 
-	metadataFields := lo.Filter(i.MetadataFields, func(f Field, _ int) bool {
+	metadataFields := lo.Map(lo.Filter(i.MetadataFields, func(f *Field, _ int) bool {
 		return f.Group == g
+	}), func(f *Field, _ int) *Field {
+		g := f.Clone()
+		g.Group = ""
+		return g
 	})
-
-	for i := range fields {
-		fields[i].Group = ""
-	}
-
-	for i := range metadataFields {
-		metadataFields[i].Group = ""
-	}
 
 	return Item{
 		ID:             g,
@@ -216,7 +217,7 @@ func (d Item) Unmarshal(i any) {
 			continue
 		}
 
-		isMetadata := strings.Contains(opts, ",metadata")
+		isMetadata := strings.HasSuffix(opts, ",metadata")
 		vf := v.FieldByName(f.Name)
 
 		if key == "id" {
@@ -234,9 +235,9 @@ func (d Item) Unmarshal(i any) {
 		}
 
 		if itf != nil && itf.Type == "group" {
-			groupIDs := itf.ValueStrings()
+			groupIDs := itf.GetValue().Strings()
 			if len(groupIDs) == 0 {
-				if groupID := itf.ValueString(); groupID != nil {
+				if groupID := itf.GetValue().String(); groupID != nil {
 					groupIDs = []string{*groupID}
 				}
 			}
@@ -290,15 +291,15 @@ func (d Item) Unmarshal(i any) {
 
 		if itf != nil {
 			if f.Type.Kind() == reflect.String {
-				if itfv := itf.ValueString(); itfv != nil {
+				if itfv := itf.GetValue().String(); itfv != nil {
 					vf.SetString(*itfv)
 				}
 			} else if f.Type.Kind() == reflect.Slice && f.Type.Elem().Kind() == reflect.String {
 				if te := f.Type.Elem(); te.Name() == "string" {
-					if itfv := itf.ValueStrings(); itfv != nil {
+					if itfv := itf.GetValue().Strings(); itfv != nil {
 						vf.Set(reflect.ValueOf(itfv))
 					}
-				} else if itfv := itf.ValueStrings(); itfv != nil {
+				} else if itfv := itf.GetValue().Strings(); itfv != nil {
 					s := reflect.MakeSlice(f.Type, 0, len(itfv))
 					for _, v := range itfv {
 						rv := reflect.ValueOf(v).Convert(te)
@@ -340,7 +341,7 @@ func Marshal(i any, item *Item) {
 			continue
 		}
 
-		isMetadata := strings.Contains(opts, ",metadata")
+		isMetadata := strings.HasSuffix(opts, ",metadata")
 		ty, _, _ := strings.Cut(opts, ",")
 
 		vf := v.FieldByName(f.Name)
@@ -434,7 +435,7 @@ func Marshal(i any, item *Item) {
 		}
 
 		if value != nil {
-			f := Field{
+			f := &Field{
 				Key:   key,
 				Type:  ty,
 				Value: value,
@@ -459,70 +460,11 @@ type Field struct {
 	Value any    `json:"value"`
 }
 
-func (f *Field) ValueString() *string {
-	return FieldValue[string](f)
-}
-
-func (f *Field) ValueStrings() []string {
-	return FieldValues[string](f)
-}
-
-func (f *Field) ValueBool() *bool {
-	return FieldValue[bool](f)
-}
-
-func (f *Field) ValueBools() []bool {
-	return FieldValues[bool](f)
-}
-
-func (f *Field) ValueInt() *int {
-	return FieldValue[int](f)
-}
-
-func (f *Field) ValueInts() []int {
-	return FieldValues[int](f)
-}
-
-func (f *Field) ValueFloat() *float64 {
-	return FieldValue[float64](f)
-}
-
-func (f *Field) ValueFloats() []float64 {
-	return FieldValues[float64](f)
-}
-
-func (f *Field) ValueJSON() (any, error) {
+func (f *Field) GetValue() *Value {
 	if f == nil {
-		return nil, nil
+		return nil
 	}
-	s := f.ValueString()
-	if s == nil {
-		return nil, nil
-	}
-
-	var j any
-	err := json.Unmarshal([]byte(*s), &j)
-	return j, err
-}
-
-func (f *Field) ValueJSONs() ([]any, error) {
-	if f == nil {
-		return nil, nil
-	}
-	values := f.ValueStrings()
-	if values == nil {
-		return nil, nil
-	}
-
-	var res []any
-	for _, v := range values {
-		var r any
-		if err := json.Unmarshal([]byte(v), &r); err != nil {
-			return nil, err
-		}
-		res = append(res, r)
-	}
-	return res, nil
+	return &Value{value: f.Value}
 }
 
 func (f *Field) Clone() *Field {
@@ -537,35 +479,33 @@ func (f *Field) Clone() *Field {
 	}
 }
 
-func FieldValue[T any](f *Field) *T {
-	if f == nil {
-		return nil
-	}
+type FieldChangeType string
 
-	if v, ok := f.Value.(T); ok {
-		return &v
-	}
+const (
+	FieldChangeTypeCreate FieldChangeType = "add"
+	FieldChangeTypeUpdate FieldChangeType = "update"
+	FieldChangeTypeDelete FieldChangeType = "delete"
+)
 
-	return nil
+type FieldChange struct {
+	ID            string          `json:"id,omitempty"`
+	Type          FieldChangeType `json:"type"`
+	PreviousValue any             `json:"previousValue"`
+	CurrentValue  any             `json:"currentValue"`
 }
 
-func FieldValues[T any](f *Field) []T {
+func (f *FieldChange) GetPreviousValue() *Value {
 	if f == nil {
 		return nil
 	}
+	return &Value{value: f.PreviousValue}
+}
 
-	if v, ok := f.Value.([]T); ok {
-		return v
+func (f *FieldChange) GetCurrentValue() *Value {
+	if f == nil {
+		return nil
 	}
-
-	if v, ok := f.Value.([]any); ok {
-		return lo.FilterMap(v, func(e any, _ int) (T, bool) {
-			s, ok := e.(T)
-			return s, ok
-		})
-	}
-
-	return nil
+	return &Value{value: f.CurrentValue}
 }
 
 type Schema struct {

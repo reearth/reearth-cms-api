@@ -95,9 +95,11 @@ type Integration struct {
 type Machine struct{}
 
 type ItemData struct {
-	Item   *cms.Item   `json:"item,omitempty"`
-	Model  *cms.Model  `json:"model,omitempty"`
-	Schema *cms.Schema `json:"schema,omitempty"`
+	Item            *cms.Item         `json:"item,omitempty"`
+	Model           *cms.Model        `json:"model,omitempty"`
+	Schema          *cms.Schema       `json:"schema,omitempty"`
+	ReferencedItems []*cms.Item       `json:"referencedItems,omitempty"`
+	Changes         []cms.FieldChange `json:"changes,omitempty"`
 }
 
 type AssetData cms.Asset
