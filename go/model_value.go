@@ -15,6 +15,9 @@ func NewValeu(value any) *Value {
 }
 
 func (v *Value) Interface() any {
+	if v == nil {
+		return nil
+	}
 	return v.value
 }
 
