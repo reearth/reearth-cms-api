@@ -28,6 +28,17 @@ var ctxKey = struct{}{}
 
 type Handler func(*http.Request, *Payload) error
 
+func MergeHandlers(handlers []Handler) Handler {
+	return func(r *http.Request, p *Payload) error {
+		for _, h := range handlers {
+			if err := h(r, p); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+}
+
 func AttachPayload(ctx context.Context, p *Payload) context.Context {
 	return context.WithValue(ctx, ctxKey, p)
 }
