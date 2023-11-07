@@ -1,0 +1,5 @@
+package: cmaoapi
+generate:
+  models: true
+  client: true
+output: integration_gen.go
