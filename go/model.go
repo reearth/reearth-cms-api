@@ -285,11 +285,16 @@ func (d *Item) Unmarshal(i any) {
 			}
 		}
 
-		if itf == nil || !vf.CanSet() || !reflect.TypeOf(itf.Value).AssignableTo(vf.Type()) {
+		if itf == nil || !vf.CanSet() {
 			continue
 		}
 
-		vf.Set(reflect.ValueOf(itf.Value))
+		itfv := reflect.ValueOf(itf.Value)
+		if reflect.TypeOf(itf.Value).AssignableTo(vf.Type()) {
+			vf.Set(itfv)
+		} else if itfv.CanConvert(vf.Type()) {
+			vf.Set(itfv.Convert(vf.Type()))
+		}
 	}
 }
 
