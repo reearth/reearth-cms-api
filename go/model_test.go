@@ -58,9 +58,9 @@ func TestItem_Unmarshal(t *testing.T) {
 	(&Item{
 		ID: "xxx",
 		Fields: []*Field{
-			{Key: "aaa", Value: "bbb"},
+			{Key: "aaa", Value: str("bbb")},
 			{Key: "bbb", Value: []string{"ccc", "bbb"}},
-			{Key: "ccc", Value: []string{"a", "b"}},
+			{Key: "ccc", Value: []str{"a", "b"}},
 			{Key: "ddd", Value: map[string]any{"a": "b"}},
 			{Key: "ggg", Type: "group", Value: []string{"1", "2"}},
 			{Key: "hhh", Type: "group", Value: []string{"1"}},
@@ -73,7 +73,7 @@ func TestItem_Unmarshal(t *testing.T) {
 
 	assert.Equal(t, S{
 		ID:  "xxx",
-		AAA: "bbb",
+		AAA: str("bbb"),
 		BBB: []string{"ccc", "bbb"},
 		CCC: []str{"a", "b"},
 		DDD: map[string]any{"a": "b"},

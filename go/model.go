@@ -285,32 +285,11 @@ func (d *Item) Unmarshal(i any) {
 			}
 		}
 
-		if !vf.CanSet() {
+		if itf == nil || !vf.CanSet() || !reflect.TypeOf(itf.Value).AssignableTo(vf.Type()) {
 			continue
 		}
 
-		if itf != nil {
-			if f.Type.Kind() == reflect.String {
-				if itfv := itf.GetValue().String(); itfv != nil {
-					vf.SetString(*itfv)
-				}
-			} else if f.Type.Kind() == reflect.Slice && f.Type.Elem().Kind() == reflect.String {
-				if te := f.Type.Elem(); te.Name() == "string" {
-					if itfv := itf.GetValue().Strings(); itfv != nil {
-						vf.Set(reflect.ValueOf(itfv))
-					}
-				} else if itfv := itf.GetValue().Strings(); itfv != nil {
-					s := reflect.MakeSlice(f.Type, 0, len(itfv))
-					for _, v := range itfv {
-						rv := reflect.ValueOf(v).Convert(te)
-						s = reflect.Append(s, rv)
-					}
-					vf.Set(s)
-				}
-			} else if itf.Value != nil && reflect.TypeOf(itf.Value).AssignableTo(vf.Type()) {
-				vf.Set(reflect.ValueOf(itf.Value))
-			}
-		}
+		vf.Set(reflect.ValueOf(itf.Value))
 	}
 }
 
