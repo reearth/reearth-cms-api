@@ -111,15 +111,15 @@ func (i *Item) Clone() *Item {
 	}
 }
 
-func (i Item) Field(id string) *Field {
+func (i *Item) Field(id string) *Field {
 	return i.FieldByGroup(id, "")
 }
 
-func (i Item) MetadataField(id string) *Field {
+func (i *Item) MetadataField(id string) *Field {
 	return i.MetadataFieldByGroup(id, "")
 }
 
-func (i Item) FieldByGroup(id, group string) *Field {
+func (i *Item) FieldByGroup(id, group string) *Field {
 	f, ok := lo.Find(i.Fields, func(f *Field) bool {
 		return f.ID == id && f.Group == group
 	})
@@ -129,7 +129,7 @@ func (i Item) FieldByGroup(id, group string) *Field {
 	return nil
 }
 
-func (i Item) MetadataFieldByGroup(id, group string) *Field {
+func (i *Item) MetadataFieldByGroup(id, group string) *Field {
 	f, ok := lo.Find(i.MetadataFields, func(f *Field) bool {
 		return f.ID == id && f.Group == group
 	})
@@ -139,11 +139,11 @@ func (i Item) MetadataFieldByGroup(id, group string) *Field {
 	return nil
 }
 
-func (i Item) FieldByKey(key string) *Field {
+func (i *Item) FieldByKey(key string) *Field {
 	return i.FieldByKeyAndGroup(key, "")
 }
 
-func (i Item) FieldByKeyAndGroup(key, group string) *Field {
+func (i *Item) FieldByKeyAndGroup(key, group string) *Field {
 	f, ok := lo.Find(i.Fields, func(f *Field) bool {
 		return f.Key == key && f.Group == group
 	})
@@ -153,11 +153,11 @@ func (i Item) FieldByKeyAndGroup(key, group string) *Field {
 	return nil
 }
 
-func (i Item) MetadataFieldByKey(key string) *Field {
+func (i *Item) MetadataFieldByKey(key string) *Field {
 	return i.MetadataFieldByKeyAndGroup(key, "")
 }
 
-func (i Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
+func (i *Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
 	f, ok := lo.Find(i.MetadataFields, func(f *Field) bool {
 		return f.Key == key && f.Group == group
 	})
@@ -167,7 +167,7 @@ func (i Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
 	return nil
 }
 
-func (i Item) Group(g string) Item {
+func (i *Item) Group(g string) Item {
 	fields := lo.Map(lo.Filter(i.Fields, func(f *Field, _ int) bool {
 		return f.Group == g
 	}), func(f *Field, _ int) *Field {
@@ -192,7 +192,7 @@ func (i Item) Group(g string) Item {
 	}
 }
 
-func (d Item) Unmarshal(i any) {
+func (d *Item) Unmarshal(i any) {
 	if i == nil {
 		return
 	}
@@ -341,8 +341,10 @@ func Marshal(i any, item *Item) {
 			continue
 		}
 
-		isMetadata := strings.HasSuffix(opts, ",metadata")
-		ty, _, _ := strings.Cut(opts, ",")
+		ty, optsRemaining, _ := strings.Cut(opts, ",")
+		optsSplited := strings.Split(optsRemaining, ",")
+		omitempty := !slices.Contains(optsSplited, "includezero")
+		isMetadata := slices.Contains(optsSplited, "metadata")
 
 		vf := v.FieldByName(f.Name)
 		if key == "id" {
@@ -352,12 +354,7 @@ func Marshal(i any, item *Item) {
 
 		vft := vf.Type()
 		var value any
-		if vft.Kind() == reflect.String {
-			v := vf.Convert(reflect.TypeOf("")).Interface()
-			if v != "" {
-				value = v
-			}
-		} else if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
+		if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
 			st := reflect.TypeOf("")
 			v := make([]string, 0, vf.Len())
 			for i := 0; i < cap(v); i++ {
@@ -432,6 +429,8 @@ func Marshal(i any, item *Item) {
 
 			value = item.ID
 			ty = "group"
+		} else if !omitempty || !vf.IsZero() {
+			value = vf.Convert(vft).Interface()
 		}
 
 		if value != nil {
