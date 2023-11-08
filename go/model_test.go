@@ -52,6 +52,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		EEE bool           `cms:"eee,,metadata"`
 		GGG []*G           `cms:"ggg,group"`
 		HHH []G            `cms:"hhh,group"`
+		III *int           `cms:"iii,,metadata,includezero"`
 	}
 	s := S{}
 
@@ -65,6 +66,7 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "ggg", Type: "group", Value: []string{"1", "2"}},
 			{Key: "hhh", Type: "group", Value: []string{"1"}},
 			{Key: "aaa", Group: "1", Value: "123"},
+			{Key: "iii"},
 		},
 		MetadataFields: []*Field{
 			{Key: "eee", Value: true},
@@ -80,6 +82,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		EEE: true,
 		GGG: []*G{{ID: "1", AAA: "123"}, {ID: "2"}},
 		HHH: []G{{ID: "1", AAA: "123"}},
+		III: nil,
 	}, s)
 
 	// no panic

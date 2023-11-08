@@ -285,15 +285,15 @@ func (d *Item) Unmarshal(i any) {
 			}
 		}
 
-		if itf == nil || !vf.CanSet() {
+		if itf == nil || itf.Value == nil || !vf.CanSet() {
 			continue
 		}
 
 		itfv := reflect.ValueOf(itf.Value)
-		if reflect.TypeOf(itf.Value).AssignableTo(vf.Type()) {
+		if iftvt := reflect.TypeOf(itf.Value); iftvt != nil && iftvt.AssignableTo(vf.Type()) {
 			vf.Set(itfv)
-		} else if itfv.CanConvert(vf.Type()) {
-			vf.Set(itfv.Convert(vf.Type()))
+		} else if itfv.CanConvert(f.Type) {
+			vf.Set(itfv.Convert(f.Type))
 		}
 	}
 }
@@ -304,6 +304,10 @@ func Marshal(i any, item *Item) {
 	}
 
 	t := reflect.TypeOf(i)
+	if t == nil {
+		return
+	}
+
 	v := reflect.ValueOf(i)
 	if t.Kind() == reflect.Pointer {
 		if v.IsNil() {
