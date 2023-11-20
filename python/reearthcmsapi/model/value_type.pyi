@@ -80,3 +80,11 @@ class ValueType(
     @schemas.classproperty
     def URL(cls):
         return cls("url")
+    
+    @schemas.classproperty
+    def GROUP(cls):
+        return cls("group")
+    
+    @schemas.classproperty
+    def TAG(cls):
+        return cls("tag")

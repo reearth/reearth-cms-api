@@ -68,6 +68,10 @@ class SchemaForRequestBodyApplicationJson(
     class MetaOapg:
         
         class properties:
+        
+            @staticmethod
+            def asset() -> typing.Type['AssetEmbedding']:
+                return AssetEmbedding
             
             
             class fields(
@@ -94,55 +98,86 @@ class SchemaForRequestBodyApplicationJson(
             
                 def __getitem__(self, i: int) -> 'Field':
                     return super().__getitem__(i)
-        
-            @staticmethod
-            def asset() -> typing.Type['AssetEmbedding']:
-                return AssetEmbedding
+            
+            
+            class metadataFields(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @staticmethod
+                    def items() -> typing.Type['Field']:
+                        return Field
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['Field'], typing.List['Field']],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'metadataFields':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> 'Field':
+                    return super().__getitem__(i)
             __annotations__ = {
-                "fields": fields,
                 "asset": asset,
+                "fields": fields,
+                "metadataFields": metadataFields,
             }
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["fields"]) -> MetaOapg.properties.fields: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["asset"]) -> 'AssetEmbedding': ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fields"]) -> MetaOapg.properties.fields: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadataFields"]) -> MetaOapg.properties.metadataFields: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["fields", "asset", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["asset", "fields", "metadataFields", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["asset"]) -> typing.Union['AssetEmbedding', schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fields"]) -> typing.Union[MetaOapg.properties.fields, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["asset"]) -> typing.Union['AssetEmbedding', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["metadataFields"]) -> typing.Union[MetaOapg.properties.metadataFields, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["fields", "asset", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["asset", "fields", "metadataFields", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
         asset: typing.Union['AssetEmbedding', schemas.Unset] = schemas.unset,
+        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
+        metadataFields: typing.Union[MetaOapg.properties.metadataFields, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SchemaForRequestBodyApplicationJson':
         return super().__new__(
             cls,
             *_args,
-            fields=fields,
             asset=asset,
+            fields=fields,
+            metadataFields=metadataFields,
             _configuration=_configuration,
             **kwargs,
         )

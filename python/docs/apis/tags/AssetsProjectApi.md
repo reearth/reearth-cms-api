@@ -62,8 +62,8 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
         'projectId': None,
     }
     body = dict(
-        file=open('/path/to/file', 'rb'),
         skip_decompression=False,
+        url="url_example",
     )
     try:
         # Create an new asset.
@@ -79,15 +79,29 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
-body | typing.Union[SchemaForRequestBodyMultipartFormData, SchemaForRequestBodyApplicationJson, Unset] | optional, default is unset |
+body | typing.Union[SchemaForRequestBodyApplicationJson, SchemaForRequestBodyMultipartFormData, Unset] | optional, default is unset |
 path_params | RequestPathParams | |
-content_type | str | optional, default is 'multipart/form-data' | Selects the schema and serialization of the request body
+content_type | str | optional, default is 'application/json' | Selects the schema and serialization of the request body
 accept_content_types | typing.Tuple[str] | default is ('application/json', ) | Tells the server the content type(s) that are accepted by the client
 stream | bool | default is False | if True then the response.content will be streamed and loaded from a file like object. When downloading a file, set this to True to force the code to deserialize the content to a FileSchema file
 timeout | typing.Optional[typing.Union[int, typing.Tuple]] | default is None | the timeout used by the rest client
 skip_deserialization | bool | default is False | when True, headers and body will be unset and an instance of api_client.ApiResponseWithoutDeserialization will be returned
 
 ### body
+
+# SchemaForRequestBodyApplicationJson
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
+
+### Dictionary Keys
+Key | Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | ------------- | -------------
+**skipDecompression** | None, bool,  | NoneClass, BoolClass,  |  | [optional] if omitted the server will use the default value of False
+**url** | str,  | str,  |  | [optional] 
+**any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 # SchemaForRequestBodyMultipartFormData
 
@@ -101,20 +115,6 @@ Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **file** | bytes, io.FileIO, io.BufferedReader,  | bytes, FileIO,  |  | [optional] 
 **skipDecompression** | bool,  | BoolClass,  |  | [optional] if omitted the server will use the default value of False
-**any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
-
-# SchemaForRequestBodyApplicationJson
-
-## Model Type Info
-Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | -------------
-dict, frozendict.frozendict,  | frozendict.frozendict,  |  | 
-
-### Dictionary Keys
-Key | Input Type | Accessed Type | Description | Notes
------------- | ------------- | ------------- | ------------- | -------------
-**url** | str,  | str,  |  | [optional] 
-**skipDecompression** | None, bool,  | NoneClass, BoolClass,  |  | [optional] if omitted the server will use the default value of False
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 ### path_params
@@ -345,9 +345,9 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  |  |
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **[items](#items)** | list, tuple,  | tuple,  |  | [optional] 
-**totalCount** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **page** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **perPage** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
+**totalCount** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 # items

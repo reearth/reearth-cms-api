@@ -177,12 +177,6 @@ class SchemaFor200ResponseBodyApplicationJson(
                     return super().__getitem__(i)
             
             
-            class totalCount(
-                schemas.IntSchema
-            ):
-                pass
-            
-            
             class page(
                 schemas.IntSchema
             ):
@@ -193,18 +187,21 @@ class SchemaFor200ResponseBodyApplicationJson(
                 schemas.IntSchema
             ):
                 pass
+            
+            
+            class totalCount(
+                schemas.IntSchema
+            ):
+                pass
             __annotations__ = {
                 "items": items,
-                "totalCount": totalCount,
                 "page": page,
                 "perPage": perPage,
+                "totalCount": totalCount,
             }
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["items"]) -> MetaOapg.properties.items: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["totalCount"]) -> MetaOapg.properties.totalCount: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["page"]) -> MetaOapg.properties.page: ...
@@ -213,9 +210,12 @@ class SchemaFor200ResponseBodyApplicationJson(
     def __getitem__(self, name: typing_extensions.Literal["perPage"]) -> MetaOapg.properties.perPage: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["totalCount"]) -> MetaOapg.properties.totalCount: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["items", "totalCount", "page", "perPage", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["items", "page", "perPage", "totalCount", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -224,18 +224,18 @@ class SchemaFor200ResponseBodyApplicationJson(
     def get_item_oapg(self, name: typing_extensions.Literal["items"]) -> typing.Union[MetaOapg.properties.items, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["totalCount"]) -> typing.Union[MetaOapg.properties.totalCount, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["page"]) -> typing.Union[MetaOapg.properties.page, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["perPage"]) -> typing.Union[MetaOapg.properties.perPage, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["totalCount"]) -> typing.Union[MetaOapg.properties.totalCount, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["items", "totalCount", "page", "perPage", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["items", "page", "perPage", "totalCount", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -243,9 +243,9 @@ class SchemaFor200ResponseBodyApplicationJson(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         items: typing.Union[MetaOapg.properties.items, list, tuple, schemas.Unset] = schemas.unset,
-        totalCount: typing.Union[MetaOapg.properties.totalCount, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         page: typing.Union[MetaOapg.properties.page, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         perPage: typing.Union[MetaOapg.properties.perPage, decimal.Decimal, int, schemas.Unset] = schemas.unset,
+        totalCount: typing.Union[MetaOapg.properties.totalCount, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
@@ -253,9 +253,9 @@ class SchemaFor200ResponseBodyApplicationJson(
             cls,
             *_args,
             items=items,
-            totalCount=totalCount,
             page=page,
             perPage=perPage,
+            totalCount=totalCount,
             _configuration=_configuration,
             **kwargs,
         )

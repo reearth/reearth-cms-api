@@ -36,7 +36,6 @@ class Version(
     class MetaOapg:
         
         class properties:
-            version = schemas.UUIDSchema
             
             
             class parents(
@@ -83,14 +82,12 @@ class Version(
             
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
+            version = schemas.UUIDSchema
             __annotations__ = {
-                "version": version,
                 "parents": parents,
                 "refs": refs,
+                "version": version,
             }
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["version"]) -> MetaOapg.properties.version: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["parents"]) -> MetaOapg.properties.parents: ...
@@ -99,15 +96,15 @@ class Version(
     def __getitem__(self, name: typing_extensions.Literal["refs"]) -> MetaOapg.properties.refs: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["version"]) -> MetaOapg.properties.version: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["version", "parents", "refs", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["parents", "refs", "version", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["version"]) -> typing.Union[MetaOapg.properties.version, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["parents"]) -> typing.Union[MetaOapg.properties.parents, schemas.Unset]: ...
@@ -116,27 +113,30 @@ class Version(
     def get_item_oapg(self, name: typing_extensions.Literal["refs"]) -> typing.Union[MetaOapg.properties.refs, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["version"]) -> typing.Union[MetaOapg.properties.version, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["version", "parents", "refs", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["parents", "refs", "version", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        version: typing.Union[MetaOapg.properties.version, str, uuid.UUID, schemas.Unset] = schemas.unset,
         parents: typing.Union[MetaOapg.properties.parents, list, tuple, schemas.Unset] = schemas.unset,
         refs: typing.Union[MetaOapg.properties.refs, list, tuple, schemas.Unset] = schemas.unset,
+        version: typing.Union[MetaOapg.properties.version, str, uuid.UUID, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Version':
         return super().__new__(
             cls,
             *_args,
-            version=version,
             parents=parents,
             refs=refs,
+            version=version,
             _configuration=_configuration,
             **kwargs,
         )

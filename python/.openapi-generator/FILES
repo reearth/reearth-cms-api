@@ -20,6 +20,7 @@ docs/models/Model.md
 docs/models/RefOrVersion.md
 docs/models/Schema.md
 docs/models/SchemaField.md
+docs/models/TagResponse.md
 docs/models/ValueType.md
 docs/models/Version.md
 docs/models/VersionedItem.md
@@ -57,6 +58,8 @@ reearthcmsapi/model/schema.py
 reearthcmsapi/model/schema.pyi
 reearthcmsapi/model/schema_field.py
 reearthcmsapi/model/schema_field.pyi
+reearthcmsapi/model/tag_response.py
+reearthcmsapi/model/tag_response.pyi
 reearthcmsapi/model/value_type.py
 reearthcmsapi/model/value_type.pyi
 reearthcmsapi/model/version.py
@@ -82,6 +85,7 @@ test/test_models/test_model.py
 test/test_models/test_ref_or_version.py
 test/test_models/test_schema.py
 test/test_models/test_schema_field.py
+test/test_models/test_tag_response.py
 test/test_models/test_value_type.py
 test/test_models/test_version.py
 test/test_models/test_versioned_item.py

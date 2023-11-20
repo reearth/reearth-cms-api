@@ -21,6 +21,7 @@ from reearthcmsapi.model.model import Model
 from reearthcmsapi.model.ref_or_version import RefOrVersion
 from reearthcmsapi.model.schema import Schema
 from reearthcmsapi.model.schema_field import SchemaField
+from reearthcmsapi.model.tag_response import TagResponse
 from reearthcmsapi.model.value_type import ValueType
 from reearthcmsapi.model.version import Version
 from reearthcmsapi.model.versioned_item import VersionedItem

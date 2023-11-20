@@ -36,133 +36,143 @@ class Model(
     class MetaOapg:
         
         class properties:
-            id = schemas.StrSchema
-            projectId = schemas.StrSchema
-            schemaId = schemas.StrSchema
-            name = schemas.StrSchema
-            description = schemas.StrSchema
-            public = schemas.BoolSchema
-            key = schemas.StrSchema
             createdAt = schemas.DateTimeSchema
-            updatedAt = schemas.DateTimeSchema
+            description = schemas.StrSchema
+            id = schemas.StrSchema
+            key = schemas.StrSchema
             lastModified = schemas.DateTimeSchema
+            metadataSchemaId = schemas.StrSchema
+            name = schemas.StrSchema
+            projectId = schemas.StrSchema
+            public = schemas.BoolSchema
+            schemaId = schemas.StrSchema
+            updatedAt = schemas.DateTimeSchema
             __annotations__ = {
-                "id": id,
-                "projectId": projectId,
-                "schemaId": schemaId,
-                "name": name,
-                "description": description,
-                "public": public,
-                "key": key,
                 "createdAt": createdAt,
-                "updatedAt": updatedAt,
+                "description": description,
+                "id": id,
+                "key": key,
                 "lastModified": lastModified,
+                "metadataSchemaId": metadataSchemaId,
+                "name": name,
+                "projectId": projectId,
+                "public": public,
+                "schemaId": schemaId,
+                "updatedAt": updatedAt,
             }
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["projectId"]) -> MetaOapg.properties.projectId: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["schemaId"]) -> MetaOapg.properties.schemaId: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["public"]) -> MetaOapg.properties.public: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["updatedAt"]) -> MetaOapg.properties.updatedAt: ...
+    def __getitem__(self, name: typing_extensions.Literal["description"]) -> MetaOapg.properties.description: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["lastModified"]) -> MetaOapg.properties.lastModified: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadataSchemaId"]) -> MetaOapg.properties.metadataSchemaId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["projectId"]) -> MetaOapg.properties.projectId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["public"]) -> MetaOapg.properties.public: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["schemaId"]) -> MetaOapg.properties.schemaId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["updatedAt"]) -> MetaOapg.properties.updatedAt: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "schemaId", "name", "description", "public", "key", "createdAt", "updatedAt", "lastModified", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["createdAt", "description", "id", "key", "lastModified", "metadataSchemaId", "name", "projectId", "public", "schemaId", "updatedAt", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["projectId"]) -> typing.Union[MetaOapg.properties.projectId, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["schemaId"]) -> typing.Union[MetaOapg.properties.schemaId, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["description"]) -> typing.Union[MetaOapg.properties.description, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["public"]) -> typing.Union[MetaOapg.properties.public, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> typing.Union[MetaOapg.properties.key, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["lastModified"]) -> typing.Union[MetaOapg.properties.lastModified, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["metadataSchemaId"]) -> typing.Union[MetaOapg.properties.metadataSchemaId, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["projectId"]) -> typing.Union[MetaOapg.properties.projectId, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["public"]) -> typing.Union[MetaOapg.properties.public, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["schemaId"]) -> typing.Union[MetaOapg.properties.schemaId, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["updatedAt"]) -> typing.Union[MetaOapg.properties.updatedAt, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["lastModified"]) -> typing.Union[MetaOapg.properties.lastModified, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "schemaId", "name", "description", "public", "key", "createdAt", "updatedAt", "lastModified", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["createdAt", "description", "id", "key", "lastModified", "metadataSchemaId", "name", "projectId", "public", "schemaId", "updatedAt", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        projectId: typing.Union[MetaOapg.properties.projectId, str, schemas.Unset] = schemas.unset,
-        schemaId: typing.Union[MetaOapg.properties.schemaId, str, schemas.Unset] = schemas.unset,
-        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
-        description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
-        public: typing.Union[MetaOapg.properties.public, bool, schemas.Unset] = schemas.unset,
-        key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
         createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, schemas.Unset] = schemas.unset,
-        updatedAt: typing.Union[MetaOapg.properties.updatedAt, str, datetime, schemas.Unset] = schemas.unset,
+        description: typing.Union[MetaOapg.properties.description, str, schemas.Unset] = schemas.unset,
+        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
         lastModified: typing.Union[MetaOapg.properties.lastModified, str, datetime, schemas.Unset] = schemas.unset,
+        metadataSchemaId: typing.Union[MetaOapg.properties.metadataSchemaId, str, schemas.Unset] = schemas.unset,
+        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
+        projectId: typing.Union[MetaOapg.properties.projectId, str, schemas.Unset] = schemas.unset,
+        public: typing.Union[MetaOapg.properties.public, bool, schemas.Unset] = schemas.unset,
+        schemaId: typing.Union[MetaOapg.properties.schemaId, str, schemas.Unset] = schemas.unset,
+        updatedAt: typing.Union[MetaOapg.properties.updatedAt, str, datetime, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Model':
         return super().__new__(
             cls,
             *_args,
-            id=id,
-            projectId=projectId,
-            schemaId=schemaId,
-            name=name,
-            description=description,
-            public=public,
-            key=key,
             createdAt=createdAt,
-            updatedAt=updatedAt,
+            description=description,
+            id=id,
+            key=key,
             lastModified=lastModified,
+            metadataSchemaId=metadataSchemaId,
+            name=name,
+            projectId=projectId,
+            public=public,
+            schemaId=schemaId,
+            updatedAt=updatedAt,
             _configuration=_configuration,
             **kwargs,
         )

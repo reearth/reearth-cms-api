@@ -37,24 +37,21 @@ class SchemaField(
         
         class properties:
             id = schemas.StrSchema
+            key = schemas.StrSchema
+            required = schemas.BoolSchema
         
             @staticmethod
             def type() -> typing.Type['ValueType']:
                 return ValueType
-            key = schemas.StrSchema
-            required = schemas.BoolSchema
             __annotations__ = {
                 "id": id,
-                "type": type,
                 "key": key,
                 "required": required,
+                "type": type,
             }
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
@@ -63,9 +60,12 @@ class SchemaField(
     def __getitem__(self, name: typing_extensions.Literal["required"]) -> MetaOapg.properties.required: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "type", "key", "required", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "key", "required", "type", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -74,18 +74,18 @@ class SchemaField(
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> typing.Union['ValueType', schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> typing.Union[MetaOapg.properties.key, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["required"]) -> typing.Union[MetaOapg.properties.required, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> typing.Union['ValueType', schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "type", "key", "required", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "key", "required", "type", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -93,9 +93,9 @@ class SchemaField(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        type: typing.Union['ValueType', schemas.Unset] = schemas.unset,
         key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
         required: typing.Union[MetaOapg.properties.required, bool, schemas.Unset] = schemas.unset,
+        type: typing.Union['ValueType', schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SchemaField':
@@ -103,9 +103,9 @@ class SchemaField(
             cls,
             *_args,
             id=id,
-            type=type,
             key=key,
             required=required,
+            type=type,
             _configuration=_configuration,
             **kwargs,
         )

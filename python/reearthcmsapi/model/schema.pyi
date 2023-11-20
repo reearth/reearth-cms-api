@@ -36,8 +36,8 @@ class Schema(
     class MetaOapg:
         
         class properties:
-            id = schemas.StrSchema
-            projectId = schemas.StrSchema
+            TitleField = schemas.StrSchema
+            createdAt = schemas.DateTimeSchema
             
             
             class fields(
@@ -64,13 +64,24 @@ class Schema(
             
                 def __getitem__(self, i: int) -> 'SchemaField':
                     return super().__getitem__(i)
-            createdAt = schemas.DateTimeSchema
+            id = schemas.StrSchema
+            projectId = schemas.StrSchema
             __annotations__ = {
+                "TitleField": TitleField,
+                "createdAt": createdAt,
+                "fields": fields,
                 "id": id,
                 "projectId": projectId,
-                "fields": fields,
-                "createdAt": createdAt,
             }
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["TitleField"]) -> MetaOapg.properties.TitleField: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["fields"]) -> MetaOapg.properties.fields: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -79,18 +90,21 @@ class Schema(
     def __getitem__(self, name: typing_extensions.Literal["projectId"]) -> MetaOapg.properties.projectId: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["fields"]) -> MetaOapg.properties.fields: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "fields", "createdAt", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["TitleField", "createdAt", "fields", "id", "projectId", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["TitleField"]) -> typing.Union[MetaOapg.properties.TitleField, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["fields"]) -> typing.Union[MetaOapg.properties.fields, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
@@ -99,35 +113,31 @@ class Schema(
     def get_item_oapg(self, name: typing_extensions.Literal["projectId"]) -> typing.Union[MetaOapg.properties.projectId, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["fields"]) -> typing.Union[MetaOapg.properties.fields, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "fields", "createdAt", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["TitleField", "createdAt", "fields", "id", "projectId", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
+        TitleField: typing.Union[MetaOapg.properties.TitleField, str, schemas.Unset] = schemas.unset,
+        createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, schemas.Unset] = schemas.unset,
+        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         projectId: typing.Union[MetaOapg.properties.projectId, str, schemas.Unset] = schemas.unset,
-        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
-        createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Schema':
         return super().__new__(
             cls,
             *_args,
+            TitleField=TitleField,
+            createdAt=createdAt,
+            fields=fields,
             id=id,
             projectId=projectId,
-            fields=fields,
-            createdAt=createdAt,
             _configuration=_configuration,
             **kwargs,
         )

@@ -51,12 +51,14 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
     body = dict(
         fields=[
             Field(
+                group="group_example",
                 id="id_example",
+                key="key_example",
                 type=ValueType("text"),
                 value=None,
-                key="key_example",
             )
         ],
+,
     )
     try:
         api_response = api_instance.item_create_with_project(
@@ -92,9 +94,22 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  |  |
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **[fields](#fields)** | list, tuple,  | tuple,  |  | [optional] 
+**[metadataFields](#metadataFields)** | list, tuple,  | tuple,  |  | [optional] 
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 # fields
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+list, tuple,  | tuple,  |  | 
+
+### Tuple Items
+Class Name | Input Type | Accessed Type | Description | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+[**Field**]({{complexTypePrefix}}Field.md) | [**Field**]({{complexTypePrefix}}Field.md) | [**Field**]({{complexTypePrefix}}Field.md) |  | 
+
+# metadataFields
 
 ## Model Type Info
 Input Type | Accessed Type | Description | Notes
@@ -363,9 +378,9 @@ dict, frozendict.frozendict,  | frozendict.frozendict,  |  |
 Key | Input Type | Accessed Type | Description | Notes
 ------------ | ------------- | ------------- | ------------- | -------------
 **[items](#items)** | list, tuple,  | tuple,  |  | [optional] 
-**totalCount** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **page** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **perPage** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
+**totalCount** | decimal.Decimal, int,  | decimal.Decimal,  |  | [optional] 
 **any_string_name** | dict, frozendict.frozendict, str, date, datetime, int, float, bool, decimal.Decimal, None, list, tuple, bytes, io.FileIO, io.BufferedReader | frozendict.frozendict, str, BoolClass, decimal.Decimal, NoneClass, tuple, bytes, FileIO | any string name can be used but the value must be the correct type | [optional]
 
 # items

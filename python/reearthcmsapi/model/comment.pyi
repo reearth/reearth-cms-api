@@ -36,7 +36,6 @@ class Comment(
     class MetaOapg:
         
         class properties:
-            id = schemas.StrSchema
             authorId = schemas.StrSchema
             
             
@@ -54,16 +53,14 @@ class Comment(
                     return cls("integrtaion")
             content = schemas.StrSchema
             createdAt = schemas.DateTimeSchema
+            id = schemas.StrSchema
             __annotations__ = {
-                "id": id,
                 "authorId": authorId,
                 "authorType": authorType,
                 "content": content,
                 "createdAt": createdAt,
+                "id": id,
             }
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["authorId"]) -> MetaOapg.properties.authorId: ...
@@ -78,15 +75,15 @@ class Comment(
     def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "authorId", "authorType", "content", "createdAt", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["authorId", "authorType", "content", "createdAt", "id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["authorId"]) -> typing.Union[MetaOapg.properties.authorId, schemas.Unset]: ...
@@ -101,31 +98,34 @@ class Comment(
     def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "authorId", "authorType", "content", "createdAt", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["authorId", "authorType", "content", "createdAt", "id", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         authorId: typing.Union[MetaOapg.properties.authorId, str, schemas.Unset] = schemas.unset,
         authorType: typing.Union[MetaOapg.properties.authorType, str, schemas.Unset] = schemas.unset,
         content: typing.Union[MetaOapg.properties.content, str, schemas.Unset] = schemas.unset,
         createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, schemas.Unset] = schemas.unset,
+        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Comment':
         return super().__new__(
             cls,
             *_args,
-            id=id,
             authorId=authorId,
             authorType=authorType,
             content=content,
             createdAt=createdAt,
+            id=id,
             _configuration=_configuration,
             **kwargs,
         )
