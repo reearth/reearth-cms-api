@@ -2,6 +2,7 @@ package cms
 
 import (
 	"net/url"
+	"strconv"
 )
 
 func parallel[T any](limit int, fn func(int) (T, int, error)) ([]T, error) {
@@ -50,4 +51,15 @@ func parallel[T any](limit int, fn func(int) (T, int, error)) ([]T, error) {
 func cloneURL(u *url.URL) *url.URL {
 	u2 := *u
 	return &u2
+}
+
+func paginationQuery(page, perPage int) map[string][]string {
+	q := map[string][]string{}
+	if page >= 1 {
+		q["page"] = []string{strconv.Itoa(page)}
+	}
+	if perPage >= 1 {
+		q["perPage"] = []string{strconv.Itoa(perPage)}
+	}
+	return q
 }

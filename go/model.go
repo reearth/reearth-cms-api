@@ -70,10 +70,31 @@ func (a *Asset) ToPublic() *PublicAsset {
 	}
 }
 
+type Models struct {
+	Models     []Model `json:"models"`
+	Page       int     `json:"page"`
+	PerPage    int     `json:"perPage"`
+	TotalCount int     `json:"totalCount"`
+}
+
+func (r Models) HasNext() bool {
+	if r.PerPage == 0 {
+		return false
+	}
+	return r.TotalCount > r.Page*r.PerPage
+}
+
 type Model struct {
-	ID           string    `json:"id"`
-	Key          string    `json:"key,omitempty"`
-	LastModified time.Time `json:"lastModified,omitempty"`
+	ID               string    `json:"id,omitempty"`
+	Name             string    `json:"name,omitempty"`
+	Key              string    `json:"key,omitempty"`
+	Public           bool      `json:"public,omitempty"`
+	ProjectID        string    `json:"projectId,omitempty"`
+	SchemaID         string    `json:"schemaId,omitempty"`
+	MetadataSchemaID string    `json:"metadataSchemaId,omitempty"`
+	CreatedAt        time.Time `json:"createdAt,omitempty"`
+	UpdatedAt        time.Time `json:"updatedAt,omitempty"`
+	LastModified     time.Time `json:"lastModified,omitempty"`
 }
 
 type Items struct {

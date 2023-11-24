@@ -23,6 +23,9 @@ var ErrNotFound = errors.New("not found")
 type Interface interface {
 	GetModel(ctx context.Context, modelID string) (*Model, error)
 	GetModelByKey(ctx context.Context, proejctID, modelID string) (*Model, error)
+	GetModelsPartially(ctx context.Context, projectIDOrAlias string, page, perPage int) (*Models, error)
+	GetModelsInParallel(ctx context.Context, modelID string, limit int) (*Models, error)
+	GetModels(ctx context.Context, projectIDOrAlias string) (*Models, error)
 	GetItem(ctx context.Context, itemID string, asset bool) (*Item, error)
 	GetItemsPartially(ctx context.Context, modelID string, page, perPage int, asset bool) (*Items, error)
 	GetItems(ctx context.Context, modelID string, asset bool) (*Items, error)
@@ -107,6 +110,78 @@ func (c *CMS) GetModelByKey(ctx context.Context, projectKey, modelKey string) (*
 	}
 
 	return model, nil
+}
+
+func (c *CMS) GetModelsPartially(ctx context.Context, projectIDOrAlias string, page, perPage int) (*Models, error) {
+	b, err := c.send(ctx, http.MethodGet, []string{"api", "projects", projectIDOrAlias, "models"}, "", paginationQuery(page, perPage))
+	if err != nil {
+		return nil, fmt.Errorf("failed to get models: %w", err)
+	}
+	defer func() { _ = b.Close() }()
+
+	models := &Models{}
+	if err := json.NewDecoder(b).Decode(models); err != nil {
+		return nil, fmt.Errorf("failed to parse models: %w", err)
+	}
+
+	return models, nil
+}
+
+func (c *CMS) GetModels(ctx context.Context, projectIDOrAlias string) (models *Models, _ error) {
+	const perPage = 100
+	for p := 1; ; p++ {
+		i, err := c.GetModelsPartially(ctx, projectIDOrAlias, p, perPage)
+		if err != nil {
+			return nil, err
+		}
+
+		if i == nil || i.PerPage <= 0 {
+			return nil, fmt.Errorf("invalid response: %#v", i)
+		}
+
+		if models == nil {
+			models = i
+		} else {
+			models.Models = append(models.Models, i.Models...)
+		}
+
+		allPageCount := i.TotalCount / i.PerPage
+		if i.Page >= allPageCount {
+			break
+		}
+	}
+
+	return models, nil
+}
+
+func (c *CMS) GetModelsInParallel(ctx context.Context, modelID string, limit int) (*Models, error) {
+	const perPage = 100
+	if limit <= 0 {
+		limit = 5
+	}
+
+	res, err := parallel(limit, func(p int) (*Models, int, error) {
+		r, err := c.GetModelsPartially(ctx, modelID, p+1, perPage)
+		if err != nil || r == nil {
+			if r == nil || r.PerPage == 0 {
+				err = fmt.Errorf("invalid response: %#v", r)
+			}
+			return nil, 0, err
+		}
+		return r, int(math.Ceil(float64(r.TotalCount) / float64(perPage))), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res2 := res[0]
+	res2.Models = lo.FlatMap(res, func(i *Models, _ int) []Model {
+		if i == nil {
+			return nil
+		}
+		return i.Models
+	})
+	return res2, nil
 }
 
 func (c *CMS) GetItem(ctx context.Context, itemID string, asset bool) (*Item, error) {
