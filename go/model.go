@@ -119,6 +119,7 @@ type Item struct {
 	ReferencedItems []*Item  `json:"referencedItems,omitempty"`
 	OriginalItemID  *string  `json:"originalItemId,omitempty"`
 	MetadataItemID  *string  `json:"metadataItemId,omitempty"`
+	IsMetadata      bool     `json:"isMetadata,omitempty"`
 }
 
 func (i *Item) Clone() *Item {
