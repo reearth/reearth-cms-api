@@ -72,7 +72,13 @@ func TagsFrom(j any) []Tag {
 	return res
 }
 
-func (t Tag) MarshalCMS() any {
+func (t *Tag) MarshalCMS() any {
+	if t == nil || t.ID == "" && t.Name == "" {
+		return nil
+	}
+	if t.ID == "" {
+		return t.Name
+	}
 	return t.ID
 }
 

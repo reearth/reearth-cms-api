@@ -87,7 +87,7 @@ func TestMarshal(t *testing.T) {
 		HHH []*G     `cms:"hhh"`
 		III *int     `cms:"iii,,metadata,includezero"`
 		JJJ *Value   `cms:"jjj"`
-		KKK *Tag     `cms:"kkk"`
+		KKK []*Tag   `cms:"kkk"`
 	}
 
 	s := S{
@@ -100,7 +100,7 @@ func TestMarshal(t *testing.T) {
 		GGG: []G{{ID: "1", AAA: "ggg"}},
 		HHH: []*G{{ID: "2", AAA: "hhh"}, nil},
 		JJJ: &Value{value: "foo"},
-		KKK: &Tag{ID: "tag"},
+		KKK: []*Tag{{Name: "tag"}, nil},
 	}
 
 	expected := &Item{
@@ -116,7 +116,7 @@ func TestMarshal(t *testing.T) {
 			{Key: "aaa", Group: "2", Type: "text", Value: "hhh"},
 			{Key: "hhh", Type: "group", Value: []string{"2"}},
 			{Key: "jjj", Type: "", Value: "foo"},
-			{Key: "kkk", Type: "", Value: "tag"},
+			{Key: "kkk", Type: "", Value: []any{"tag"}},
 		},
 		MetadataFields: []*Field{
 			{Key: "fff", Type: "bool", Value: true},

@@ -8,6 +8,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+var marshalCMSType = reflect.TypeOf((*MarshalCMS)(nil)).Elem()
+
 func (d *Item) Unmarshal(i any) {
 	if i == nil {
 		return
@@ -199,6 +201,15 @@ func Marshal(src any, item *Item) {
 		var value any
 		if m, ok := vf.Interface().(MarshalCMS); ok {
 			value = m.MarshalCMS()
+		} else if vft.Kind() == reflect.Slice && vft.Elem().Implements(marshalCMSType) {
+			v := make([]any, 0, vf.Len())
+			for i := 0; i < cap(v); i++ {
+				t := vf.Index(i).Interface().(MarshalCMS).MarshalCMS()
+				if t != nil {
+					v = append(v, t)
+				}
+			}
+			value = v
 		} else if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
 			st := reflect.TypeOf("")
 			v := make([]string, 0, vf.Len())
