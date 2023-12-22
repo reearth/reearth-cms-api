@@ -10,7 +10,7 @@ type Value struct {
 	value any
 }
 
-func NewValeu(value any) *Value {
+func NewValue(value any) *Value {
 	return &Value{value: value}
 }
 
