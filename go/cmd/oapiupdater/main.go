@@ -39,6 +39,11 @@ func updateSchema() error {
 
 func removeXGoType(schema any) any {
 	switch schema := schema.(type) {
+	case map[string]any:
+		delete(schema, "x-go-type")
+		for k, v := range schema {
+			schema[k] = removeXGoType(v)
+		}
 	case map[any]any:
 		delete(schema, "x-go-type")
 		for k, v := range schema {
