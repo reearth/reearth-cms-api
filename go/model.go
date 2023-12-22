@@ -187,7 +187,7 @@ func (i *Item) MetadataFieldByKeyAndGroup(key, group string) *Field {
 	return nil
 }
 
-func (i *Item) Group(g string) Item {
+func (i *Item) Group(g string) *Item {
 	fields := lo.Map(lo.Filter(i.Fields, func(f *Field, _ int) bool {
 		return f.Group == g
 	}), func(f *Field, _ int) *Field {
@@ -204,7 +204,7 @@ func (i *Item) Group(g string) Item {
 		return g
 	})
 
-	return Item{
+	return &Item{
 		ID:             g,
 		ModelID:        i.ModelID,
 		Fields:         fields,

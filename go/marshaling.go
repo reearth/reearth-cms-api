@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
 )
 
@@ -57,7 +58,7 @@ func (d *Item) Unmarshal(i any) {
 				}
 			}
 
-			groups := make([]Item, 0, len(groupIDs))
+			groups := make([]*Item, 0, len(groupIDs))
 			for _, g := range groupIDs {
 				group := d.Group(g)
 				groups = append(groups, group)
@@ -104,6 +105,27 @@ func (d *Item) Unmarshal(i any) {
 			continue
 		}
 
+		// Tag
+		assignIf[Tag](vf, func() (Tag, bool) {
+			t := TagFrom(itf.Value)
+			if t == nil {
+				return Tag{}, false
+			}
+			return *t, true
+		})
+		assignIf[[]Tag](vf, func() ([]Tag, bool) {
+			return TagsFrom(itf.Value), true
+		})
+		assignIf[[]*Tag](vf, func() ([]*Tag, bool) {
+			return lo.ToSlicePtr(TagsFrom(itf.Value)), true
+		})
+
+		// Value
+		assignIf[Value](vf, func() (Value, bool) {
+			return *NewValue(itf.Value), true
+		})
+
+		// normal value
 		itfv := reflect.ValueOf(itf.Value)
 		if iftvt := reflect.TypeOf(itf.Value); iftvt != nil && iftvt.AssignableTo(vf.Type()) {
 			vf.Set(itfv)
@@ -113,17 +135,34 @@ func (d *Item) Unmarshal(i any) {
 	}
 }
 
-func Marshal(i any, item *Item) {
-	if item == nil || i == nil {
+func assignIf[T any](vf reflect.Value, conv func() (T, bool)) {
+	var t T
+	if valueType := reflect.TypeOf(&t); vf.Type().AssignableTo(valueType) {
+		v, ok := conv()
+		if !ok {
+			return
+		}
+		vf.Set(reflect.ValueOf(lo.ToPtr(v)))
+	} else if valueType := reflect.TypeOf(t); vf.Type().AssignableTo(valueType) {
+		v, ok := conv()
+		if !ok {
+			return
+		}
+		vf.Set(reflect.ValueOf(v))
+	}
+}
+
+func Marshal(src any, item *Item) {
+	if item == nil || src == nil {
 		return
 	}
 
-	t := reflect.TypeOf(i)
+	t := reflect.TypeOf(src)
 	if t == nil {
 		return
 	}
 
-	v := reflect.ValueOf(i)
+	v := reflect.ValueOf(src)
 	if t.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return
@@ -140,6 +179,7 @@ func Marshal(i any, item *Item) {
 		f := t.Field(i)
 		tag := f.Tag.Get(tag)
 		key, opts, _ := strings.Cut(tag, ",")
+
 		if key == "" || key == "-" {
 			continue
 		}
@@ -157,7 +197,9 @@ func Marshal(i any, item *Item) {
 
 		vft := vf.Type()
 		var value any
-		if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
+		if m, ok := vf.Interface().(MarshalCMS); ok {
+			value = m.MarshalCMS()
+		} else if vft.Kind() == reflect.Slice && vft.Elem().Kind() == reflect.String && vf.Len() > 0 {
 			st := reflect.TypeOf("")
 			v := make([]string, 0, vf.Len())
 			for i := 0; i < cap(v); i++ {

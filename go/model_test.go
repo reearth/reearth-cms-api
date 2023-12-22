@@ -25,7 +25,7 @@ func TestItem_Group(t *testing.T) {
 	}
 
 	g := item.Group("1")
-	assert.Equal(t, Item{
+	assert.Equal(t, &Item{
 		ID:      "1",
 		ModelID: "xxx",
 		Fields: []*Field{

@@ -24,6 +24,8 @@ func TestItem_Unmarshal(t *testing.T) {
 		GGG []*G           `cms:"ggg,group"`
 		HHH []G            `cms:"hhh,group"`
 		III *int           `cms:"iii,,metadata,includezero"`
+		JJJ []Tag          `cms:"jjj"`
+		KKK *Value         `cms:"kkk"`
 	}
 	s := S{}
 
@@ -38,6 +40,8 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "hhh", Type: "group", Value: []string{"1"}},
 			{Key: "aaa", Group: "1", Value: "123"},
 			{Key: "iii"},
+			{Key: "jjj", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
+			{Key: "kkk", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
 		},
 		MetadataFields: []*Field{
 			{Key: "eee", Value: true},
@@ -54,6 +58,8 @@ func TestItem_Unmarshal(t *testing.T) {
 		GGG: []*G{{ID: "1", AAA: "123"}, {ID: "2"}},
 		HHH: []G{{ID: "1", AAA: "123"}},
 		III: nil,
+		JJJ: []Tag{{ID: "xxx", Name: "tag"}},
+		KKK: &Value{value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
 	}, s)
 
 	// no panic
@@ -80,6 +86,8 @@ func TestMarshal(t *testing.T) {
 		GGG []G      `cms:"ggg"`
 		HHH []*G     `cms:"hhh"`
 		III *int     `cms:"iii,,metadata,includezero"`
+		JJJ *Value   `cms:"jjj"`
+		KKK *Tag     `cms:"kkk"`
 	}
 
 	s := S{
@@ -91,6 +99,8 @@ func TestMarshal(t *testing.T) {
 		FFF: true,
 		GGG: []G{{ID: "1", AAA: "ggg"}},
 		HHH: []*G{{ID: "2", AAA: "hhh"}, nil},
+		JJJ: &Value{value: "foo"},
+		KKK: &Tag{ID: "tag"},
 	}
 
 	expected := &Item{
@@ -105,6 +115,8 @@ func TestMarshal(t *testing.T) {
 			{Key: "ggg", Type: "group", Value: []string{"1"}},
 			{Key: "aaa", Group: "2", Type: "text", Value: "hhh"},
 			{Key: "hhh", Type: "group", Value: []string{"2"}},
+			{Key: "jjj", Type: "", Value: "foo"},
+			{Key: "kkk", Type: "", Value: "tag"},
 		},
 		MetadataFields: []*Field{
 			{Key: "fff", Type: "bool", Value: true},

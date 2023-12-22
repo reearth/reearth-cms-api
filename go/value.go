@@ -7,6 +7,10 @@ import (
 	"github.com/samber/lo"
 )
 
+type MarshalCMS interface {
+	MarshalCMS() any
+}
+
 type Tag struct {
 	ID    string `json:"id"`
 	Name  string `json:"name"`
@@ -30,6 +34,33 @@ func TagFrom(j any) *Tag {
 	}
 
 	return &t
+}
+
+func TagsFrom(j any) []Tag {
+	s, ok := j.([]any)
+	if !ok {
+		s2, ok := j.([]map[string]any)
+		if !ok {
+			return nil
+		}
+		s = make([]any, len(s2))
+		for i, e := range s2 {
+			s[i] = e
+		}
+	}
+
+	res := make([]Tag, len(s))
+	for i, e := range s {
+		if t := TagFrom(e); t != nil {
+			res[i] = *t
+		}
+	}
+
+	return res
+}
+
+func (t Tag) MarshalCMS() any {
+	return t.ID
 }
 
 type Value struct {
@@ -87,27 +118,10 @@ func (v *Value) Tag() *Tag {
 }
 
 func (v *Value) Tags() []Tag {
-	values, ok := v.value.([]any)
-	if !ok {
-		values2, ok := v.value.([]map[string]any)
-		if !ok {
-			return nil
-		}
-
-		values = make([]any, len(values2))
-		for i, value := range values2 {
-			values[i] = value
-		}
+	if v == nil {
+		return nil
 	}
-
-	res := make([]Tag, len(values))
-	for i, value := range values {
-		if t := TagFrom(value); t != nil {
-			res[i] = *t
-		}
-	}
-
-	return res
+	return TagsFrom(v.value)
 }
 
 func (f *Value) JSON(j any) error {
@@ -166,6 +180,33 @@ func getValue[T any](v *Value) *T {
 		return &v
 	}
 
+	return nil
+}
+
+func (v *Value) MarshalCMS() any {
+	if v == nil {
+		return nil
+	}
+	if m, ok := v.value.(MarshalCMS); ok {
+		return m.MarshalCMS()
+	}
+	return v.value
+}
+
+func (v *Value) MarshalJSON() ([]byte, error) {
+	if v == nil {
+		return nil, nil
+	}
+	return json.Marshal(v.value)
+}
+
+func (v *Value) UnmarshalJSON(b []byte) error {
+	if v == nil {
+		*v = Value{}
+	}
+	if err := json.Unmarshal(b, &v.value); err != nil {
+		return err
+	}
 	return nil
 }
 
