@@ -154,18 +154,70 @@ func TestField_ValueFloat(t *testing.T) {
 	}).GetValue().Float())
 }
 
+func TestField_ValueTag(t *testing.T) {
+	assert.Equal(t, &Tag{
+		ID:    "xxx",
+		Name:  "tag",
+		Color: "red",
+	}, (&Field{
+		Value: map[string]any{
+			"id":    "xxx",
+			"name":  "tag",
+			"color": "red",
+		},
+	}).GetValue().Tag())
+	assert.Nil(t, (&Field{
+		Value: 100,
+	}).GetValue().Tag())
+}
+
+func TestField_ValueTags(t *testing.T) {
+	assert.Equal(t, []Tag{
+		{ID: "xxx"},
+		{ID: "yyy"},
+	}, (&Field{
+		Value: []any{
+			map[string]any{"id": "xxx"}, map[string]any{"id": "yyy"},
+		},
+	}).GetValue().Tags())
+	assert.Equal(t, []Tag{
+		{ID: "xxx"},
+		{ID: "yyy"},
+	}, (&Field{
+		Value: []map[string]any{
+			{"id": "xxx"}, {"id": "yyy"},
+		},
+	}).GetValue().Tags())
+	assert.Nil(t, (&Field{
+		Value: map[string]any{
+			"id":    "xxx",
+			"name":  "tag",
+			"color": "red",
+		},
+	}).GetValue().Tags())
+}
+
 func TestField_ValueJSON(t *testing.T) {
-	r, err := (&Field{
+	var r any
+	err := (&Field{
 		Value: `{"foo":"bar"}`,
-	}).GetValue().JSON()
+	}).GetValue().JSON(&r)
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"foo": "bar"}, r)
 }
 
 func TestField_ValueJSONs(t *testing.T) {
-	r, err := (&Field{
+	r := []any{}
+	err := (&Field{
 		Value: []string{`{"foo":"bar"}`, `{"foo":"hoge"}`},
-	}).GetValue().JSONs()
+	}).GetValue().JSONs(&r)
+	assert.NoError(t, err)
+	assert.Equal(t, []any{map[string]any{"foo": "bar"}, map[string]any{"foo": "hoge"}}, r)
+
+	r = []any{nil, nil}
+	err = (&Field{
+		Value: []string{`{"foo":"bar"}`, `{"foo":"hoge"}`},
+	}).GetValue().JSONs(r)
 	assert.NoError(t, err)
 	assert.Equal(t, []any{map[string]any{"foo": "bar"}, map[string]any{"foo": "hoge"}}, r)
 }
