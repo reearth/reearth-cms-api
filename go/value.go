@@ -22,14 +22,27 @@ func TagFrom(j any) *Tag {
 		return nil
 	}
 
+	m, ok := j.(map[string]any)
+	if !ok {
+		if m2, ok := j.(map[any]any); ok {
+			m = make(map[string]any, len(m2))
+			for k, v := range m2 {
+				if k, ok := k.(string); ok {
+					m[k] = v
+				}
+			}
+		}
+		return nil
+	}
+
 	t := Tag{}
-	if id, ok := j.(map[string]any)["id"].(string); ok {
+	if id, ok := m["id"].(string); ok {
 		t.ID = id
 	}
-	if name, ok := j.(map[string]any)["name"].(string); ok {
+	if name, ok := m["name"].(string); ok {
 		t.Name = name
 	}
-	if color, ok := j.(map[string]any)["color"].(string); ok {
+	if color, ok := m["color"].(string); ok {
 		t.Color = color
 	}
 
