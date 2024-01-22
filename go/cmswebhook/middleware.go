@@ -1,6 +1,7 @@
 package cmswebhook
 
 import (
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -8,16 +9,17 @@ import (
 
 type MiddlewareConfig struct {
 	Secret []byte
-	Logger func(format string, v ...any)
+	Logger func(ctx context.Context, format string, v ...any)
 }
 
 func Middleware(config MiddlewareConfig) func(http.Handler) http.Handler {
 	if config.Logger == nil {
-		config.Logger = func(format string, v ...any) {}
+		config.Logger = func(ctx context.Context, format string, v ...any) {}
 	}
 
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
 			body, err := io.ReadAll(r.Body)
 			if err != nil {
 				jsonResp(w, http.StatusUnprocessableEntity, map[string]string{"error": "unprocessable entity"})
@@ -25,13 +27,11 @@ func Middleware(config MiddlewareConfig) func(http.Handler) http.Handler {
 			}
 
 			sig := r.Header.Get(SignatureHeader)
-			config.Logger("webhook: received: sig=%s", sig)
+			config.Logger(ctx, "cms webhook: received: sig=%s, body=%s", sig, body)
 			if !validateSignature(sig, body, config.Secret) {
 				jsonResp(w, http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
 				return
 			}
-
-			config.Logger("webhook: body: %s", body)
 
 			p := &Payload{}
 			if err := json.Unmarshal(body, p); err != nil {
@@ -41,8 +41,7 @@ func Middleware(config MiddlewareConfig) func(http.Handler) http.Handler {
 
 			p.Body = body
 			p.Sig = sig
-			ctx := AttachPayload(r.Context(), p)
-			next.ServeHTTP(w, r.WithContext(ctx))
+			next.ServeHTTP(w, r.WithContext(AttachPayload(ctx, p)))
 		})
 	}
 }

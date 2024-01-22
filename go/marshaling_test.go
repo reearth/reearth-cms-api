@@ -26,6 +26,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		III *int           `cms:"iii,,metadata,includezero"`
 		JJJ []Tag          `cms:"jjj"`
 		KKK *Value         `cms:"kkk"`
+		LLL *Tag           `cms:"lll"`
 	}
 	s := S{}
 
@@ -42,6 +43,7 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "iii"},
 			{Key: "jjj", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
 			{Key: "kkk", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
+			{Key: "lll", Value: map[string]any{"id": "xxx", "name": "tag"}},
 		},
 		MetadataFields: []*Field{
 			{Key: "eee", Value: true},
@@ -60,6 +62,7 @@ func TestItem_Unmarshal(t *testing.T) {
 		III: nil,
 		JJJ: []Tag{{ID: "xxx", Name: "tag"}},
 		KKK: &Value{value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
+		LLL: &Tag{ID: "xxx", Name: "tag"},
 	}, s)
 
 	// no panic
