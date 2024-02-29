@@ -129,6 +129,29 @@ func (v *Value) Bools() []bool {
 	return getValues[bool](v)
 }
 
+func (v *Value) Asset() *PublicAsset {
+	if v == nil {
+		return nil
+	}
+	return PublicAssetFrom(v.value)
+}
+
+func (v *Value) AssetID() string {
+	a := v.Asset()
+	if a == nil {
+		return ""
+	}
+	return a.ID
+}
+
+func (v *Value) AssetURL() string {
+	a := v.Asset()
+	if a == nil {
+		return ""
+	}
+	return a.URL
+}
+
 func (v *Value) Tag() *Tag {
 	if v == nil {
 		return nil
@@ -221,8 +244,9 @@ func (v *Value) MarshalJSON() ([]byte, error) {
 
 func (v *Value) UnmarshalJSON(b []byte) error {
 	if v == nil {
-		*v = Value{}
+		return nil
 	}
+
 	if err := json.Unmarshal(b, &v.value); err != nil {
 		return err
 	}

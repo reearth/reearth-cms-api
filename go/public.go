@@ -204,3 +204,43 @@ type PublicAsset struct {
 func (a PublicAsset) IsExtractionDone() bool {
 	return a.ArchiveExtractionStatus == "done"
 }
+
+func PublicAssetFrom(a any) *PublicAsset {
+	if a == nil {
+		return nil
+	}
+	if a, ok := a.(PublicAsset); ok {
+		return &a
+	}
+	if a, ok := a.(*PublicAsset); ok {
+		return a
+	}
+
+	m, ok := a.(map[string]any)
+	if !ok {
+		return nil
+	}
+
+	aa := PublicAsset{}
+	if v, ok := m["type"].(string); ok {
+		aa.Type = v
+	}
+
+	if v, ok := m["id"].(string); ok {
+		aa.ID = v
+	}
+
+	if v, ok := m["url"].(string); ok {
+		aa.URL = v
+	}
+
+	if v, ok := m["contentType"].(string); ok {
+		aa.ContentType = v
+	}
+
+	if v, ok := m["archiveExtractionStatus"].(string); ok {
+		aa.ArchiveExtractionStatus = v
+	}
+
+	return &aa
+}
