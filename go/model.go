@@ -21,6 +21,12 @@ type Asset struct {
 	File                    *File  `json:"file,omitempty"`
 }
 
+type AssetUpload struct {
+	URL         string `json:"url"`
+	Token       string `json:"token"`
+	ContentType string `json:"contentType"`
+}
+
 type File struct {
 	Name        string `json:"name"`
 	Size        int    `json:"size"`
