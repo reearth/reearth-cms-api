@@ -13,12 +13,17 @@ const (
 )
 
 type Asset struct {
-	ID                      string `json:"id,omitempty"`
-	ProjectID               string `json:"projectId,omitempty"`
-	URL                     string `json:"url,omitempty"`
-	ContentType             string `json:"contentType,omitempty"`
-	ArchiveExtractionStatus string `json:"archiveExtractionStatus,omitempty"`
-	File                    *File  `json:"file,omitempty"`
+	ArchiveExtractionStatus string    `json:"archiveExtractionStatus,omitempty"`
+	ContentType             string    `json:"contentType,omitempty"`
+	CreatedAt               time.Time `json:"createdAt"`
+	File                    *File     `json:"file,omitempty"`
+	ID                      string    `json:"id"`
+	Name                    string    `json:"name,omitempty"`
+	PreviewType             string    `json:"previewType,omitempty"`
+	ProjectID               string    `json:"projectId"`
+	TotalSize               uint64    `json:"totalSize,omitempty"`
+	UpdatedAt               time.Time `json:"updatedAt"`
+	URL                     string    `json:"url"`
 }
 
 type File struct {
