@@ -40,6 +40,8 @@ type Interface interface {
 	Asset(ctx context.Context, id string) (*Asset, error)
 	UploadAsset(ctx context.Context, projectID, url string) (string, error)
 	UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader) (string, error)
+	CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error)
+	CreateAssetUpload(ctx context.Context, projectID, name string) (*AssetUpload, error)
 	CommentToItem(ctx context.Context, assetID, content string) error
 	CommentToAsset(ctx context.Context, assetID, content string) error
 }
@@ -450,11 +452,7 @@ func (c *CMS) UploadAsset(ctx context.Context, projectID, url string) (string, e
 		return "", fmt.Errorf("failed to read body: %w", err2)
 	}
 
-	type res struct {
-		ID string `json:"id"`
-	}
-
-	r := &res{}
+	r := &Asset{}
 	if err2 := json.Unmarshal(body, &r); err2 != nil {
 		return "", fmt.Errorf("failed to parse body: %w", err2)
 	}
@@ -503,6 +501,58 @@ func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, d
 	}
 
 	return r.ID, nil
+}
+
+func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error) {
+	rb := map[string]string{
+		"token": token,
+	}
+
+	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, "", rb)
+	if err2 != nil {
+		return nil, fmt.Errorf("failed to upload an asset: %w", err2)
+	}
+
+	defer func() { _ = b.Close() }()
+
+	body, err2 := io.ReadAll(b)
+	if err2 != nil {
+		return nil, fmt.Errorf("failed to read body: %w", err2)
+	}
+
+	r := &Asset{}
+	if err2 := json.Unmarshal(body, &r); err2 != nil {
+		return nil, fmt.Errorf("failed to parse body: %w", err2)
+	}
+
+	return r, nil
+}
+
+func (c *CMS) CreateAssetUpload(ctx context.Context, projectID, name string) (*AssetUpload, error) {
+	b, err2 := c.send(
+		ctx,
+		http.MethodPost,
+		[]string{"api", "projects", projectID, "assets", "uploads"},
+		"",
+		map[string]string{"name": name},
+	)
+	if err2 != nil {
+		return nil, fmt.Errorf("failed to upload an asset: %w", err2)
+	}
+
+	defer func() { _ = b.Close() }()
+
+	body, err2 := io.ReadAll(b)
+	if err2 != nil {
+		return nil, fmt.Errorf("failed to read body: %w", err2)
+	}
+
+	r := &AssetUpload{}
+	if err2 := json.Unmarshal(body, &r); err2 != nil {
+		return nil, fmt.Errorf("failed to parse body: %w", err2)
+	}
+
+	return r, nil
 }
 
 func (c *CMS) Asset(ctx context.Context, assetID string) (*Asset, error) {
