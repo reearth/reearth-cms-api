@@ -66,6 +66,15 @@ func New(base, token string) (*CMS, error) {
 	}, nil
 }
 
+func (c *CMS) WithHTTPClient(hc *http.Client) *CMS {
+	return &CMS{
+		base:    c.base,
+		token:   c.token,
+		client:  hc,
+		timeout: c.timeout,
+	}
+}
+
 func (c *CMS) WithTimeout(t time.Duration) *CMS {
 	return &CMS{
 		base:    c.base,
@@ -504,8 +513,13 @@ func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, d
 }
 
 func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error) {
+	if token == "" {
+		return nil, errors.New("token is empty")
+	}
+
 	rb := map[string]string{
 		"token": token,
+		"url":   "https://example.com", // workaround
 	}
 
 	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, "", rb)
@@ -670,4 +684,36 @@ func (c *CMS) request(ctx context.Context, m string, p []string, ct string, body
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	return req, nil
+}
+
+func (c *CMS) UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data io.Reader) error {
+	if upload == nil {
+		return errors.New("upload is nil")
+	}
+
+	ctx2 := ctx
+	if c.timeout > 0 {
+		ctx3, cancel := context.WithTimeout(context.Background(), c.timeout)
+		ctx2 = ctx3
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx2, http.MethodPut, upload.URL, data)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", upload.ContentType)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %w", err)
+	}
+
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to upload: %s", resp.Status)
+	}
+
+	return nil
 }
