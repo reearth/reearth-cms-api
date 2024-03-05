@@ -552,7 +552,6 @@ func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (
 
 	rb := map[string]string{
 		"token": token,
-		"url":   "https://example.com", // workaround
 	}
 
 	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, "", rb)
