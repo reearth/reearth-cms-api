@@ -271,3 +271,17 @@ func getValues[T any](v *Value) []T {
 
 	return nil
 }
+
+func PublicAssetFrom(a any) *PublicAsset {
+	j, err := json.Marshal(a)
+	if err != nil {
+		return nil
+	}
+
+	pa := PublicAsset{}
+	if err := json.Unmarshal(j, &pa); err != nil {
+		return nil
+	}
+
+	return &pa
+}
