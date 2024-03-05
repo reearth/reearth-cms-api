@@ -40,6 +40,7 @@ type Interface interface {
 	Asset(ctx context.Context, id string) (*Asset, error)
 	UploadAsset(ctx context.Context, projectID, url string) (string, error)
 	UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader) (string, error)
+	UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data io.Reader) error
 	CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error)
 	CreateAssetUpload(ctx context.Context, projectID, name string) (*AssetUpload, error)
 	CommentToItem(ctx context.Context, assetID, content string) error
@@ -512,6 +513,38 @@ func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, d
 	return r.ID, nil
 }
 
+func (c *CMS) UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data io.Reader) error {
+	if upload == nil {
+		return errors.New("upload is nil")
+	}
+
+	ctx2 := ctx
+	if c.timeout > 0 {
+		ctx3, cancel := context.WithTimeout(context.Background(), c.timeout)
+		ctx2 = ctx3
+		defer cancel()
+	}
+
+	req, err := http.NewRequestWithContext(ctx2, http.MethodPut, upload.URL, data)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", upload.ContentType)
+
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to send request: %w", err)
+	}
+
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to upload: %s", resp.Status)
+	}
+
+	return nil
+}
+
 func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error) {
 	if token == "" {
 		return nil, errors.New("token is empty")
@@ -684,36 +717,4 @@ func (c *CMS) request(ctx context.Context, m string, p []string, ct string, body
 	}
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.token))
 	return req, nil
-}
-
-func (c *CMS) UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data io.Reader) error {
-	if upload == nil {
-		return errors.New("upload is nil")
-	}
-
-	ctx2 := ctx
-	if c.timeout > 0 {
-		ctx3, cancel := context.WithTimeout(context.Background(), c.timeout)
-		ctx2 = ctx3
-		defer cancel()
-	}
-
-	req, err := http.NewRequestWithContext(ctx2, http.MethodPut, upload.URL, data)
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", upload.ContentType)
-
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to send request: %w", err)
-	}
-
-	defer func() { _ = resp.Body.Close() }()
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to upload: %s", resp.Status)
-	}
-
-	return nil
 }
