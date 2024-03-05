@@ -193,7 +193,8 @@ func (r PublicAPIListResponse[T]) HasNext() bool {
 }
 
 type PublicAsset struct {
-	Type string `json:"type,omitempty"`
+	Type  string   `json:"type,omitempty"`
+	Files []string `json:"files,omitempty"`
 	Asset
 }
 

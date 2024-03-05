@@ -136,9 +136,10 @@ func TestPublicAPIClient_GetAsset(t *testing.T) {
 	defer httpmock.Deactivate()
 
 	httpmock.RegisterResponder("GET", "https://example.com/api/p/ppp/assets/aaa", lo.Must(httpmock.NewJsonResponder(http.StatusOK, map[string]any{
-		"type": "asset",
-		"id":   "aaa",
-		"url":  "https://example.com",
+		"type":  "asset",
+		"id":    "aaa",
+		"url":   "https://example.com",
+		"files": []string{"https://example.com/a.txt", "https://example.com/b.txt"},
 	})))
 	httpmock.RegisterResponder("GET", "https://example.com/api/p/ppp/assets/aaa2", lo.Must(httpmock.NewJsonResponder(http.StatusNotFound, nil)))
 
@@ -147,7 +148,8 @@ func TestPublicAPIClient_GetAsset(t *testing.T) {
 	res, err := c.GetAsset(ctx, "ppp", "aaa")
 	assert.NoError(t, err)
 	assert.Equal(t, &PublicAsset{
-		Type: "asset",
+		Type:  "asset",
+		Files: []string{"https://example.com/a.txt", "https://example.com/b.txt"},
 		Asset: Asset{
 			ID:  "aaa",
 			URL: "https://example.com",
