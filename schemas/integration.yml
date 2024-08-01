@@ -1,3 +1,4 @@
+# WARN: this schema is out of date! see https://github.com/reearth/reearth-cms/blob/main/server/schemas/integration.yml
 components:
   parameters:
     assetIdParam:
