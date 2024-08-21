@@ -118,14 +118,16 @@ func (r Items) HasNext() bool {
 }
 
 type Item struct {
-	ID              string   `json:"id"`
-	ModelID         string   `json:"modelId"`
-	Fields          []*Field `json:"fields"`
-	MetadataFields  []*Field `json:"metadataFields,omitempty"`
-	ReferencedItems []*Item  `json:"referencedItems,omitempty"`
-	OriginalItemID  *string  `json:"originalItemId,omitempty"`
-	MetadataItemID  *string  `json:"metadataItemId,omitempty"`
-	IsMetadata      bool     `json:"isMetadata,omitempty"`
+	ID              string    `json:"id"`
+	ModelID         string    `json:"modelId"`
+	Fields          []*Field  `json:"fields"`
+	MetadataFields  []*Field  `json:"metadataFields,omitempty"`
+	ReferencedItems []*Item   `json:"referencedItems,omitempty"`
+	OriginalItemID  *string   `json:"originalItemId,omitempty"`
+	MetadataItemID  *string   `json:"metadataItemId,omitempty"`
+	IsMetadata      bool      `json:"isMetadata,omitempty"`
+	CreatedAt       time.Time `json:"createdAt,omitempty"`
+	UpdatedAt       time.Time `json:"updatedAt,omitempty"`
 }
 
 func (i *Item) Clone() *Item {
@@ -281,6 +283,7 @@ type Schema struct {
 	Fields    []SchemaField `json:"fields"`
 	ProjectID string        `json:"projectId"`
 	Meta      *Schema       `json:"meta"`
+	CreatedAt time.Time     `json:"createdAt,omitempty"`
 }
 
 func (d Schema) FieldIDByKey(k string) string {
