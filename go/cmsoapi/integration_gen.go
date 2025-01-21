@@ -22,6 +22,27 @@ const (
 	BearerAuthScopes = "bearerAuth.Scopes"
 )
 
+// Defines values for FeatureType.
+const (
+	FeatureTypeFeature FeatureType = "Feature"
+)
+
+// Defines values for FeatureCollectionType.
+const (
+	FeatureCollectionTypeFeatureCollection FeatureCollectionType = "FeatureCollection"
+)
+
+// Defines values for GeometryType.
+const (
+	GeometryTypeGeometryCollection GeometryType = "GeometryCollection"
+	GeometryTypeLineString         GeometryType = "LineString"
+	GeometryTypeMultiLineString    GeometryType = "MultiLineString"
+	GeometryTypeMultiPoint         GeometryType = "MultiPoint"
+	GeometryTypeMultiPolygon       GeometryType = "MultiPolygon"
+	GeometryTypePoint              GeometryType = "Point"
+	GeometryTypePolygon            GeometryType = "Polygon"
+)
+
 // Defines values for AssetArchiveExtractionStatus.
 const (
 	Done       AssetArchiveExtractionStatus = "done"
@@ -32,6 +53,7 @@ const (
 
 // Defines values for AssetPreviewType.
 const (
+	Csv        AssetPreviewType = "csv"
 	Geo        AssetPreviewType = "geo"
 	Geo3dTiles AssetPreviewType = "geo_3d_Tiles"
 	GeoMvt     AssetPreviewType = "geo_mvt"
@@ -54,21 +76,92 @@ const (
 	User        CommentAuthorType = "user"
 )
 
+// Defines values for ConditionBasicOperator.
+const (
+	ConditionBasicOperatorEquals    ConditionBasicOperator = "equals"
+	ConditionBasicOperatorNotEquals ConditionBasicOperator = "notEquals"
+)
+
+// Defines values for ConditionBoolOperator.
+const (
+	ConditionBoolOperatorEquals    ConditionBoolOperator = "equals"
+	ConditionBoolOperatorNotEquals ConditionBoolOperator = "notEquals"
+)
+
+// Defines values for ConditionMultipleOperator.
+const (
+	IncludesAll    ConditionMultipleOperator = "includesAll"
+	IncludesAny    ConditionMultipleOperator = "includesAny"
+	NotIncludesAll ConditionMultipleOperator = "notIncludesAll"
+	NotIncludesAny ConditionMultipleOperator = "notIncludesAny"
+)
+
+// Defines values for ConditionNullableOperator.
+const (
+	Empty    ConditionNullableOperator = "empty"
+	NotEmpty ConditionNullableOperator = "notEmpty"
+)
+
+// Defines values for ConditionNumberOperator.
+const (
+	GreaterThan          ConditionNumberOperator = "greaterThan"
+	GreaterThanOrEqualTo ConditionNumberOperator = "greaterThanOrEqualTo"
+	LessThan             ConditionNumberOperator = "lessThan"
+	LessThanOrEqualTo    ConditionNumberOperator = "lessThanOrEqualTo"
+)
+
+// Defines values for ConditionStringOperator.
+const (
+	Contains      ConditionStringOperator = "contains"
+	EndsWith      ConditionStringOperator = "endsWith"
+	NotContains   ConditionStringOperator = "notContains"
+	NotEndsWith   ConditionStringOperator = "notEndsWith"
+	NotStartsWith ConditionStringOperator = "notStartsWith"
+	StartsWith    ConditionStringOperator = "startsWith"
+)
+
+// Defines values for ConditionTimeOperator.
+const (
+	After       ConditionTimeOperator = "after"
+	AfterOrOn   ConditionTimeOperator = "afterOrOn"
+	Before      ConditionTimeOperator = "before"
+	BeforeOrOn  ConditionTimeOperator = "beforeOrOn"
+	OfThisMonth ConditionTimeOperator = "ofThisMonth"
+	OfThisWeek  ConditionTimeOperator = "ofThisWeek"
+	OfThisYear  ConditionTimeOperator = "ofThisYear"
+)
+
+// Defines values for FieldSelectorType.
+const (
+	FieldSelectorTypeCreationDate     FieldSelectorType = "creationDate"
+	FieldSelectorTypeCreationUser     FieldSelectorType = "creationUser"
+	FieldSelectorTypeField            FieldSelectorType = "field"
+	FieldSelectorTypeId               FieldSelectorType = "id"
+	FieldSelectorTypeMetaField        FieldSelectorType = "metaField"
+	FieldSelectorTypeModificationDate FieldSelectorType = "modificationDate"
+	FieldSelectorTypeModificationUser FieldSelectorType = "modificationUser"
+	FieldSelectorTypeStatus           FieldSelectorType = "status"
+)
+
 // Defines values for ValueType.
 const (
-	ValueTypeAsset     ValueType = "asset"
-	ValueTypeBool      ValueType = "bool"
-	ValueTypeDate      ValueType = "date"
-	ValueTypeGroup     ValueType = "group"
-	ValueTypeInteger   ValueType = "integer"
-	ValueTypeMarkdown  ValueType = "markdown"
-	ValueTypeReference ValueType = "reference"
-	ValueTypeRichText  ValueType = "richText"
-	ValueTypeSelect    ValueType = "select"
-	ValueTypeTag       ValueType = "tag"
-	ValueTypeText      ValueType = "text"
-	ValueTypeTextArea  ValueType = "textArea"
-	ValueTypeUrl       ValueType = "url"
+	ValueTypeAsset          ValueType = "asset"
+	ValueTypeBool           ValueType = "bool"
+	ValueTypeCheckbox       ValueType = "checkbox"
+	ValueTypeDate           ValueType = "date"
+	ValueTypeGeometryEditor ValueType = "geometryEditor"
+	ValueTypeGeometryObject ValueType = "geometryObject"
+	ValueTypeGroup          ValueType = "group"
+	ValueTypeInteger        ValueType = "integer"
+	ValueTypeMarkdown       ValueType = "markdown"
+	ValueTypeNumber         ValueType = "number"
+	ValueTypeReference      ValueType = "reference"
+	ValueTypeRichText       ValueType = "richText"
+	ValueTypeSelect         ValueType = "select"
+	ValueTypeTag            ValueType = "tag"
+	ValueTypeText           ValueType = "text"
+	ValueTypeTextArea       ValueType = "textArea"
+	ValueTypeUrl            ValueType = "url"
 )
 
 // Defines values for RefParam.
@@ -95,6 +188,32 @@ const (
 	ItemGetParamsRefPublic ItemGetParamsRef = "public"
 )
 
+// Defines values for ModelImportJSONBodyFormat.
+const (
+	ModelImportJSONBodyFormatGeoJson ModelImportJSONBodyFormat = "geoJson"
+	ModelImportJSONBodyFormatJson    ModelImportJSONBodyFormat = "json"
+)
+
+// Defines values for ModelImportJSONBodyStrategy.
+const (
+	ModelImportJSONBodyStrategyInsert ModelImportJSONBodyStrategy = "insert"
+	ModelImportJSONBodyStrategyUpdate ModelImportJSONBodyStrategy = "update"
+	ModelImportJSONBodyStrategyUpsert ModelImportJSONBodyStrategy = "upsert"
+)
+
+// Defines values for ModelImportMultipartBodyFormat.
+const (
+	ModelImportMultipartBodyFormatGeoJson ModelImportMultipartBodyFormat = "geoJson"
+	ModelImportMultipartBodyFormatJson    ModelImportMultipartBodyFormat = "json"
+)
+
+// Defines values for ModelImportMultipartBodyStrategy.
+const (
+	ModelImportMultipartBodyStrategyInsert ModelImportMultipartBodyStrategy = "insert"
+	ModelImportMultipartBodyStrategyUpdate ModelImportMultipartBodyStrategy = "update"
+	ModelImportMultipartBodyStrategyUpsert ModelImportMultipartBodyStrategy = "upsert"
+)
+
 // Defines values for ItemFilterParamsSort.
 const (
 	ItemFilterParamsSortCreatedAt ItemFilterParamsSort = "createdAt"
@@ -111,6 +230,18 @@ const (
 const (
 	ItemFilterParamsRefLatest ItemFilterParamsRef = "latest"
 	ItemFilterParamsRefPublic ItemFilterParamsRef = "public"
+)
+
+// Defines values for ItemsAsCSVParamsRef.
+const (
+	ItemsAsCSVParamsRefLatest ItemsAsCSVParamsRef = "latest"
+	ItemsAsCSVParamsRefPublic ItemsAsCSVParamsRef = "public"
+)
+
+// Defines values for ItemsAsGeoJSONParamsRef.
+const (
+	ItemsAsGeoJSONParamsRefLatest ItemsAsGeoJSONParamsRef = "latest"
+	ItemsAsGeoJSONParamsRefPublic ItemsAsGeoJSONParamsRef = "public"
 )
 
 // Defines values for ItemFilterWithProjectParamsSort.
@@ -131,6 +262,18 @@ const (
 	ItemFilterWithProjectParamsRefPublic ItemFilterWithProjectParamsRef = "public"
 )
 
+// Defines values for ItemsWithProjectAsCSVParamsRef.
+const (
+	ItemsWithProjectAsCSVParamsRefLatest ItemsWithProjectAsCSVParamsRef = "latest"
+	ItemsWithProjectAsCSVParamsRefPublic ItemsWithProjectAsCSVParamsRef = "public"
+)
+
+// Defines values for ItemsWithProjectAsGeoJSONParamsRef.
+const (
+	ItemsWithProjectAsGeoJSONParamsRefLatest ItemsWithProjectAsGeoJSONParamsRef = "latest"
+	ItemsWithProjectAsGeoJSONParamsRefPublic ItemsWithProjectAsGeoJSONParamsRef = "public"
+)
+
 // Defines values for AssetFilterParamsSort.
 const (
 	AssetFilterParamsSortCreatedAt AssetFilterParamsSort = "createdAt"
@@ -142,6 +285,62 @@ const (
 	AssetFilterParamsDirAsc  AssetFilterParamsDir = "asc"
 	AssetFilterParamsDirDesc AssetFilterParamsDir = "desc"
 )
+
+// Feature defines model for Feature.
+type Feature struct {
+	Geometry   *Geometry               `json:"geometry,omitempty"`
+	Id         *string                 `json:"id,omitempty"`
+	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Type       *FeatureType            `json:"type,omitempty"`
+}
+
+// FeatureType defines model for Feature.Type.
+type FeatureType string
+
+// FeatureCollection defines model for FeatureCollection.
+type FeatureCollection struct {
+	Features *[]Feature             `json:"features,omitempty"`
+	Type     *FeatureCollectionType `json:"type,omitempty"`
+}
+
+// FeatureCollectionType defines model for FeatureCollection.Type.
+type FeatureCollectionType string
+
+// GeoJSON defines model for GeoJSON.
+type GeoJSON = FeatureCollection
+
+// Geometry defines model for Geometry.
+type Geometry struct {
+	Coordinates *Geometry_Coordinates `json:"coordinates,omitempty"`
+	Geometries  *[]Geometry           `json:"geometries,omitempty"`
+	Type        *GeometryType         `json:"type,omitempty"`
+}
+
+// Geometry_Coordinates defines model for Geometry.Coordinates.
+type Geometry_Coordinates struct {
+	union json.RawMessage
+}
+
+// GeometryType defines model for Geometry.Type.
+type GeometryType string
+
+// LineString defines model for LineString.
+type LineString = []Point
+
+// MultiLineString defines model for MultiLineString.
+type MultiLineString = []LineString
+
+// MultiPoint defines model for MultiPoint.
+type MultiPoint = []Point
+
+// MultiPolygon defines model for MultiPolygon.
+type MultiPolygon = []Polygon
+
+// Point defines model for Point.
+type Point = []float64
+
+// Polygon defines model for Polygon.
+type Polygon = [][]Point
 
 // Asset defines model for asset.
 type Asset struct {
@@ -179,6 +378,67 @@ type Comment struct {
 // CommentAuthorType defines model for Comment.AuthorType.
 type CommentAuthorType string
 
+// Condition defines model for condition.
+type Condition struct {
+	And   *[]Condition `json:"and,omitempty"`
+	Basic *struct {
+		FieldId  *FieldSelector          `json:"fieldId,omitempty"`
+		Operator *ConditionBasicOperator `json:"operator,omitempty"`
+		Value    *interface{}            `json:"value,omitempty"`
+	} `json:"basic,omitempty"`
+	Bool *struct {
+		FieldId  FieldSelector         `json:"fieldId"`
+		Operator ConditionBoolOperator `json:"operator"`
+		Value    bool                  `json:"value"`
+	} `json:"bool,omitempty"`
+	Multiple *struct {
+		FieldId  FieldSelector             `json:"fieldId"`
+		Operator ConditionMultipleOperator `json:"operator"`
+		Value    []interface{}             `json:"value"`
+	} `json:"multiple,omitempty"`
+	Nullable *struct {
+		FieldId  *FieldSelector             `json:"fieldId,omitempty"`
+		Operator *ConditionNullableOperator `json:"operator,omitempty"`
+	} `json:"nullable,omitempty"`
+	Number *struct {
+		FieldId  FieldSelector           `json:"fieldId"`
+		Operator ConditionNumberOperator `json:"operator"`
+		Value    float32                 `json:"value"`
+	} `json:"number,omitempty"`
+	Or     *[]Condition `json:"or,omitempty"`
+	String *struct {
+		FieldId  FieldSelector           `json:"fieldId"`
+		Operator ConditionStringOperator `json:"operator"`
+		Value    string                  `json:"value"`
+	} `json:"string,omitempty"`
+	Time *struct {
+		FieldId  FieldSelector         `json:"fieldId"`
+		Operator ConditionTimeOperator `json:"operator"`
+		Value    time.Time             `json:"value"`
+	} `json:"time,omitempty"`
+}
+
+// ConditionBasicOperator defines model for Condition.Basic.Operator.
+type ConditionBasicOperator string
+
+// ConditionBoolOperator defines model for Condition.Bool.Operator.
+type ConditionBoolOperator string
+
+// ConditionMultipleOperator defines model for Condition.Multiple.Operator.
+type ConditionMultipleOperator string
+
+// ConditionNullableOperator defines model for Condition.Nullable.Operator.
+type ConditionNullableOperator string
+
+// ConditionNumberOperator defines model for Condition.Number.Operator.
+type ConditionNumberOperator string
+
+// ConditionStringOperator defines model for Condition.String.Operator.
+type ConditionStringOperator string
+
+// ConditionTimeOperator defines model for Condition.Time.Operator.
+type ConditionTimeOperator string
+
 // Field defines model for field.
 type Field struct {
 	Group *string      `json:"group,omitempty"`
@@ -187,6 +447,15 @@ type Field struct {
 	Type  *ValueType   `json:"type,omitempty"`
 	Value *interface{} `json:"value,omitempty"`
 }
+
+// FieldSelector defines model for fieldSelector.
+type FieldSelector struct {
+	FieldId *string            `json:"fieldId,omitempty"`
+	Type    *FieldSelectorType `json:"type,omitempty"`
+}
+
+// FieldSelectorType defines model for FieldSelector.Type.
+type FieldSelectorType string
 
 // File defines model for file.
 type File struct {
@@ -204,12 +473,65 @@ type Model struct {
 	Id               *string    `json:"id,omitempty"`
 	Key              *string    `json:"key,omitempty"`
 	LastModified     *time.Time `json:"lastModified,omitempty"`
+	MetadataSchema   *Schema    `json:"metadataSchema,omitempty"`
 	MetadataSchemaId *string    `json:"metadataSchemaId,omitempty"`
 	Name             *string    `json:"name,omitempty"`
 	ProjectId        *string    `json:"projectId,omitempty"`
 	Public           *bool      `json:"public,omitempty"`
+	Schema           *Schema    `json:"schema,omitempty"`
 	SchemaId         *string    `json:"schemaId,omitempty"`
 	UpdatedAt        *time.Time `json:"updatedAt,omitempty"`
+}
+
+// Project defines model for project.
+type Project struct {
+	Alias       *string    `json:"alias,omitempty"`
+	CreatedAt   *time.Time `json:"createdAt,omitempty"`
+	Description *string    `json:"description,omitempty"`
+	Id          *string    `json:"id,omitempty"`
+	Name        *string    `json:"name,omitempty"`
+	UpdatedAt   *time.Time `json:"updatedAt,omitempty"`
+	WorkspaceId *string    `json:"workspaceId,omitempty"`
+}
+
+// Schema defines model for schema.
+type Schema struct {
+	CreatedAt  *time.Time     `json:"createdAt,omitempty"`
+	Fields     *[]SchemaField `json:"fields,omitempty"`
+	Id         *string        `json:"id,omitempty"`
+	ProjectId  *string        `json:"projectId,omitempty"`
+	TitleField *string        `json:"titleField,omitempty"`
+}
+
+// SchemaField defines model for schemaField.
+type SchemaField struct {
+	Id       *string    `json:"id,omitempty"`
+	Key      *string    `json:"key,omitempty"`
+	Multiple *bool      `json:"multiple,omitempty"`
+	Required *bool      `json:"required,omitempty"`
+	Type     *ValueType `json:"type,omitempty"`
+}
+
+// SchemaJSON defines model for schemaJSON.
+type SchemaJSON struct {
+	Id          *string                         `json:"$id,omitempty"`
+	Schema      *string                         `json:"$schema,omitempty"`
+	Description *string                         `json:"description,omitempty"`
+	Properties  map[string]SchemaJSONProperties `json:"properties"`
+	Title       *string                         `json:"title,omitempty"`
+	Type        string                          `json:"type"`
+}
+
+// SchemaJSONProperties defines model for schemaJSONProperties.
+type SchemaJSONProperties struct {
+	Description *string     `json:"description,omitempty"`
+	Format      *string     `json:"format,omitempty"`
+	Items       *SchemaJSON `json:"items,omitempty"`
+	MaxLength   *int        `json:"maxLength,omitempty"`
+	Maximum     *float64    `json:"maximum,omitempty"`
+	Minimum     *float64    `json:"minimum,omitempty"`
+	Title       *string     `json:"title,omitempty"`
+	Type        string      `json:"type"`
 }
 
 // ValueType defines model for valueType.
@@ -220,6 +542,7 @@ type VersionedItem struct {
 	CreatedAt       *time.Time            `json:"createdAt,omitempty"`
 	Fields          *[]Field              `json:"fields,omitempty"`
 	Id              *string               `json:"id,omitempty"`
+	IsMetadata      *bool                 `json:"isMetadata,omitempty"`
 	MetadataFields  *[]Field              `json:"metadataFields,omitempty"`
 	ModelId         *string               `json:"modelId,omitempty"`
 	Parents         *[]openapi_types.UUID `json:"parents,omitempty"`
@@ -238,8 +561,14 @@ type AssetParam = AssetEmbedding
 // CommentIdParam defines model for commentIdParam.
 type CommentIdParam = string
 
+// FieldIdOrKeyParam defines model for fieldIdOrKeyParam.
+type FieldIdOrKeyParam = string
+
 // ItemIdParam defines model for itemIdParam.
 type ItemIdParam = string
+
+// KeywordParam defines model for keywordParam.
+type KeywordParam = string
 
 // ModelIdOrKeyParam defines model for modelIdOrKeyParam.
 type ModelIdOrKeyParam = string
@@ -262,11 +591,17 @@ type ProjectIdParam = interface{}
 // RefParam defines model for refParam.
 type RefParam string
 
+// SchemaIdParam defines model for schemaIdParam.
+type SchemaIdParam = string
+
 // SortDirParam defines model for sortDirParam.
 type SortDirParam string
 
 // SortParam defines model for sortParam.
 type SortParam string
+
+// WorkspaceIdParam defines model for workspaceIdParam.
+type WorkspaceIdParam = interface{}
 
 // AssetCommentCreateJSONBody defines parameters for AssetCommentCreate.
 type AssetCommentCreateJSONBody struct {
@@ -307,6 +642,54 @@ type ItemCommentUpdateJSONBody struct {
 	Content *string `json:"content,omitempty"`
 }
 
+// ModelUpdateJSONBody defines parameters for ModelUpdate.
+type ModelUpdateJSONBody struct {
+	Description *string `json:"description,omitempty"`
+	Key         *string `json:"key,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// CopyModelJSONBody defines parameters for CopyModel.
+type CopyModelJSONBody struct {
+	Key  *string `json:"key,omitempty"`
+	Name *string `json:"name,omitempty"`
+}
+
+// ModelImportJSONBody defines parameters for ModelImport.
+type ModelImportJSONBody struct {
+	AssetId          string                      `json:"assetId"`
+	Format           ModelImportJSONBodyFormat   `json:"format"`
+	GeometryFieldKey *string                     `json:"geometryFieldKey,omitempty"`
+	MutateSchema     *bool                       `json:"mutateSchema,omitempty"`
+	Strategy         ModelImportJSONBodyStrategy `json:"strategy"`
+}
+
+// ModelImportMultipartBody defines parameters for ModelImport.
+type ModelImportMultipartBody struct {
+	File             *openapi_types.File              `json:"file,omitempty"`
+	Format           ModelImportMultipartBodyFormat   `json:"format"`
+	GeometryFieldKey *string                          `json:"geometryFieldKey,omitempty"`
+	MutateSchema     *bool                            `json:"mutateSchema,omitempty"`
+	Strategy         ModelImportMultipartBodyStrategy `json:"strategy"`
+}
+
+// ModelImportJSONBodyFormat defines parameters for ModelImport.
+type ModelImportJSONBodyFormat string
+
+// ModelImportJSONBodyStrategy defines parameters for ModelImport.
+type ModelImportJSONBodyStrategy string
+
+// ModelImportMultipartBodyFormat defines parameters for ModelImport.
+type ModelImportMultipartBodyFormat string
+
+// ModelImportMultipartBodyStrategy defines parameters for ModelImport.
+type ModelImportMultipartBodyStrategy string
+
+// ItemFilterJSONBody defines parameters for ItemFilter.
+type ItemFilterJSONBody struct {
+	Filter *Condition `json:"filter,omitempty"`
+}
+
 // ItemFilterParams defines parameters for ItemFilter.
 type ItemFilterParams struct {
 	// Sort Used to define the order of the response list
@@ -326,6 +709,9 @@ type ItemFilterParams struct {
 
 	// Asset Specifies whether asset data are embedded in the results
 	Asset *AssetParam `form:"asset,omitempty" json:"asset,omitempty"`
+
+	// Keyword keyword string
+	Keyword *KeywordParam `form:"keyword,omitempty" json:"keyword,omitempty"`
 }
 
 // ItemFilterParamsSort defines parameters for ItemFilter.
@@ -341,6 +727,84 @@ type ItemFilterParamsRef string
 type ItemCreateJSONBody struct {
 	Fields         *[]Field `json:"fields,omitempty"`
 	MetadataFields *[]Field `json:"metadataFields,omitempty"`
+}
+
+// ItemsAsCSVParams defines parameters for ItemsAsCSV.
+type ItemsAsCSVParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Ref Used to select a ref or ver
+	Ref *ItemsAsCSVParamsRef `form:"ref,omitempty" json:"ref,omitempty"`
+}
+
+// ItemsAsCSVParamsRef defines parameters for ItemsAsCSV.
+type ItemsAsCSVParamsRef string
+
+// ItemsAsGeoJSONParams defines parameters for ItemsAsGeoJSON.
+type ItemsAsGeoJSONParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Ref Used to select a ref or ver
+	Ref *ItemsAsGeoJSONParamsRef `form:"ref,omitempty" json:"ref,omitempty"`
+}
+
+// ItemsAsGeoJSONParamsRef defines parameters for ItemsAsGeoJSON.
+type ItemsAsGeoJSONParamsRef string
+
+// ModelFilterParams defines parameters for ModelFilter.
+type ModelFilterParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+}
+
+// ModelCreateJSONBody defines parameters for ModelCreate.
+type ModelCreateJSONBody struct {
+	Description *string `json:"description,omitempty"`
+	Key         *string `json:"key,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// ModelCreateParams defines parameters for ModelCreate.
+type ModelCreateParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+}
+
+// ModelUpdateWithProjectJSONBody defines parameters for ModelUpdateWithProject.
+type ModelUpdateWithProjectJSONBody struct {
+	Description *string `json:"description,omitempty"`
+	Key         *string `json:"key,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// FieldCreateWithProjectJSONBody defines parameters for FieldCreateWithProject.
+type FieldCreateWithProjectJSONBody struct {
+	Key      *string    `json:"key,omitempty"`
+	Multiple *bool      `json:"multiple,omitempty"`
+	Required *bool      `json:"required,omitempty"`
+	Type     *ValueType `json:"type,omitempty"`
+}
+
+// FieldUpdateWithProjectJSONBody defines parameters for FieldUpdateWithProject.
+type FieldUpdateWithProjectJSONBody struct {
+	Key      *string    `json:"key,omitempty"`
+	Multiple *bool      `json:"multiple,omitempty"`
+	Required *bool      `json:"required,omitempty"`
+	Type     *ValueType `json:"type,omitempty"`
 }
 
 // ItemFilterWithProjectParams defines parameters for ItemFilterWithProject.
@@ -379,6 +843,48 @@ type ItemCreateWithProjectJSONBody struct {
 	MetadataFields *[]Field `json:"metadataFields,omitempty"`
 }
 
+// ItemsWithProjectAsCSVParams defines parameters for ItemsWithProjectAsCSV.
+type ItemsWithProjectAsCSVParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Ref Used to select a ref or ver
+	Ref *ItemsWithProjectAsCSVParamsRef `form:"ref,omitempty" json:"ref,omitempty"`
+}
+
+// ItemsWithProjectAsCSVParamsRef defines parameters for ItemsWithProjectAsCSV.
+type ItemsWithProjectAsCSVParamsRef string
+
+// ItemsWithProjectAsGeoJSONParams defines parameters for ItemsWithProjectAsGeoJSON.
+type ItemsWithProjectAsGeoJSONParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Ref Used to select a ref or ver
+	Ref *ItemsWithProjectAsGeoJSONParamsRef `form:"ref,omitempty" json:"ref,omitempty"`
+}
+
+// ItemsWithProjectAsGeoJSONParamsRef defines parameters for ItemsWithProjectAsGeoJSON.
+type ItemsWithProjectAsGeoJSONParamsRef string
+
+// SchemaFilterParams defines parameters for SchemaFilter.
+type SchemaFilterParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Keyword keyword string
+	Keyword *KeywordParam `form:"keyword,omitempty" json:"keyword,omitempty"`
+}
+
 // AssetFilterParams defines parameters for AssetFilter.
 type AssetFilterParams struct {
 	// Sort Used to define the order of the response list
@@ -392,6 +898,9 @@ type AssetFilterParams struct {
 
 	// PerPage Used to select the page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Keyword keyword string
+	Keyword *KeywordParam `form:"keyword,omitempty" json:"keyword,omitempty"`
 }
 
 // AssetFilterParamsSort defines parameters for AssetFilter.
@@ -403,6 +912,7 @@ type AssetFilterParamsDir string
 // AssetCreateJSONBody defines parameters for AssetCreate.
 type AssetCreateJSONBody struct {
 	SkipDecompression *bool   `json:"skipDecompression"`
+	Token             *string `json:"token,omitempty"`
 	Url               *string `json:"url,omitempty"`
 }
 
@@ -410,6 +920,38 @@ type AssetCreateJSONBody struct {
 type AssetCreateMultipartBody struct {
 	File              *openapi_types.File `json:"file,omitempty"`
 	SkipDecompression *bool               `json:"skipDecompression,omitempty"`
+}
+
+// AssetUploadCreateJSONBody defines parameters for AssetUploadCreate.
+type AssetUploadCreateJSONBody struct {
+	ContentLength *int    `json:"contentLength,omitempty"`
+	Cursor        *string `json:"cursor,omitempty"`
+	Name          *string `json:"name,omitempty"`
+}
+
+// FieldCreateJSONBody defines parameters for FieldCreate.
+type FieldCreateJSONBody struct {
+	Key      *string    `json:"key,omitempty"`
+	Multiple *bool      `json:"multiple,omitempty"`
+	Required *bool      `json:"required,omitempty"`
+	Type     *ValueType `json:"type,omitempty"`
+}
+
+// FieldUpdateJSONBody defines parameters for FieldUpdate.
+type FieldUpdateJSONBody struct {
+	Key      *string    `json:"key,omitempty"`
+	Multiple *bool      `json:"multiple,omitempty"`
+	Required *bool      `json:"required,omitempty"`
+	Type     *ValueType `json:"type,omitempty"`
+}
+
+// ProjectFilterParams defines parameters for ProjectFilter.
+type ProjectFilterParams struct {
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 }
 
 // AssetCommentCreateJSONRequestBody defines body for AssetCommentCreate for application/json ContentType.
@@ -427,8 +969,35 @@ type ItemCommentCreateJSONRequestBody ItemCommentCreateJSONBody
 // ItemCommentUpdateJSONRequestBody defines body for ItemCommentUpdate for application/json ContentType.
 type ItemCommentUpdateJSONRequestBody ItemCommentUpdateJSONBody
 
+// ModelUpdateJSONRequestBody defines body for ModelUpdate for application/json ContentType.
+type ModelUpdateJSONRequestBody ModelUpdateJSONBody
+
+// CopyModelJSONRequestBody defines body for CopyModel for application/json ContentType.
+type CopyModelJSONRequestBody CopyModelJSONBody
+
+// ModelImportJSONRequestBody defines body for ModelImport for application/json ContentType.
+type ModelImportJSONRequestBody ModelImportJSONBody
+
+// ModelImportMultipartRequestBody defines body for ModelImport for multipart/form-data ContentType.
+type ModelImportMultipartRequestBody ModelImportMultipartBody
+
+// ItemFilterJSONRequestBody defines body for ItemFilter for application/json ContentType.
+type ItemFilterJSONRequestBody ItemFilterJSONBody
+
 // ItemCreateJSONRequestBody defines body for ItemCreate for application/json ContentType.
 type ItemCreateJSONRequestBody ItemCreateJSONBody
+
+// ModelCreateJSONRequestBody defines body for ModelCreate for application/json ContentType.
+type ModelCreateJSONRequestBody ModelCreateJSONBody
+
+// ModelUpdateWithProjectJSONRequestBody defines body for ModelUpdateWithProject for application/json ContentType.
+type ModelUpdateWithProjectJSONRequestBody ModelUpdateWithProjectJSONBody
+
+// FieldCreateWithProjectJSONRequestBody defines body for FieldCreateWithProject for application/json ContentType.
+type FieldCreateWithProjectJSONRequestBody FieldCreateWithProjectJSONBody
+
+// FieldUpdateWithProjectJSONRequestBody defines body for FieldUpdateWithProject for application/json ContentType.
+type FieldUpdateWithProjectJSONRequestBody FieldUpdateWithProjectJSONBody
 
 // ItemCreateWithProjectJSONRequestBody defines body for ItemCreateWithProject for application/json ContentType.
 type ItemCreateWithProjectJSONRequestBody ItemCreateWithProjectJSONBody
@@ -438,6 +1007,181 @@ type AssetCreateJSONRequestBody AssetCreateJSONBody
 
 // AssetCreateMultipartRequestBody defines body for AssetCreate for multipart/form-data ContentType.
 type AssetCreateMultipartRequestBody AssetCreateMultipartBody
+
+// AssetUploadCreateJSONRequestBody defines body for AssetUploadCreate for application/json ContentType.
+type AssetUploadCreateJSONRequestBody AssetUploadCreateJSONBody
+
+// FieldCreateJSONRequestBody defines body for FieldCreate for application/json ContentType.
+type FieldCreateJSONRequestBody FieldCreateJSONBody
+
+// FieldUpdateJSONRequestBody defines body for FieldUpdate for application/json ContentType.
+type FieldUpdateJSONRequestBody FieldUpdateJSONBody
+
+// AsPoint returns the union data inside the Geometry_Coordinates as a Point
+func (t Geometry_Coordinates) AsPoint() (Point, error) {
+	var body Point
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPoint overwrites any union data inside the Geometry_Coordinates as the provided Point
+func (t *Geometry_Coordinates) FromPoint(v Point) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePoint performs a merge with any union data inside the Geometry_Coordinates, using the provided Point
+func (t *Geometry_Coordinates) MergePoint(v Point) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsMultiPoint returns the union data inside the Geometry_Coordinates as a MultiPoint
+func (t Geometry_Coordinates) AsMultiPoint() (MultiPoint, error) {
+	var body MultiPoint
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromMultiPoint overwrites any union data inside the Geometry_Coordinates as the provided MultiPoint
+func (t *Geometry_Coordinates) FromMultiPoint(v MultiPoint) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeMultiPoint performs a merge with any union data inside the Geometry_Coordinates, using the provided MultiPoint
+func (t *Geometry_Coordinates) MergeMultiPoint(v MultiPoint) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsLineString returns the union data inside the Geometry_Coordinates as a LineString
+func (t Geometry_Coordinates) AsLineString() (LineString, error) {
+	var body LineString
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromLineString overwrites any union data inside the Geometry_Coordinates as the provided LineString
+func (t *Geometry_Coordinates) FromLineString(v LineString) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeLineString performs a merge with any union data inside the Geometry_Coordinates, using the provided LineString
+func (t *Geometry_Coordinates) MergeLineString(v LineString) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsMultiLineString returns the union data inside the Geometry_Coordinates as a MultiLineString
+func (t Geometry_Coordinates) AsMultiLineString() (MultiLineString, error) {
+	var body MultiLineString
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromMultiLineString overwrites any union data inside the Geometry_Coordinates as the provided MultiLineString
+func (t *Geometry_Coordinates) FromMultiLineString(v MultiLineString) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeMultiLineString performs a merge with any union data inside the Geometry_Coordinates, using the provided MultiLineString
+func (t *Geometry_Coordinates) MergeMultiLineString(v MultiLineString) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsPolygon returns the union data inside the Geometry_Coordinates as a Polygon
+func (t Geometry_Coordinates) AsPolygon() (Polygon, error) {
+	var body Polygon
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromPolygon overwrites any union data inside the Geometry_Coordinates as the provided Polygon
+func (t *Geometry_Coordinates) FromPolygon(v Polygon) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergePolygon performs a merge with any union data inside the Geometry_Coordinates, using the provided Polygon
+func (t *Geometry_Coordinates) MergePolygon(v Polygon) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsMultiPolygon returns the union data inside the Geometry_Coordinates as a MultiPolygon
+func (t Geometry_Coordinates) AsMultiPolygon() (MultiPolygon, error) {
+	var body MultiPolygon
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromMultiPolygon overwrites any union data inside the Geometry_Coordinates as the provided MultiPolygon
+func (t *Geometry_Coordinates) FromMultiPolygon(v MultiPolygon) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeMultiPolygon performs a merge with any union data inside the Geometry_Coordinates, using the provided MultiPolygon
+func (t *Geometry_Coordinates) MergeMultiPolygon(v MultiPolygon) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JsonMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Geometry_Coordinates) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Geometry_Coordinates) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -561,19 +1305,80 @@ type ClientInterface interface {
 
 	ItemCommentUpdate(ctx context.Context, itemId ItemIdParam, commentId CommentIdParam, body ItemCommentUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ModelDelete request
+	ModelDelete(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ModelGet request
 	ModelGet(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ItemFilter request
-	ItemFilter(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ModelUpdateWithBody request with any body
+	ModelUpdateWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ModelUpdate(ctx context.Context, modelId ModelIdParam, body ModelUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CopyModelWithBody request with any body
+	CopyModelWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	CopyModel(ctx context.Context, modelId ModelIdParam, body CopyModelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ModelImportWithBody request with any body
+	ModelImportWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ModelImport(ctx context.Context, modelId ModelIdParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ItemFilterWithBody request with any body
+	ItemFilterWithBody(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ItemFilter(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ItemCreateWithBody request with any body
 	ItemCreateWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	ItemCreate(ctx context.Context, modelId ModelIdParam, body ItemCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ItemsAsCSV request
+	ItemsAsCSV(ctx context.Context, modelId ModelIdParam, params *ItemsAsCSVParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ItemsAsGeoJSON request
+	ItemsAsGeoJSON(ctx context.Context, modelId ModelIdParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// MetadataSchemaByModelAsJSON request
+	MetadataSchemaByModelAsJSON(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SchemaByModelAsJSON request
+	SchemaByModelAsJSON(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ModelFilter request
+	ModelFilter(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ModelCreateWithBody request with any body
+	ModelCreateWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ModelCreate(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, body ModelCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ModelDeleteWithProject request
+	ModelDeleteWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ModelGetWithProject request
 	ModelGetWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ModelUpdateWithProjectWithBody request with any body
+	ModelUpdateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ModelUpdateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldCreateWithProjectWithBody request with any body
+	FieldCreateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	FieldCreateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body FieldCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldDeleteWithProject request
+	FieldDeleteWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldUpdateWithProjectWithBody request with any body
+	FieldUpdateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	FieldUpdateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ItemFilterWithProject request
 	ItemFilterWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterWithProjectParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -583,6 +1388,24 @@ type ClientInterface interface {
 
 	ItemCreateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ItemCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ItemsWithProjectAsCSV request
+	ItemsWithProjectAsCSV(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsCSVParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ItemsWithProjectAsGeoJSON request
+	ItemsWithProjectAsGeoJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// MetadataSchemaByModelWithProjectAsJSON request
+	MetadataSchemaByModelWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SchemaByModelWithProjectAsJSON request
+	SchemaByModelWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SchemaFilter request
+	SchemaFilter(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *SchemaFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SchemaByIDWithProjectAsJSON request
+	SchemaByIDWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// AssetFilter request
 	AssetFilter(ctx context.Context, projectId ProjectIdParam, params *AssetFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -590,6 +1413,30 @@ type ClientInterface interface {
 	AssetCreateWithBody(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	AssetCreate(ctx context.Context, projectId ProjectIdParam, body AssetCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AssetUploadCreateWithBody request with any body
+	AssetUploadCreateWithBody(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	AssetUploadCreate(ctx context.Context, projectId ProjectIdParam, body AssetUploadCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldCreateWithBody request with any body
+	FieldCreateWithBody(ctx context.Context, schemaId SchemaIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	FieldCreate(ctx context.Context, schemaId SchemaIdParam, body FieldCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldDelete request
+	FieldDelete(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// FieldUpdateWithBody request with any body
+	FieldUpdateWithBody(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	FieldUpdate(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SchemaByIDAsJSON request
+	SchemaByIDAsJSON(ctx context.Context, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ProjectFilter request
+	ProjectFilter(ctx context.Context, workspaceId WorkspaceIdParam, params *ProjectFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) AssetDelete(ctx context.Context, assetId AssetIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -808,6 +1655,18 @@ func (c *Client) ItemCommentUpdate(ctx context.Context, itemId ItemIdParam, comm
 	return c.Client.Do(req)
 }
 
+func (c *Client) ModelDelete(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelDeleteRequest(c.Server, modelId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) ModelGet(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewModelGetRequest(c.Server, modelId)
 	if err != nil {
@@ -820,8 +1679,92 @@ func (c *Client) ModelGet(ctx context.Context, modelId ModelIdParam, reqEditors 
 	return c.Client.Do(req)
 }
 
-func (c *Client) ItemFilter(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewItemFilterRequest(c.Server, modelId, params)
+func (c *Client) ModelUpdateWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelUpdateRequestWithBody(c.Server, modelId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelUpdate(ctx context.Context, modelId ModelIdParam, body ModelUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelUpdateRequest(c.Server, modelId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CopyModelWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCopyModelRequestWithBody(c.Server, modelId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) CopyModel(ctx context.Context, modelId ModelIdParam, body CopyModelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCopyModelRequest(c.Server, modelId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelImportWithBody(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelImportRequestWithBody(c.Server, modelId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelImport(ctx context.Context, modelId ModelIdParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelImportRequest(c.Server, modelId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemFilterWithBody(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterRequestWithBody(c.Server, modelId, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemFilter(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterRequest(c.Server, modelId, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -856,8 +1799,188 @@ func (c *Client) ItemCreate(ctx context.Context, modelId ModelIdParam, body Item
 	return c.Client.Do(req)
 }
 
+func (c *Client) ItemsAsCSV(ctx context.Context, modelId ModelIdParam, params *ItemsAsCSVParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemsAsCSVRequest(c.Server, modelId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemsAsGeoJSON(ctx context.Context, modelId ModelIdParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemsAsGeoJSONRequest(c.Server, modelId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) MetadataSchemaByModelAsJSON(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewMetadataSchemaByModelAsJSONRequest(c.Server, modelId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SchemaByModelAsJSON(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSchemaByModelAsJSONRequest(c.Server, modelId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelFilter(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelFilterRequest(c.Server, projectIdOrAlias, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelCreateWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelCreateRequestWithBody(c.Server, projectIdOrAlias, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelCreate(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, body ModelCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelCreateRequest(c.Server, projectIdOrAlias, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelDeleteWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelDeleteWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) ModelGetWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewModelGetWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelUpdateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelUpdateWithProjectRequestWithBody(c.Server, projectIdOrAlias, modelIdOrKey, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ModelUpdateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewModelUpdateWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldCreateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldCreateWithProjectRequestWithBody(c.Server, projectIdOrAlias, modelIdOrKey, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldCreateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body FieldCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldCreateWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldDeleteWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldDeleteWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldUpdateWithProjectWithBody(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldUpdateWithProjectRequestWithBody(c.Server, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldUpdateWithProject(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldUpdateWithProjectRequest(c.Server, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, body)
 	if err != nil {
 		return nil, err
 	}
@@ -904,6 +2027,78 @@ func (c *Client) ItemCreateWithProject(ctx context.Context, projectIdOrAlias Pro
 	return c.Client.Do(req)
 }
 
+func (c *Client) ItemsWithProjectAsCSV(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsCSVParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemsWithProjectAsCSVRequest(c.Server, projectIdOrAlias, modelIdOrKey, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemsWithProjectAsGeoJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemsWithProjectAsGeoJSONRequest(c.Server, projectIdOrAlias, modelIdOrKey, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) MetadataSchemaByModelWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewMetadataSchemaByModelWithProjectAsJSONRequest(c.Server, projectIdOrAlias, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SchemaByModelWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSchemaByModelWithProjectAsJSONRequest(c.Server, projectIdOrAlias, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SchemaFilter(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *SchemaFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSchemaFilterRequest(c.Server, projectIdOrAlias, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SchemaByIDWithProjectAsJSON(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSchemaByIDWithProjectAsJSONRequest(c.Server, projectIdOrAlias, schemaId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) AssetFilter(ctx context.Context, projectId ProjectIdParam, params *AssetFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAssetFilterRequest(c.Server, projectId, params)
 	if err != nil {
@@ -930,6 +2125,114 @@ func (c *Client) AssetCreateWithBody(ctx context.Context, projectId ProjectIdPar
 
 func (c *Client) AssetCreate(ctx context.Context, projectId ProjectIdParam, body AssetCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAssetCreateRequest(c.Server, projectId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AssetUploadCreateWithBody(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAssetUploadCreateRequestWithBody(c.Server, projectId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AssetUploadCreate(ctx context.Context, projectId ProjectIdParam, body AssetUploadCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAssetUploadCreateRequest(c.Server, projectId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldCreateWithBody(ctx context.Context, schemaId SchemaIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldCreateRequestWithBody(c.Server, schemaId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldCreate(ctx context.Context, schemaId SchemaIdParam, body FieldCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldCreateRequest(c.Server, schemaId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldDelete(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldDeleteRequest(c.Server, schemaId, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldUpdateWithBody(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldUpdateRequestWithBody(c.Server, schemaId, fieldIdOrKey, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) FieldUpdate(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFieldUpdateRequest(c.Server, schemaId, fieldIdOrKey, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SchemaByIDAsJSON(ctx context.Context, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSchemaByIDAsJSONRequest(c.Server, schemaId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ProjectFilter(ctx context.Context, workspaceId WorkspaceIdParam, params *ProjectFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewProjectFilterRequest(c.Server, workspaceId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1513,6 +2816,40 @@ func NewItemCommentUpdateRequestWithBody(server string, itemId ItemIdParam, comm
 	return req, nil
 }
 
+// NewModelDeleteRequest generates requests for ModelDelete
+func NewModelDeleteRequest(server string, modelId ModelIdParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewModelGetRequest generates requests for ModelGet
 func NewModelGetRequest(server string, modelId ModelIdParam) (*http.Request, error) {
 	var err error
@@ -1547,8 +2884,160 @@ func NewModelGetRequest(server string, modelId ModelIdParam) (*http.Request, err
 	return req, nil
 }
 
-// NewItemFilterRequest generates requests for ItemFilter
-func NewItemFilterRequest(server string, modelId ModelIdParam, params *ItemFilterParams) (*http.Request, error) {
+// NewModelUpdateRequest calls the generic ModelUpdate builder with application/json body
+func NewModelUpdateRequest(server string, modelId ModelIdParam, body ModelUpdateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewModelUpdateRequestWithBody(server, modelId, "application/json", bodyReader)
+}
+
+// NewModelUpdateRequestWithBody generates requests for ModelUpdate with any type of body
+func NewModelUpdateRequestWithBody(server string, modelId ModelIdParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewCopyModelRequest calls the generic CopyModel builder with application/json body
+func NewCopyModelRequest(server string, modelId ModelIdParam, body CopyModelJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCopyModelRequestWithBody(server, modelId, "application/json", bodyReader)
+}
+
+// NewCopyModelRequestWithBody generates requests for CopyModel with any type of body
+func NewCopyModelRequestWithBody(server string, modelId ModelIdParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/copy", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewModelImportRequest calls the generic ModelImport builder with application/json body
+func NewModelImportRequest(server string, modelId ModelIdParam, body ModelImportJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewModelImportRequestWithBody(server, modelId, "application/json", bodyReader)
+}
+
+// NewModelImportRequestWithBody generates requests for ModelImport with any type of body
+func NewModelImportRequestWithBody(server string, modelId ModelIdParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/import", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewItemFilterRequest calls the generic ItemFilter builder with application/json body
+func NewItemFilterRequest(server string, modelId ModelIdParam, params *ItemFilterParams, body ItemFilterJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewItemFilterRequestWithBody(server, modelId, params, "application/json", bodyReader)
+}
+
+// NewItemFilterRequestWithBody generates requests for ItemFilter with any type of body
+func NewItemFilterRequestWithBody(server string, modelId ModelIdParam, params *ItemFilterParams, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1672,13 +3161,31 @@ func NewItemFilterRequest(server string, modelId ModelIdParam, params *ItemFilte
 
 		}
 
+		if params.Keyword != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "keyword", runtime.ParamLocationQuery, *params.Keyword); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
 		queryURL.RawQuery = queryValues.Encode()
 	}
 
-	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	req, err := http.NewRequest("GET", queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -1730,6 +3237,448 @@ func NewItemCreateRequestWithBody(server string, modelId ModelIdParam, contentTy
 	return req, nil
 }
 
+// NewItemsAsCSVRequest generates requests for ItemsAsCSV
+func NewItemsAsCSVRequest(server string, modelId ModelIdParam, params *ItemsAsCSVParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/items.csv", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Ref != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "ref", runtime.ParamLocationQuery, *params.Ref); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewItemsAsGeoJSONRequest generates requests for ItemsAsGeoJSON
+func NewItemsAsGeoJSONRequest(server string, modelId ModelIdParam, params *ItemsAsGeoJSONParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/items.geojson", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Ref != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "ref", runtime.ParamLocationQuery, *params.Ref); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewMetadataSchemaByModelAsJSONRequest generates requests for MetadataSchemaByModelAsJSON
+func NewMetadataSchemaByModelAsJSONRequest(server string, modelId ModelIdParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/metadata_schema.json", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSchemaByModelAsJSONRequest generates requests for SchemaByModelAsJSON
+func NewSchemaByModelAsJSONRequest(server string, modelId ModelIdParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "modelId", runtime.ParamLocationPath, modelId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/models/%s/schema.json", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewModelFilterRequest generates requests for ModelFilter
+func NewModelFilterRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, params *ModelFilterParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewModelCreateRequest calls the generic ModelCreate builder with application/json body
+func NewModelCreateRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, body ModelCreateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewModelCreateRequestWithBody(server, projectIdOrAlias, params, "application/json", bodyReader)
+}
+
+// NewModelCreateRequestWithBody generates requests for ModelCreate with any type of body
+func NewModelCreateRequestWithBody(server string, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewModelDeleteWithProjectRequest generates requests for ModelDeleteWithProject
+func NewModelDeleteWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewModelGetWithProjectRequest generates requests for ModelGetWithProject
 func NewModelGetWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam) (*http.Request, error) {
 	var err error
@@ -1767,6 +3716,223 @@ func NewModelGetWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAl
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewModelUpdateWithProjectRequest calls the generic ModelUpdateWithProject builder with application/json body
+func NewModelUpdateWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelUpdateWithProjectJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewModelUpdateWithProjectRequestWithBody(server, projectIdOrAlias, modelIdOrKey, "application/json", bodyReader)
+}
+
+// NewModelUpdateWithProjectRequestWithBody generates requests for ModelUpdateWithProject with any type of body
+func NewModelUpdateWithProjectRequestWithBody(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewFieldCreateWithProjectRequest calls the generic FieldCreateWithProject builder with application/json body
+func NewFieldCreateWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body FieldCreateWithProjectJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewFieldCreateWithProjectRequestWithBody(server, projectIdOrAlias, modelIdOrKey, "application/json", bodyReader)
+}
+
+// NewFieldCreateWithProjectRequestWithBody generates requests for FieldCreateWithProject with any type of body
+func NewFieldCreateWithProjectRequestWithBody(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/fields", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewFieldDeleteWithProjectRequest generates requests for FieldDeleteWithProject
+func NewFieldDeleteWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam2 string
+
+	pathParam2, err = runtime.StyleParamWithLocation("simple", false, "fieldIdOrKey", runtime.ParamLocationPath, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/fields/%s", pathParam0, pathParam1, pathParam2)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewFieldUpdateWithProjectRequest calls the generic FieldUpdateWithProject builder with application/json body
+func NewFieldUpdateWithProjectRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateWithProjectJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewFieldUpdateWithProjectRequestWithBody(server, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, "application/json", bodyReader)
+}
+
+// NewFieldUpdateWithProjectRequestWithBody generates requests for FieldUpdateWithProject with any type of body
+func NewFieldUpdateWithProjectRequestWithBody(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam2 string
+
+	pathParam2, err = runtime.StyleParamWithLocation("simple", false, "fieldIdOrKey", runtime.ParamLocationPath, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/fields/%s", pathParam0, pathParam1, pathParam2)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -1968,6 +4134,407 @@ func NewItemCreateWithProjectRequestWithBody(server string, projectIdOrAlias Pro
 	return req, nil
 }
 
+// NewItemsWithProjectAsCSVRequest generates requests for ItemsWithProjectAsCSV
+func NewItemsWithProjectAsCSVRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsCSVParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/items.csv", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Ref != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "ref", runtime.ParamLocationQuery, *params.Ref); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewItemsWithProjectAsGeoJSONRequest generates requests for ItemsWithProjectAsGeoJSON
+func NewItemsWithProjectAsGeoJSONRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsGeoJSONParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/items.geojson", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Ref != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "ref", runtime.ParamLocationQuery, *params.Ref); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewMetadataSchemaByModelWithProjectAsJSONRequest generates requests for MetadataSchemaByModelWithProjectAsJSON
+func NewMetadataSchemaByModelWithProjectAsJSONRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/metadata_schema.json", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSchemaByModelWithProjectAsJSONRequest generates requests for SchemaByModelWithProjectAsJSON
+func NewSchemaByModelWithProjectAsJSONRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/models/%s/schema.json", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSchemaFilterRequest generates requests for SchemaFilter
+func NewSchemaFilterRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, params *SchemaFilterParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/schemata", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Keyword != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "keyword", runtime.ParamLocationQuery, *params.Keyword); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSchemaByIDWithProjectAsJSONRequest generates requests for SchemaByIDWithProjectAsJSON
+func NewSchemaByIDWithProjectAsJSONRequest(server string, projectIdOrAlias ProjectIdOrAliasParam, schemaId SchemaIdParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "schemaId", runtime.ParamLocationPath, schemaId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/schemata/%s/schema.json", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewAssetFilterRequest generates requests for AssetFilter
 func NewAssetFilterRequest(server string, projectId ProjectIdParam, params *AssetFilterParams) (*http.Request, error) {
 	var err error
@@ -2061,6 +4628,22 @@ func NewAssetFilterRequest(server string, projectId ProjectIdParam, params *Asse
 
 		}
 
+		if params.Keyword != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "keyword", runtime.ParamLocationQuery, *params.Keyword); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
 		queryURL.RawQuery = queryValues.Encode()
 	}
 
@@ -2115,6 +4698,301 @@ func NewAssetCreateRequestWithBody(server string, projectId ProjectIdParam, cont
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewAssetUploadCreateRequest calls the generic AssetUploadCreate builder with application/json body
+func NewAssetUploadCreateRequest(server string, projectId ProjectIdParam, body AssetUploadCreateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAssetUploadCreateRequestWithBody(server, projectId, "application/json", bodyReader)
+}
+
+// NewAssetUploadCreateRequestWithBody generates requests for AssetUploadCreate with any type of body
+func NewAssetUploadCreateRequestWithBody(server string, projectId ProjectIdParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "projectId", runtime.ParamLocationPath, projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/projects/%s/assets/uploads", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewFieldCreateRequest calls the generic FieldCreate builder with application/json body
+func NewFieldCreateRequest(server string, schemaId SchemaIdParam, body FieldCreateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewFieldCreateRequestWithBody(server, schemaId, "application/json", bodyReader)
+}
+
+// NewFieldCreateRequestWithBody generates requests for FieldCreate with any type of body
+func NewFieldCreateRequestWithBody(server string, schemaId SchemaIdParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "schemaId", runtime.ParamLocationPath, schemaId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/schemata/%s/fields", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewFieldDeleteRequest generates requests for FieldDelete
+func NewFieldDeleteRequest(server string, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "schemaId", runtime.ParamLocationPath, schemaId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "fieldIdOrKey", runtime.ParamLocationPath, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/schemata/%s/fields/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewFieldUpdateRequest calls the generic FieldUpdate builder with application/json body
+func NewFieldUpdateRequest(server string, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewFieldUpdateRequestWithBody(server, schemaId, fieldIdOrKey, "application/json", bodyReader)
+}
+
+// NewFieldUpdateRequestWithBody generates requests for FieldUpdate with any type of body
+func NewFieldUpdateRequestWithBody(server string, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "schemaId", runtime.ParamLocationPath, schemaId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "fieldIdOrKey", runtime.ParamLocationPath, fieldIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/schemata/%s/fields/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewSchemaByIDAsJSONRequest generates requests for SchemaByIDAsJSON
+func NewSchemaByIDAsJSONRequest(server string, schemaId SchemaIdParam) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "schemaId", runtime.ParamLocationPath, schemaId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/schemata/%s/schema.json", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewProjectFilterRequest generates requests for ProjectFilter
+func NewProjectFilterRequest(server string, workspaceId WorkspaceIdParam, params *ProjectFilterParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "workspaceId", runtime.ParamLocationPath, workspaceId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/%s/projects", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -2211,19 +5089,80 @@ type ClientWithResponsesInterface interface {
 
 	ItemCommentUpdateWithResponse(ctx context.Context, itemId ItemIdParam, commentId CommentIdParam, body ItemCommentUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemCommentUpdateResponse, error)
 
+	// ModelDeleteWithResponse request
+	ModelDeleteWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*ModelDeleteResponse, error)
+
 	// ModelGetWithResponse request
 	ModelGetWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*ModelGetResponse, error)
 
-	// ItemFilterWithResponse request
-	ItemFilterWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
+	// ModelUpdateWithBodyWithResponse request with any body
+	ModelUpdateWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelUpdateResponse, error)
+
+	ModelUpdateWithResponse(ctx context.Context, modelId ModelIdParam, body ModelUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelUpdateResponse, error)
+
+	// CopyModelWithBodyWithResponse request with any body
+	CopyModelWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CopyModelResponse, error)
+
+	CopyModelWithResponse(ctx context.Context, modelId ModelIdParam, body CopyModelJSONRequestBody, reqEditors ...RequestEditorFn) (*CopyModelResponse, error)
+
+	// ModelImportWithBodyWithResponse request with any body
+	ModelImportWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelImportResponse, error)
+
+	ModelImportWithResponse(ctx context.Context, modelId ModelIdParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelImportResponse, error)
+
+	// ItemFilterWithBodyWithResponse request with any body
+	ItemFilterWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
+
+	ItemFilterWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
 
 	// ItemCreateWithBodyWithResponse request with any body
 	ItemCreateWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemCreateResponse, error)
 
 	ItemCreateWithResponse(ctx context.Context, modelId ModelIdParam, body ItemCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemCreateResponse, error)
 
+	// ItemsAsCSVWithResponse request
+	ItemsAsCSVWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemsAsCSVParams, reqEditors ...RequestEditorFn) (*ItemsAsCSVResponse, error)
+
+	// ItemsAsGeoJSONWithResponse request
+	ItemsAsGeoJSONWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*ItemsAsGeoJSONResponse, error)
+
+	// MetadataSchemaByModelAsJSONWithResponse request
+	MetadataSchemaByModelAsJSONWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*MetadataSchemaByModelAsJSONResponse, error)
+
+	// SchemaByModelAsJSONWithResponse request
+	SchemaByModelAsJSONWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*SchemaByModelAsJSONResponse, error)
+
+	// ModelFilterWithResponse request
+	ModelFilterWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelFilterParams, reqEditors ...RequestEditorFn) (*ModelFilterResponse, error)
+
+	// ModelCreateWithBodyWithResponse request with any body
+	ModelCreateWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelCreateResponse, error)
+
+	ModelCreateWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, body ModelCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelCreateResponse, error)
+
+	// ModelDeleteWithProjectWithResponse request
+	ModelDeleteWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*ModelDeleteWithProjectResponse, error)
+
 	// ModelGetWithProjectWithResponse request
 	ModelGetWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*ModelGetWithProjectResponse, error)
+
+	// ModelUpdateWithProjectWithBodyWithResponse request with any body
+	ModelUpdateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelUpdateWithProjectResponse, error)
+
+	ModelUpdateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelUpdateWithProjectResponse, error)
+
+	// FieldCreateWithProjectWithBodyWithResponse request with any body
+	FieldCreateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldCreateWithProjectResponse, error)
+
+	FieldCreateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body FieldCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldCreateWithProjectResponse, error)
+
+	// FieldDeleteWithProjectWithResponse request
+	FieldDeleteWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*FieldDeleteWithProjectResponse, error)
+
+	// FieldUpdateWithProjectWithBodyWithResponse request with any body
+	FieldUpdateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldUpdateWithProjectResponse, error)
+
+	FieldUpdateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldUpdateWithProjectResponse, error)
 
 	// ItemFilterWithProjectWithResponse request
 	ItemFilterWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterWithProjectParams, reqEditors ...RequestEditorFn) (*ItemFilterWithProjectResponse, error)
@@ -2233,6 +5172,24 @@ type ClientWithResponsesInterface interface {
 
 	ItemCreateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ItemCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemCreateWithProjectResponse, error)
 
+	// ItemsWithProjectAsCSVWithResponse request
+	ItemsWithProjectAsCSVWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsCSVParams, reqEditors ...RequestEditorFn) (*ItemsWithProjectAsCSVResponse, error)
+
+	// ItemsWithProjectAsGeoJSONWithResponse request
+	ItemsWithProjectAsGeoJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsGeoJSONParams, reqEditors ...RequestEditorFn) (*ItemsWithProjectAsGeoJSONResponse, error)
+
+	// MetadataSchemaByModelWithProjectAsJSONWithResponse request
+	MetadataSchemaByModelWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*MetadataSchemaByModelWithProjectAsJSONResponse, error)
+
+	// SchemaByModelWithProjectAsJSONWithResponse request
+	SchemaByModelWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*SchemaByModelWithProjectAsJSONResponse, error)
+
+	// SchemaFilterWithResponse request
+	SchemaFilterWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *SchemaFilterParams, reqEditors ...RequestEditorFn) (*SchemaFilterResponse, error)
+
+	// SchemaByIDWithProjectAsJSONWithResponse request
+	SchemaByIDWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*SchemaByIDWithProjectAsJSONResponse, error)
+
 	// AssetFilterWithResponse request
 	AssetFilterWithResponse(ctx context.Context, projectId ProjectIdParam, params *AssetFilterParams, reqEditors ...RequestEditorFn) (*AssetFilterResponse, error)
 
@@ -2240,6 +5197,30 @@ type ClientWithResponsesInterface interface {
 	AssetCreateWithBodyWithResponse(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AssetCreateResponse, error)
 
 	AssetCreateWithResponse(ctx context.Context, projectId ProjectIdParam, body AssetCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*AssetCreateResponse, error)
+
+	// AssetUploadCreateWithBodyWithResponse request with any body
+	AssetUploadCreateWithBodyWithResponse(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AssetUploadCreateResponse, error)
+
+	AssetUploadCreateWithResponse(ctx context.Context, projectId ProjectIdParam, body AssetUploadCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*AssetUploadCreateResponse, error)
+
+	// FieldCreateWithBodyWithResponse request with any body
+	FieldCreateWithBodyWithResponse(ctx context.Context, schemaId SchemaIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldCreateResponse, error)
+
+	FieldCreateWithResponse(ctx context.Context, schemaId SchemaIdParam, body FieldCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldCreateResponse, error)
+
+	// FieldDeleteWithResponse request
+	FieldDeleteWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*FieldDeleteResponse, error)
+
+	// FieldUpdateWithBodyWithResponse request with any body
+	FieldUpdateWithBodyWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldUpdateResponse, error)
+
+	FieldUpdateWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldUpdateResponse, error)
+
+	// SchemaByIDAsJSONWithResponse request
+	SchemaByIDAsJSONWithResponse(ctx context.Context, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*SchemaByIDAsJSONResponse, error)
+
+	// ProjectFilterWithResponse request
+	ProjectFilterWithResponse(ctx context.Context, workspaceId WorkspaceIdParam, params *ProjectFilterParams, reqEditors ...RequestEditorFn) (*ProjectFilterResponse, error)
 }
 
 type AssetDeleteResponse struct {
@@ -2540,6 +5521,30 @@ func (r ItemCommentUpdateResponse) StatusCode() int {
 	return 0
 }
 
+type ModelDeleteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Id *string `json:"id,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelDeleteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelDeleteResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type ModelGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2556,6 +5561,79 @@ func (r ModelGetResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r ModelGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelUpdateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Model
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelUpdateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelUpdateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type CopyModelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Model
+}
+
+// Status returns HTTPResponse.Status
+func (r CopyModelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CopyModelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelImportResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		IgnoredCount  *int           `json:"ignoredCount,omitempty"`
+		InsertedCount *int           `json:"insertedCount,omitempty"`
+		ItemsCount    *int           `json:"itemsCount,omitempty"`
+		ModelId       *string        `json:"modelId,omitempty"`
+		NewFields     *[]SchemaField `json:"newFields,omitempty"`
+		UpdatedCount  *int           `json:"updatedCount,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelImportResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelImportResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2611,6 +5689,166 @@ func (r ItemCreateResponse) StatusCode() int {
 	return 0
 }
 
+type ItemsAsCSVResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r ItemsAsCSVResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ItemsAsCSVResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ItemsAsGeoJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *GeoJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r ItemsAsGeoJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ItemsAsGeoJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type MetadataSchemaByModelAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r MetadataSchemaByModelAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r MetadataSchemaByModelAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SchemaByModelAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r SchemaByModelAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SchemaByModelAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelFilterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Models     *[]Model `json:"models,omitempty"`
+		Page       *int     `json:"page,omitempty"`
+		PerPage    *int     `json:"perPage,omitempty"`
+		TotalCount *int     `json:"totalCount,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelFilterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelFilterResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelCreateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Model
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelCreateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelCreateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelDeleteWithProjectResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Id *string `json:"id,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelDeleteWithProjectResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelDeleteWithProjectResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type ModelGetWithProjectResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2627,6 +5865,96 @@ func (r ModelGetWithProjectResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r ModelGetWithProjectResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ModelUpdateWithProjectResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Model
+}
+
+// Status returns HTTPResponse.Status
+func (r ModelUpdateWithProjectResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ModelUpdateWithProjectResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldCreateWithProjectResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaField
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldCreateWithProjectResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldCreateWithProjectResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldDeleteWithProjectResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Id *string `json:"id,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldDeleteWithProjectResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldDeleteWithProjectResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldUpdateWithProjectResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaField
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldUpdateWithProjectResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldUpdateWithProjectResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2682,6 +6010,142 @@ func (r ItemCreateWithProjectResponse) StatusCode() int {
 	return 0
 }
 
+type ItemsWithProjectAsCSVResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r ItemsWithProjectAsCSVResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ItemsWithProjectAsCSVResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ItemsWithProjectAsGeoJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *GeoJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r ItemsWithProjectAsGeoJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ItemsWithProjectAsGeoJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type MetadataSchemaByModelWithProjectAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r MetadataSchemaByModelWithProjectAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r MetadataSchemaByModelWithProjectAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SchemaByModelWithProjectAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r SchemaByModelWithProjectAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SchemaByModelWithProjectAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SchemaFilterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Models     *[]Model `json:"models,omitempty"`
+		Page       *int     `json:"page,omitempty"`
+		PerPage    *int     `json:"perPage,omitempty"`
+		TotalCount *int     `json:"totalCount,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r SchemaFilterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SchemaFilterResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SchemaByIDWithProjectAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r SchemaByIDWithProjectAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SchemaByIDWithProjectAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type AssetFilterResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2725,6 +6189,151 @@ func (r AssetCreateResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r AssetCreateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type AssetUploadCreateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		ContentLength *int    `json:"contentLength,omitempty"`
+		ContentType   *string `json:"contentType,omitempty"`
+		Next          *string `json:"next,omitempty"`
+		Token         *string `json:"token,omitempty"`
+		Url           *string `json:"url,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r AssetUploadCreateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AssetUploadCreateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldCreateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaField
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldCreateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldCreateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldDeleteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Id *string `json:"id,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldDeleteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldDeleteResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type FieldUpdateResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaField
+}
+
+// Status returns HTTPResponse.Status
+func (r FieldUpdateResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r FieldUpdateResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SchemaByIDAsJSONResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SchemaJSON
+}
+
+// Status returns HTTPResponse.Status
+func (r SchemaByIDAsJSONResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SchemaByIDAsJSONResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type ProjectFilterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Page       *int       `json:"page,omitempty"`
+		PerPage    *int       `json:"perPage,omitempty"`
+		Projects   *[]Project `json:"projects,omitempty"`
+		TotalCount *int       `json:"totalCount,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ProjectFilterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ProjectFilterResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2888,6 +6497,15 @@ func (c *ClientWithResponses) ItemCommentUpdateWithResponse(ctx context.Context,
 	return ParseItemCommentUpdateResponse(rsp)
 }
 
+// ModelDeleteWithResponse request returning *ModelDeleteResponse
+func (c *ClientWithResponses) ModelDeleteWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*ModelDeleteResponse, error) {
+	rsp, err := c.ModelDelete(ctx, modelId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelDeleteResponse(rsp)
+}
+
 // ModelGetWithResponse request returning *ModelGetResponse
 func (c *ClientWithResponses) ModelGetWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*ModelGetResponse, error) {
 	rsp, err := c.ModelGet(ctx, modelId, reqEditors...)
@@ -2897,9 +6515,68 @@ func (c *ClientWithResponses) ModelGetWithResponse(ctx context.Context, modelId 
 	return ParseModelGetResponse(rsp)
 }
 
-// ItemFilterWithResponse request returning *ItemFilterResponse
-func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
-	rsp, err := c.ItemFilter(ctx, modelId, params, reqEditors...)
+// ModelUpdateWithBodyWithResponse request with arbitrary body returning *ModelUpdateResponse
+func (c *ClientWithResponses) ModelUpdateWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelUpdateResponse, error) {
+	rsp, err := c.ModelUpdateWithBody(ctx, modelId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelUpdateResponse(rsp)
+}
+
+func (c *ClientWithResponses) ModelUpdateWithResponse(ctx context.Context, modelId ModelIdParam, body ModelUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelUpdateResponse, error) {
+	rsp, err := c.ModelUpdate(ctx, modelId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelUpdateResponse(rsp)
+}
+
+// CopyModelWithBodyWithResponse request with arbitrary body returning *CopyModelResponse
+func (c *ClientWithResponses) CopyModelWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CopyModelResponse, error) {
+	rsp, err := c.CopyModelWithBody(ctx, modelId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCopyModelResponse(rsp)
+}
+
+func (c *ClientWithResponses) CopyModelWithResponse(ctx context.Context, modelId ModelIdParam, body CopyModelJSONRequestBody, reqEditors ...RequestEditorFn) (*CopyModelResponse, error) {
+	rsp, err := c.CopyModel(ctx, modelId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCopyModelResponse(rsp)
+}
+
+// ModelImportWithBodyWithResponse request with arbitrary body returning *ModelImportResponse
+func (c *ClientWithResponses) ModelImportWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelImportResponse, error) {
+	rsp, err := c.ModelImportWithBody(ctx, modelId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelImportResponse(rsp)
+}
+
+func (c *ClientWithResponses) ModelImportWithResponse(ctx context.Context, modelId ModelIdParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelImportResponse, error) {
+	rsp, err := c.ModelImport(ctx, modelId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelImportResponse(rsp)
+}
+
+// ItemFilterWithBodyWithResponse request with arbitrary body returning *ItemFilterResponse
+func (c *ClientWithResponses) ItemFilterWithBodyWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
+	rsp, err := c.ItemFilterWithBody(ctx, modelId, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemFilterResponse(rsp)
+}
+
+func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
+	rsp, err := c.ItemFilter(ctx, modelId, params, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -2923,6 +6600,77 @@ func (c *ClientWithResponses) ItemCreateWithResponse(ctx context.Context, modelI
 	return ParseItemCreateResponse(rsp)
 }
 
+// ItemsAsCSVWithResponse request returning *ItemsAsCSVResponse
+func (c *ClientWithResponses) ItemsAsCSVWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemsAsCSVParams, reqEditors ...RequestEditorFn) (*ItemsAsCSVResponse, error) {
+	rsp, err := c.ItemsAsCSV(ctx, modelId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemsAsCSVResponse(rsp)
+}
+
+// ItemsAsGeoJSONWithResponse request returning *ItemsAsGeoJSONResponse
+func (c *ClientWithResponses) ItemsAsGeoJSONWithResponse(ctx context.Context, modelId ModelIdParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*ItemsAsGeoJSONResponse, error) {
+	rsp, err := c.ItemsAsGeoJSON(ctx, modelId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemsAsGeoJSONResponse(rsp)
+}
+
+// MetadataSchemaByModelAsJSONWithResponse request returning *MetadataSchemaByModelAsJSONResponse
+func (c *ClientWithResponses) MetadataSchemaByModelAsJSONWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*MetadataSchemaByModelAsJSONResponse, error) {
+	rsp, err := c.MetadataSchemaByModelAsJSON(ctx, modelId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseMetadataSchemaByModelAsJSONResponse(rsp)
+}
+
+// SchemaByModelAsJSONWithResponse request returning *SchemaByModelAsJSONResponse
+func (c *ClientWithResponses) SchemaByModelAsJSONWithResponse(ctx context.Context, modelId ModelIdParam, reqEditors ...RequestEditorFn) (*SchemaByModelAsJSONResponse, error) {
+	rsp, err := c.SchemaByModelAsJSON(ctx, modelId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSchemaByModelAsJSONResponse(rsp)
+}
+
+// ModelFilterWithResponse request returning *ModelFilterResponse
+func (c *ClientWithResponses) ModelFilterWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelFilterParams, reqEditors ...RequestEditorFn) (*ModelFilterResponse, error) {
+	rsp, err := c.ModelFilter(ctx, projectIdOrAlias, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelFilterResponse(rsp)
+}
+
+// ModelCreateWithBodyWithResponse request with arbitrary body returning *ModelCreateResponse
+func (c *ClientWithResponses) ModelCreateWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelCreateResponse, error) {
+	rsp, err := c.ModelCreateWithBody(ctx, projectIdOrAlias, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelCreateResponse(rsp)
+}
+
+func (c *ClientWithResponses) ModelCreateWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *ModelCreateParams, body ModelCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelCreateResponse, error) {
+	rsp, err := c.ModelCreate(ctx, projectIdOrAlias, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelCreateResponse(rsp)
+}
+
+// ModelDeleteWithProjectWithResponse request returning *ModelDeleteWithProjectResponse
+func (c *ClientWithResponses) ModelDeleteWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*ModelDeleteWithProjectResponse, error) {
+	rsp, err := c.ModelDeleteWithProject(ctx, projectIdOrAlias, modelIdOrKey, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelDeleteWithProjectResponse(rsp)
+}
+
 // ModelGetWithProjectWithResponse request returning *ModelGetWithProjectResponse
 func (c *ClientWithResponses) ModelGetWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*ModelGetWithProjectResponse, error) {
 	rsp, err := c.ModelGetWithProject(ctx, projectIdOrAlias, modelIdOrKey, reqEditors...)
@@ -2930,6 +6678,66 @@ func (c *ClientWithResponses) ModelGetWithProjectWithResponse(ctx context.Contex
 		return nil, err
 	}
 	return ParseModelGetWithProjectResponse(rsp)
+}
+
+// ModelUpdateWithProjectWithBodyWithResponse request with arbitrary body returning *ModelUpdateWithProjectResponse
+func (c *ClientWithResponses) ModelUpdateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ModelUpdateWithProjectResponse, error) {
+	rsp, err := c.ModelUpdateWithProjectWithBody(ctx, projectIdOrAlias, modelIdOrKey, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelUpdateWithProjectResponse(rsp)
+}
+
+func (c *ClientWithResponses) ModelUpdateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelUpdateWithProjectResponse, error) {
+	rsp, err := c.ModelUpdateWithProject(ctx, projectIdOrAlias, modelIdOrKey, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseModelUpdateWithProjectResponse(rsp)
+}
+
+// FieldCreateWithProjectWithBodyWithResponse request with arbitrary body returning *FieldCreateWithProjectResponse
+func (c *ClientWithResponses) FieldCreateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldCreateWithProjectResponse, error) {
+	rsp, err := c.FieldCreateWithProjectWithBody(ctx, projectIdOrAlias, modelIdOrKey, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldCreateWithProjectResponse(rsp)
+}
+
+func (c *ClientWithResponses) FieldCreateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body FieldCreateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldCreateWithProjectResponse, error) {
+	rsp, err := c.FieldCreateWithProject(ctx, projectIdOrAlias, modelIdOrKey, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldCreateWithProjectResponse(rsp)
+}
+
+// FieldDeleteWithProjectWithResponse request returning *FieldDeleteWithProjectResponse
+func (c *ClientWithResponses) FieldDeleteWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*FieldDeleteWithProjectResponse, error) {
+	rsp, err := c.FieldDeleteWithProject(ctx, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldDeleteWithProjectResponse(rsp)
+}
+
+// FieldUpdateWithProjectWithBodyWithResponse request with arbitrary body returning *FieldUpdateWithProjectResponse
+func (c *ClientWithResponses) FieldUpdateWithProjectWithBodyWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldUpdateWithProjectResponse, error) {
+	rsp, err := c.FieldUpdateWithProjectWithBody(ctx, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldUpdateWithProjectResponse(rsp)
+}
+
+func (c *ClientWithResponses) FieldUpdateWithProjectWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateWithProjectJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldUpdateWithProjectResponse, error) {
+	rsp, err := c.FieldUpdateWithProject(ctx, projectIdOrAlias, modelIdOrKey, fieldIdOrKey, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldUpdateWithProjectResponse(rsp)
 }
 
 // ItemFilterWithProjectWithResponse request returning *ItemFilterWithProjectResponse
@@ -2958,6 +6766,60 @@ func (c *ClientWithResponses) ItemCreateWithProjectWithResponse(ctx context.Cont
 	return ParseItemCreateWithProjectResponse(rsp)
 }
 
+// ItemsWithProjectAsCSVWithResponse request returning *ItemsWithProjectAsCSVResponse
+func (c *ClientWithResponses) ItemsWithProjectAsCSVWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsCSVParams, reqEditors ...RequestEditorFn) (*ItemsWithProjectAsCSVResponse, error) {
+	rsp, err := c.ItemsWithProjectAsCSV(ctx, projectIdOrAlias, modelIdOrKey, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemsWithProjectAsCSVResponse(rsp)
+}
+
+// ItemsWithProjectAsGeoJSONWithResponse request returning *ItemsWithProjectAsGeoJSONResponse
+func (c *ClientWithResponses) ItemsWithProjectAsGeoJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsWithProjectAsGeoJSONParams, reqEditors ...RequestEditorFn) (*ItemsWithProjectAsGeoJSONResponse, error) {
+	rsp, err := c.ItemsWithProjectAsGeoJSON(ctx, projectIdOrAlias, modelIdOrKey, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemsWithProjectAsGeoJSONResponse(rsp)
+}
+
+// MetadataSchemaByModelWithProjectAsJSONWithResponse request returning *MetadataSchemaByModelWithProjectAsJSONResponse
+func (c *ClientWithResponses) MetadataSchemaByModelWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*MetadataSchemaByModelWithProjectAsJSONResponse, error) {
+	rsp, err := c.MetadataSchemaByModelWithProjectAsJSON(ctx, projectIdOrAlias, modelIdOrKey, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseMetadataSchemaByModelWithProjectAsJSONResponse(rsp)
+}
+
+// SchemaByModelWithProjectAsJSONWithResponse request returning *SchemaByModelWithProjectAsJSONResponse
+func (c *ClientWithResponses) SchemaByModelWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, reqEditors ...RequestEditorFn) (*SchemaByModelWithProjectAsJSONResponse, error) {
+	rsp, err := c.SchemaByModelWithProjectAsJSON(ctx, projectIdOrAlias, modelIdOrKey, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSchemaByModelWithProjectAsJSONResponse(rsp)
+}
+
+// SchemaFilterWithResponse request returning *SchemaFilterResponse
+func (c *ClientWithResponses) SchemaFilterWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, params *SchemaFilterParams, reqEditors ...RequestEditorFn) (*SchemaFilterResponse, error) {
+	rsp, err := c.SchemaFilter(ctx, projectIdOrAlias, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSchemaFilterResponse(rsp)
+}
+
+// SchemaByIDWithProjectAsJSONWithResponse request returning *SchemaByIDWithProjectAsJSONResponse
+func (c *ClientWithResponses) SchemaByIDWithProjectAsJSONWithResponse(ctx context.Context, projectIdOrAlias ProjectIdOrAliasParam, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*SchemaByIDWithProjectAsJSONResponse, error) {
+	rsp, err := c.SchemaByIDWithProjectAsJSON(ctx, projectIdOrAlias, schemaId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSchemaByIDWithProjectAsJSONResponse(rsp)
+}
+
 // AssetFilterWithResponse request returning *AssetFilterResponse
 func (c *ClientWithResponses) AssetFilterWithResponse(ctx context.Context, projectId ProjectIdParam, params *AssetFilterParams, reqEditors ...RequestEditorFn) (*AssetFilterResponse, error) {
 	rsp, err := c.AssetFilter(ctx, projectId, params, reqEditors...)
@@ -2982,6 +6844,84 @@ func (c *ClientWithResponses) AssetCreateWithResponse(ctx context.Context, proje
 		return nil, err
 	}
 	return ParseAssetCreateResponse(rsp)
+}
+
+// AssetUploadCreateWithBodyWithResponse request with arbitrary body returning *AssetUploadCreateResponse
+func (c *ClientWithResponses) AssetUploadCreateWithBodyWithResponse(ctx context.Context, projectId ProjectIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AssetUploadCreateResponse, error) {
+	rsp, err := c.AssetUploadCreateWithBody(ctx, projectId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAssetUploadCreateResponse(rsp)
+}
+
+func (c *ClientWithResponses) AssetUploadCreateWithResponse(ctx context.Context, projectId ProjectIdParam, body AssetUploadCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*AssetUploadCreateResponse, error) {
+	rsp, err := c.AssetUploadCreate(ctx, projectId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAssetUploadCreateResponse(rsp)
+}
+
+// FieldCreateWithBodyWithResponse request with arbitrary body returning *FieldCreateResponse
+func (c *ClientWithResponses) FieldCreateWithBodyWithResponse(ctx context.Context, schemaId SchemaIdParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldCreateResponse, error) {
+	rsp, err := c.FieldCreateWithBody(ctx, schemaId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldCreateResponse(rsp)
+}
+
+func (c *ClientWithResponses) FieldCreateWithResponse(ctx context.Context, schemaId SchemaIdParam, body FieldCreateJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldCreateResponse, error) {
+	rsp, err := c.FieldCreate(ctx, schemaId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldCreateResponse(rsp)
+}
+
+// FieldDeleteWithResponse request returning *FieldDeleteResponse
+func (c *ClientWithResponses) FieldDeleteWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, reqEditors ...RequestEditorFn) (*FieldDeleteResponse, error) {
+	rsp, err := c.FieldDelete(ctx, schemaId, fieldIdOrKey, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldDeleteResponse(rsp)
+}
+
+// FieldUpdateWithBodyWithResponse request with arbitrary body returning *FieldUpdateResponse
+func (c *ClientWithResponses) FieldUpdateWithBodyWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*FieldUpdateResponse, error) {
+	rsp, err := c.FieldUpdateWithBody(ctx, schemaId, fieldIdOrKey, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldUpdateResponse(rsp)
+}
+
+func (c *ClientWithResponses) FieldUpdateWithResponse(ctx context.Context, schemaId SchemaIdParam, fieldIdOrKey FieldIdOrKeyParam, body FieldUpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*FieldUpdateResponse, error) {
+	rsp, err := c.FieldUpdate(ctx, schemaId, fieldIdOrKey, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseFieldUpdateResponse(rsp)
+}
+
+// SchemaByIDAsJSONWithResponse request returning *SchemaByIDAsJSONResponse
+func (c *ClientWithResponses) SchemaByIDAsJSONWithResponse(ctx context.Context, schemaId SchemaIdParam, reqEditors ...RequestEditorFn) (*SchemaByIDAsJSONResponse, error) {
+	rsp, err := c.SchemaByIDAsJSON(ctx, schemaId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSchemaByIDAsJSONResponse(rsp)
+}
+
+// ProjectFilterWithResponse request returning *ProjectFilterResponse
+func (c *ClientWithResponses) ProjectFilterWithResponse(ctx context.Context, workspaceId WorkspaceIdParam, params *ProjectFilterParams, reqEditors ...RequestEditorFn) (*ProjectFilterResponse, error) {
+	rsp, err := c.ProjectFilter(ctx, workspaceId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseProjectFilterResponse(rsp)
 }
 
 // ParseAssetDeleteResponse parses an HTTP response from a AssetDeleteWithResponse call
@@ -3334,6 +7274,34 @@ func ParseItemCommentUpdateResponse(rsp *http.Response) (*ItemCommentUpdateRespo
 	return response, nil
 }
 
+// ParseModelDeleteResponse parses an HTTP response from a ModelDeleteWithResponse call
+func ParseModelDeleteResponse(rsp *http.Response) (*ModelDeleteResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelDeleteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Id *string `json:"id,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseModelGetResponse parses an HTTP response from a ModelGetWithResponse call
 func ParseModelGetResponse(rsp *http.Response) (*ModelGetResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -3350,6 +7318,91 @@ func ParseModelGetResponse(rsp *http.Response) (*ModelGetResponse, error) {
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelUpdateResponse parses an HTTP response from a ModelUpdateWithResponse call
+func ParseModelUpdateResponse(rsp *http.Response) (*ModelUpdateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelUpdateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCopyModelResponse parses an HTTP response from a CopyModelWithResponse call
+func ParseCopyModelResponse(rsp *http.Response) (*CopyModelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CopyModelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelImportResponse parses an HTTP response from a ModelImportWithResponse call
+func ParseModelImportResponse(rsp *http.Response) (*ModelImportResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelImportResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			IgnoredCount  *int           `json:"ignoredCount,omitempty"`
+			InsertedCount *int           `json:"insertedCount,omitempty"`
+			ItemsCount    *int           `json:"itemsCount,omitempty"`
+			ModelId       *string        `json:"modelId,omitempty"`
+			NewFields     *[]SchemaField `json:"newFields,omitempty"`
+			UpdatedCount  *int           `json:"updatedCount,omitempty"`
+		}
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -3417,6 +7470,185 @@ func ParseItemCreateResponse(rsp *http.Response) (*ItemCreateResponse, error) {
 	return response, nil
 }
 
+// ParseItemsAsCSVResponse parses an HTTP response from a ItemsAsCSVWithResponse call
+func ParseItemsAsCSVResponse(rsp *http.Response) (*ItemsAsCSVResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ItemsAsCSVResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseItemsAsGeoJSONResponse parses an HTTP response from a ItemsAsGeoJSONWithResponse call
+func ParseItemsAsGeoJSONResponse(rsp *http.Response) (*ItemsAsGeoJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ItemsAsGeoJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest GeoJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseMetadataSchemaByModelAsJSONResponse parses an HTTP response from a MetadataSchemaByModelAsJSONWithResponse call
+func ParseMetadataSchemaByModelAsJSONResponse(rsp *http.Response) (*MetadataSchemaByModelAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &MetadataSchemaByModelAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSchemaByModelAsJSONResponse parses an HTTP response from a SchemaByModelAsJSONWithResponse call
+func ParseSchemaByModelAsJSONResponse(rsp *http.Response) (*SchemaByModelAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SchemaByModelAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelFilterResponse parses an HTTP response from a ModelFilterWithResponse call
+func ParseModelFilterResponse(rsp *http.Response) (*ModelFilterResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelFilterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Models     *[]Model `json:"models,omitempty"`
+			Page       *int     `json:"page,omitempty"`
+			PerPage    *int     `json:"perPage,omitempty"`
+			TotalCount *int     `json:"totalCount,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelCreateResponse parses an HTTP response from a ModelCreateWithResponse call
+func ParseModelCreateResponse(rsp *http.Response) (*ModelCreateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelCreateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelDeleteWithProjectResponse parses an HTTP response from a ModelDeleteWithProjectWithResponse call
+func ParseModelDeleteWithProjectResponse(rsp *http.Response) (*ModelDeleteWithProjectResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelDeleteWithProjectResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Id *string `json:"id,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseModelGetWithProjectResponse parses an HTTP response from a ModelGetWithProjectWithResponse call
 func ParseModelGetWithProjectResponse(rsp *http.Response) (*ModelGetWithProjectResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -3433,6 +7665,112 @@ func ParseModelGetWithProjectResponse(rsp *http.Response) (*ModelGetWithProjectR
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseModelUpdateWithProjectResponse parses an HTTP response from a ModelUpdateWithProjectWithResponse call
+func ParseModelUpdateWithProjectResponse(rsp *http.Response) (*ModelUpdateWithProjectResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ModelUpdateWithProjectResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Model
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldCreateWithProjectResponse parses an HTTP response from a FieldCreateWithProjectWithResponse call
+func ParseFieldCreateWithProjectResponse(rsp *http.Response) (*FieldCreateWithProjectResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldCreateWithProjectResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldDeleteWithProjectResponse parses an HTTP response from a FieldDeleteWithProjectWithResponse call
+func ParseFieldDeleteWithProjectResponse(rsp *http.Response) (*FieldDeleteWithProjectResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldDeleteWithProjectResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Id *string `json:"id,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldUpdateWithProjectResponse parses an HTTP response from a FieldUpdateWithProjectWithResponse call
+func ParseFieldUpdateWithProjectResponse(rsp *http.Response) (*FieldUpdateWithProjectResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldUpdateWithProjectResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaField
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -3500,6 +7838,157 @@ func ParseItemCreateWithProjectResponse(rsp *http.Response) (*ItemCreateWithProj
 	return response, nil
 }
 
+// ParseItemsWithProjectAsCSVResponse parses an HTTP response from a ItemsWithProjectAsCSVWithResponse call
+func ParseItemsWithProjectAsCSVResponse(rsp *http.Response) (*ItemsWithProjectAsCSVResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ItemsWithProjectAsCSVResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseItemsWithProjectAsGeoJSONResponse parses an HTTP response from a ItemsWithProjectAsGeoJSONWithResponse call
+func ParseItemsWithProjectAsGeoJSONResponse(rsp *http.Response) (*ItemsWithProjectAsGeoJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ItemsWithProjectAsGeoJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest GeoJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseMetadataSchemaByModelWithProjectAsJSONResponse parses an HTTP response from a MetadataSchemaByModelWithProjectAsJSONWithResponse call
+func ParseMetadataSchemaByModelWithProjectAsJSONResponse(rsp *http.Response) (*MetadataSchemaByModelWithProjectAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &MetadataSchemaByModelWithProjectAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSchemaByModelWithProjectAsJSONResponse parses an HTTP response from a SchemaByModelWithProjectAsJSONWithResponse call
+func ParseSchemaByModelWithProjectAsJSONResponse(rsp *http.Response) (*SchemaByModelWithProjectAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SchemaByModelWithProjectAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSchemaFilterResponse parses an HTTP response from a SchemaFilterWithResponse call
+func ParseSchemaFilterResponse(rsp *http.Response) (*SchemaFilterResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SchemaFilterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Models     *[]Model `json:"models,omitempty"`
+			Page       *int     `json:"page,omitempty"`
+			PerPage    *int     `json:"perPage,omitempty"`
+			TotalCount *int     `json:"totalCount,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSchemaByIDWithProjectAsJSONResponse parses an HTTP response from a SchemaByIDWithProjectAsJSONWithResponse call
+func ParseSchemaByIDWithProjectAsJSONResponse(rsp *http.Response) (*SchemaByIDWithProjectAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SchemaByIDWithProjectAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseAssetFilterResponse parses an HTTP response from a AssetFilterWithResponse call
 func ParseAssetFilterResponse(rsp *http.Response) (*AssetFilterResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -3547,6 +8036,175 @@ func ParseAssetCreateResponse(rsp *http.Response) (*AssetCreateResponse, error) 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Asset
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAssetUploadCreateResponse parses an HTTP response from a AssetUploadCreateWithResponse call
+func ParseAssetUploadCreateResponse(rsp *http.Response) (*AssetUploadCreateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AssetUploadCreateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			ContentLength *int    `json:"contentLength,omitempty"`
+			ContentType   *string `json:"contentType,omitempty"`
+			Next          *string `json:"next,omitempty"`
+			Token         *string `json:"token,omitempty"`
+			Url           *string `json:"url,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldCreateResponse parses an HTTP response from a FieldCreateWithResponse call
+func ParseFieldCreateResponse(rsp *http.Response) (*FieldCreateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldCreateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldDeleteResponse parses an HTTP response from a FieldDeleteWithResponse call
+func ParseFieldDeleteResponse(rsp *http.Response) (*FieldDeleteResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldDeleteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Id *string `json:"id,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseFieldUpdateResponse parses an HTTP response from a FieldUpdateWithResponse call
+func ParseFieldUpdateResponse(rsp *http.Response) (*FieldUpdateResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &FieldUpdateResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSchemaByIDAsJSONResponse parses an HTTP response from a SchemaByIDAsJSONWithResponse call
+func ParseSchemaByIDAsJSONResponse(rsp *http.Response) (*SchemaByIDAsJSONResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SchemaByIDAsJSONResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SchemaJSON
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseProjectFilterResponse parses an HTTP response from a ProjectFilterWithResponse call
+func ParseProjectFilterResponse(rsp *http.Response) (*ProjectFilterResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ProjectFilterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Page       *int       `json:"page,omitempty"`
+			PerPage    *int       `json:"perPage,omitempty"`
+			Projects   *[]Project `json:"projects,omitempty"`
+			TotalCount *int       `json:"totalCount,omitempty"`
+		}
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
