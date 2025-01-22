@@ -1,4 +1,4 @@
-package cms
+package cms_test
 
 import (
 	"io"
@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/jarcoal/httpmock"
+	cms "github.com/reearth/reearth-cms-api/go"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
@@ -195,15 +196,15 @@ func parseToken(r *http.Request) string {
 	return token
 }
 
-var testItems = lo.Map(lo.Range(500), func(i, _ int) Item {
-	return Item{
+var testItems = lo.Map(lo.Range(500), func(i, _ int) cms.Item {
+	return cms.Item{
 		ID:     strconv.Itoa(i),
-		Fields: []*Field{{ID: "f", Type: "text", Value: "t"}},
+		Fields: []*cms.Field{{ID: "f", Type: "text", Value: "t"}},
 	}
 })
 
-var testModels = lo.Map(lo.Range(500), func(i, _ int) Model {
-	return Model{
+var testModels = lo.Map(lo.Range(500), func(i, _ int) cms.Model {
+	return cms.Model{
 		ID: strconv.Itoa(i),
 	}
 })

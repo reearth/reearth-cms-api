@@ -24,7 +24,7 @@ const (
 	EventAssetDecompress = "asset.decompress"
 )
 
-var ctxKey = struct{}{}
+type ctxs struct{}
 
 type Handler func(*http.Request, *Payload) error
 
@@ -40,11 +40,11 @@ func MergeHandlers(handlers []Handler) Handler {
 }
 
 func AttachPayload(ctx context.Context, p *Payload) context.Context {
-	return context.WithValue(ctx, ctxKey, p)
+	return context.WithValue(ctx, ctxs{}, p)
 }
 
 func GetPayload(ctx context.Context) *Payload {
-	if c, ok := ctx.Value(ctxKey).(*Payload); ok {
+	if c, ok := ctx.Value(ctxs{}).(*Payload); ok {
 		return c
 	}
 	return nil
