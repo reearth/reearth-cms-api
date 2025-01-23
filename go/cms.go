@@ -39,10 +39,10 @@ type Interface interface {
 	DeleteItem(ctx context.Context, itemID string) error
 	Asset(ctx context.Context, id string) (*Asset, error)
 	UploadAsset(ctx context.Context, projectID, url string) (string, error)
-	UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader) (string, error)
+	UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader, opts ...UploadAssetOption) (string, error)
+	CreateAssetUpload(ctx context.Context, projectID, name string, opts ...UploadAssetOption) (*AssetUpload, error)
 	UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data io.Reader) error
 	CreateAssetByToken(ctx context.Context, projectID, token string) (*Asset, error)
-	CreateAssetUpload(ctx context.Context, projectID, name string) (*AssetUpload, error)
 	CommentToItem(ctx context.Context, assetID, content string) error
 	CommentToAsset(ctx context.Context, assetID, content string) error
 }
@@ -470,7 +470,9 @@ func (c *CMS) UploadAsset(ctx context.Context, projectID, url string) (string, e
 	return r.ID, nil
 }
 
-func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader) (string, error) {
+func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, data io.Reader, opts ...UploadAssetOption) (string, error) {
+	opt := UploadAssetOption{}.Merge(opts...)
+
 	pr, pw := io.Pipe()
 	mw := multipart.NewWriter(pw)
 
@@ -480,6 +482,20 @@ func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, d
 			_ = mw.Close()
 			_ = pw.CloseWithError(err)
 		}()
+
+		if opt.ContentType != "" {
+			if err2 := mw.WriteField("contentType", opt.ContentType); err2 != nil {
+				err = fmt.Errorf("failed to write contentType field: %w", err2)
+				return
+			}
+		}
+
+		if opt.ContentEncoding != "" {
+			if err2 := mw.WriteField("contentEncoding", opt.ContentEncoding); err2 != nil {
+				err = fmt.Errorf("failed to write contentEncoding field: %w", err2)
+				return
+			}
+		}
 
 		fw, err2 := mw.CreateFormFile("file", name)
 		if err2 != nil {
@@ -531,6 +547,9 @@ func (c *CMS) UploadToAssetUpload(ctx context.Context, upload *AssetUpload, data
 	}
 
 	req.Header.Set("Content-Type", upload.ContentType)
+	if upload.ContentEncoding != "" {
+		req.Header.Set("Content-Encoding", upload.ContentEncoding)
+	}
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -574,13 +593,23 @@ func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (
 	return r, nil
 }
 
-func (c *CMS) CreateAssetUpload(ctx context.Context, projectID, name string) (*AssetUpload, error) {
+func (c *CMS) CreateAssetUpload(ctx context.Context, projectID, name string, opts ...UploadAssetOption) (*AssetUpload, error) {
+	opt := UploadAssetOption{}.Merge(opts...)
+
+	payload := map[string]string{"name": name}
+	if opt.ContentType != "" {
+		payload["contentType"] = opt.ContentType
+	}
+	if opt.ContentEncoding != "" {
+		payload["contentEncoding"] = opt.ContentEncoding
+	}
+
 	b, err2 := c.send(
 		ctx,
 		http.MethodPost,
 		[]string{"api", "projects", projectID, "assets", "uploads"},
 		"",
-		map[string]string{"name": name},
+		payload,
 	)
 	if err2 != nil {
 		return nil, fmt.Errorf("failed to upload an asset: %w", err2)

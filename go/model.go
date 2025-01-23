@@ -27,17 +27,36 @@ type Asset struct {
 }
 
 type AssetUpload struct {
-	URL         string `json:"url"`
-	Token       string `json:"token"`
-	ContentType string `json:"contentType"`
+	URL             string `json:"url,omitempty"`
+	Token           string `json:"token,omitempty"`
+	ContentType     string `json:"contentType,omitempty"`
+	ContentEncoding string `json:"contentEncoding,omitempty"`
+}
+
+type UploadAssetOption struct {
+	ContentType     string `json:"contentType,omitempty"`
+	ContentEncoding string `json:"contentEncoding,omitempty"`
+}
+
+func (o UploadAssetOption) Merge(others ...UploadAssetOption) UploadAssetOption {
+	for _, other := range others {
+		if other.ContentType != "" {
+			o.ContentType = other.ContentType
+		}
+		if other.ContentEncoding != "" {
+			o.ContentEncoding = other.ContentEncoding
+		}
+	}
+	return o
 }
 
 type File struct {
-	Name        string `json:"name"`
-	Size        int    `json:"size"`
-	ContentType string `json:"contentType"`
-	Path        string `json:"path"`
-	Children    []File `json:"children"`
+	Name            string `json:"name"`
+	Size            int    `json:"size"`
+	Path            string `json:"path"`
+	ContentType     string `json:"contentType"`
+	ContentEncoding string `json:"contentEncoding,omitempty"`
+	Children        []File `json:"children"`
 }
 
 func (f File) Paths() []string {

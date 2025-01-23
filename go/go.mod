@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/deepmap/oapi-codegen/v2 v2.0.0
 	github.com/jarcoal/httpmock v1.3.0
+	github.com/joho/godotenv v1.5.1
 	github.com/oapi-codegen/runtime v1.0.0
 	github.com/samber/lo v1.38.1
 	github.com/stretchr/testify v1.8.4
