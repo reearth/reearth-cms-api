@@ -1,6 +1,7 @@
 package cms
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,6 +28,8 @@ func TestItem_Unmarshal(t *testing.T) {
 		JJJ []Tag          `cms:"jjj"`
 		KKK *Value         `cms:"kkk"`
 		LLL *Tag           `cms:"lll"`
+		MMM []string       `cms:"mmm"`
+		NNN *PublicAsset   `cms:"nnn"`
 	}
 	s := S{}
 
@@ -41,9 +44,11 @@ func TestItem_Unmarshal(t *testing.T) {
 			{Key: "hhh", Type: "group", Value: []string{"1"}},
 			{Key: "aaa", Group: "1", Value: "123"},
 			{Key: "iii"},
-			{Key: "jjj", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
+			{Key: "jjj", Value: []any{map[string]any{"id": "xxx!", "name": "tag"}}},
 			{Key: "kkk", Value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
 			{Key: "lll", Value: map[string]any{"id": "xxx", "name": "tag"}},
+			{Key: "mmm", Value: []any{"aaa", "bbb"}},
+			{Key: "nnn", Value: map[string]any{"id": "asset", "url": "https://example.com"}},
 		},
 		MetadataFields: []*Field{
 			{Key: "eee", Value: true},
@@ -60,9 +65,11 @@ func TestItem_Unmarshal(t *testing.T) {
 		GGG: []*G{{ID: "1", AAA: "123"}, {ID: "2"}},
 		HHH: []G{{ID: "1", AAA: "123"}},
 		III: nil,
-		JJJ: []Tag{{ID: "xxx", Name: "tag"}},
+		JJJ: []Tag{{ID: "xxx!", Name: "tag"}},
 		KKK: &Value{value: []any{map[string]any{"id": "xxx", "name": "tag"}}},
 		LLL: &Tag{ID: "xxx", Name: "tag"},
+		MMM: []string{"aaa", "bbb"},
+		NNN: &PublicAsset{Asset: Asset{ID: "asset", URL: "https://example.com"}},
 	}, s)
 
 	// no panic
@@ -140,4 +147,55 @@ func TestMarshal(t *testing.T) {
 	Marshal(nil, item2)
 	Marshal((*S)(nil), item2)
 	Marshal(s, nil)
+}
+
+func TestConvertPrimitive(t *testing.T) {
+	r, ok := convertPrimitive(reflect.ValueOf("a"), reflect.TypeOf(""))
+	assert.True(t, ok)
+	assert.Equal(t, reflect.ValueOf("a"), r)
+
+	r, ok = convertPrimitive(reflect.ValueOf(any("a")), reflect.TypeOf(""))
+	assert.True(t, ok)
+	assert.Equal(t, reflect.ValueOf("a"), r)
+
+	r, ok = convertPrimitive(reflect.ValueOf([]string{"a"}), reflect.TypeOf([]string{}))
+	assert.True(t, ok)
+	assert.Equal(t, []string{"a"}, r.Interface())
+
+	r, ok = convertPrimitive(reflect.ValueOf([]any{"a"}), reflect.TypeOf([]string{}))
+	assert.True(t, ok)
+	assert.Equal(t, []string{"a"}, r.Interface())
+
+	r, ok = convertPrimitive(reflect.ValueOf(map[string]any{"a": "b"}), reflect.TypeOf(map[string]string{}))
+	assert.True(t, ok)
+	assert.Equal(t, map[string]string{"a": "b"}, r.Interface())
+
+	type s struct{ A string }
+	r, ok = convertPrimitive(reflect.ValueOf(s{A: "a"}), reflect.TypeOf(s{}))
+	assert.True(t, ok)
+	assert.Equal(t, s{A: "a"}, r.Interface())
+
+	r, ok = convertPrimitive(reflect.ValueOf(&s{A: "a"}), reflect.TypeOf(&s{}))
+	assert.True(t, ok)
+	assert.Equal(t, &s{A: "a"}, r.Interface())
+
+	r, ok = convertPrimitive(reflect.ValueOf([]*s{{A: "a"}}), reflect.TypeOf([]*s{}))
+	assert.True(t, ok)
+	assert.Equal(t, []*s{{A: "a"}}, r.Interface())
+
+	r, ok = convertPrimitive(reflect.ValueOf(true), reflect.TypeOf(""))
+	assert.False(t, ok)
+	assert.Zero(t, r)
+
+	r, ok = convertPrimitive(reflect.ValueOf([]string{"a"}), reflect.TypeOf(""))
+	assert.False(t, ok)
+	assert.Zero(t, r)
+
+	r, ok = convertPrimitive(reflect.ValueOf(any(nil)), reflect.TypeOf(""))
+	assert.False(t, ok)
+	assert.Zero(t, r)
+
+	r, ok = convertPrimitive(reflect.ValueOf(map[string]string{"a": "a"}), reflect.TypeOf(map[bool]string{}))
+	assert.False(t, ok)
+	assert.Zero(t, r)
 }

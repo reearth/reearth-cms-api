@@ -285,3 +285,63 @@ func PublicAssetFrom(a any) *PublicAsset {
 
 	return &pa
 }
+
+func PublicAssetsFrom(j any) []PublicAsset {
+	s, ok := j.([]any)
+	if !ok {
+		s2, ok := j.([]map[string]any)
+		if !ok {
+			return nil
+		}
+		s = make([]any, len(s2))
+		for i, e := range s2 {
+			s[i] = e
+		}
+	}
+
+	res := make([]PublicAsset, len(s))
+	for i, e := range s {
+		if t := PublicAssetFrom(e); t != nil {
+			res[i] = *t
+		}
+	}
+
+	return res
+}
+
+func AssetFrom(a any) *Asset {
+	j, err := json.Marshal(a)
+	if err != nil {
+		return nil
+	}
+
+	pa := Asset{}
+	if err := json.Unmarshal(j, &pa); err != nil {
+		return nil
+	}
+
+	return &pa
+}
+
+func AssetsFrom(j any) []Asset {
+	s, ok := j.([]any)
+	if !ok {
+		s2, ok := j.([]map[string]any)
+		if !ok {
+			return nil
+		}
+		s = make([]any, len(s2))
+		for i, e := range s2 {
+			s[i] = e
+		}
+	}
+
+	res := make([]Asset, len(s))
+	for i, e := range s {
+		if t := AssetFrom(e); t != nil {
+			res[i] = *t
+		}
+	}
+
+	return res
+}

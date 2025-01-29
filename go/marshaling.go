@@ -93,6 +93,7 @@ func (d *Item) Unmarshal(i any) {
 					} else {
 						s = reflect.Append(s, rv.Elem())
 					}
+
 				}
 
 				vf.Set(s)
@@ -101,56 +102,96 @@ func (d *Item) Unmarshal(i any) {
 			} else if f.Type.Kind() == reflect.Pointer && f.Type.Elem().Kind() == reflect.Struct {
 				groups[0].Unmarshal(vf.Interface())
 			}
+
+			continue
 		}
 
 		if itf == nil || itf.Value == nil || !vf.CanSet() {
 			continue
 		}
 
-		// Tag
-		assignIf[Tag](vf, func() (Tag, bool) {
+		// tag
+		if ok := assignIf(vf, func() (Tag, bool) {
 			t := TagFrom(itf.Value)
 			if t == nil {
 				return Tag{}, false
 			}
 			return *t, true
-		})
-		assignIf[[]Tag](vf, func() ([]Tag, bool) {
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]Tag, bool) {
 			return TagsFrom(itf.Value), true
-		})
-		assignIf[[]*Tag](vf, func() ([]*Tag, bool) {
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]*Tag, bool) {
 			return lo.ToSlicePtr(TagsFrom(itf.Value)), true
-		})
+		}); ok {
+			continue
+		}
 
-		// Value
-		assignIf[Value](vf, func() (Value, bool) {
+		// asset
+		if ok := assignIf(vf, func() (Asset, bool) {
+			a := AssetFrom(itf.Value)
+			if a == nil {
+				return Asset{}, false
+			}
+			return *a, true
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]Asset, bool) {
+			return AssetsFrom(itf.Value), true
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]*Asset, bool) {
+			return lo.ToSlicePtr(AssetsFrom(itf.Value)), true
+		}); ok {
+			continue
+		}
+
+		// public asset
+		if ok := assignIf(vf, func() (PublicAsset, bool) {
+			a := PublicAssetFrom(itf.Value)
+			if a == nil {
+				return PublicAsset{}, false
+			}
+			return *a, true
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]PublicAsset, bool) {
+			return PublicAssetsFrom(itf.Value), true
+		}); ok {
+			continue
+		}
+
+		if ok := assignIf(vf, func() ([]*PublicAsset, bool) {
+			return lo.ToSlicePtr(PublicAssetsFrom(itf.Value)), true
+		}); ok {
+			continue
+		}
+
+		// value
+		if ok := assignIf(vf, func() (Value, bool) {
 			return *NewValue(itf.Value), true
-		})
+		}); ok {
+			continue
+		}
 
-		// normal value
+		// primitive
 		itfv := reflect.ValueOf(itf.Value)
-		if iftvt := reflect.TypeOf(itf.Value); iftvt != nil && iftvt.AssignableTo(vf.Type()) {
-			vf.Set(itfv)
-		} else if itfv.CanConvert(f.Type) {
-			vf.Set(itfv.Convert(f.Type))
+		res, ok := convertPrimitive(itfv, vf.Type())
+		if ok && res.IsValid() {
+			vf.Set(res)
 		}
-	}
-}
-
-func assignIf[T any](vf reflect.Value, conv func() (T, bool)) {
-	var t T
-	if valueType := reflect.TypeOf(&t); vf.Type().AssignableTo(valueType) {
-		v, ok := conv()
-		if !ok {
-			return
-		}
-		vf.Set(reflect.ValueOf(lo.ToPtr(v)))
-	} else if valueType := reflect.TypeOf(t); vf.Type().AssignableTo(valueType) {
-		v, ok := conv()
-		if !ok {
-			return
-		}
-		vf.Set(reflect.ValueOf(v))
 	}
 }
 
@@ -305,4 +346,86 @@ func Marshal(src any, item *Item) {
 	}
 
 	*item = ni
+}
+
+func convertPrimitive(v reflect.Value, ty reflect.Type) (reflect.Value, bool) {
+	if !v.IsValid() {
+		return reflect.Value{}, false
+	}
+
+	// slices
+	if v.Kind() == reflect.Slice && ty.Kind() == reflect.Slice && v.Len() > 0 {
+		toType := ty.Elem()
+		zero := reflect.Zero(toType)
+		s := reflect.MakeSlice(ty, 0, v.Len())
+		for i := 0; i < v.Len(); i++ {
+			res, ok := convertPrimitive(v.Index(i), toType)
+			if ok && res.IsValid() {
+				s = reflect.Append(s, res)
+			} else {
+				s = reflect.Append(s, zero)
+			}
+		}
+
+		return s, true
+	}
+
+	// maps
+	if v.Kind() == reflect.Map &&
+		ty.Kind() == reflect.Map &&
+		!v.IsNil() &&
+		v.Type().Key().AssignableTo(ty.Key()) &&
+		v.Len() > 0 {
+		toType := ty.Elem()
+		m := reflect.MakeMap(ty)
+		for _, key := range v.MapKeys() {
+			val := v.MapIndex(key)
+			res, ok := convertPrimitive(val, toType)
+			if ok && res.IsValid() {
+				m.SetMapIndex(key, res)
+			}
+		}
+
+		return m, true
+	}
+
+	// interface{}
+	if v.Kind() == reflect.Interface && v.Type().NumMethod() == 0 {
+		v = v.Elem()
+	}
+
+	if !v.IsValid() {
+		return reflect.Value{}, false
+	}
+
+	if v.Type().AssignableTo(ty) {
+		return v, true
+	}
+
+	if v.CanConvert(ty) {
+		return v.Convert(ty), true
+	}
+
+	return reflect.Value{}, false
+}
+
+func assignIf[T any](vf reflect.Value, conv func() (T, bool)) bool {
+	var t T
+	if valueType := reflect.TypeOf(&t); vf.Type().AssignableTo(valueType) {
+		v, ok := conv()
+		if !ok {
+			return false
+		}
+		vf.Set(reflect.ValueOf(lo.ToPtr(v)))
+		return true
+	} else if valueType := reflect.TypeOf(t); vf.Type().AssignableTo(valueType) {
+		v, ok := conv()
+		if !ok {
+			return false
+		}
+		vf.Set(reflect.ValueOf(v))
+		return true
+	}
+
+	return false
 }
