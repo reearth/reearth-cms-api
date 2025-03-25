@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
       - name: changed files for go
         id: go
-        uses: reearth/changed-files@9200e69727eb73eb060652b19946b8a2fdfb654b
+        uses: step-security/changed-files@v45
         with:
           files: |
             go
