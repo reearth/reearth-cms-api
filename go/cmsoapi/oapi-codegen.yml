@@ -1,5 +1,5 @@
-package: cmaoapi
+package: cmsoapi
 generate:
   models: true
   client: true
-output: integration_gen.go
+output: cmsoapi/integration_gen.go

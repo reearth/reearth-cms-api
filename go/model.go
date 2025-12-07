@@ -1,10 +1,10 @@
 package cms
 
 import (
+	"slices"
 	"time"
 
 	"github.com/samber/lo"
-	"golang.org/x/exp/slices"
 )
 
 const (
