@@ -12,9 +12,9 @@ jobs:
           check-latest: true
           cache: false
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v9
         with:
-          version: v1.52
+          version: v2.7
           working-directory: go
           args: --timeout=5m
   go-test:

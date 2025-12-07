@@ -52,7 +52,7 @@ func GetPayload(ctx context.Context) *Payload {
 
 func sign(payload, secret []byte, t time.Time, v string) string {
 	mac := hmac.New(sha256.New, secret)
-	_, _ = mac.Write([]byte(fmt.Sprintf("%s:%d:", v, t.Unix())))
+	_, _ = fmt.Fprintf(mac, "%s:%d:", v, t.Unix())
 	_, _ = mac.Write(payload)
 	s := hex.EncodeToString(mac.Sum(nil))
 	return fmt.Sprintf("%s,t=%d,%s", v, t.Unix(), s)
