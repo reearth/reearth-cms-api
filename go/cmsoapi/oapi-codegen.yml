@@ -2,4 +2,4 @@ package: cmsoapi
 generate:
   models: true
   client: true
-output: cmsoapi/integration_gen.go
+output: integration_gen.go
