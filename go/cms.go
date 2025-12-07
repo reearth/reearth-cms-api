@@ -19,6 +19,7 @@ import (
 )
 
 var ErrNotFound = errors.New("not found")
+var ErrWorkspaceRequired = errors.New("this method requires workspace to be unset; use the ByKey variant instead")
 
 type Interface interface {
 	GetModel(ctx context.Context, modelID string) (*Model, error)
@@ -48,10 +49,11 @@ type Interface interface {
 }
 
 type CMS struct {
-	base    *url.URL
-	token   string
-	client  *http.Client
-	timeout time.Duration
+	base      *url.URL
+	client    *http.Client
+	timeout   time.Duration
+	token     string
+	workspace string
 }
 
 func New(base, token string) (*CMS, error) {
@@ -69,19 +71,31 @@ func New(base, token string) (*CMS, error) {
 
 func (c *CMS) WithHTTPClient(hc *http.Client) *CMS {
 	return &CMS{
-		base:    c.base,
-		token:   c.token,
-		client:  hc,
-		timeout: c.timeout,
+		base:      c.base,
+		token:     c.token,
+		client:    hc,
+		timeout:   c.timeout,
+		workspace: c.workspace,
 	}
 }
 
 func (c *CMS) WithTimeout(t time.Duration) *CMS {
 	return &CMS{
-		base:    c.base,
-		token:   c.token,
-		client:  c.client,
-		timeout: t,
+		base:      c.base,
+		token:     c.token,
+		client:    c.client,
+		timeout:   t,
+		workspace: c.workspace,
+	}
+}
+
+func (c *CMS) WithWorkspace(workspace string) *CMS {
+	return &CMS{
+		base:      c.base,
+		token:     c.token,
+		client:    c.client,
+		timeout:   c.timeout,
+		workspace: workspace,
 	}
 }
 
@@ -94,7 +108,49 @@ func (c *CMS) assetParam(asset bool) map[string][]string {
 	}
 }
 
+func (c *CMS) useNewAPI() bool {
+	return c.workspace != ""
+}
+
+func (c *CMS) pathModels(projectIDOrAlias string) []string {
+	if c.useNewAPI() {
+		return []string{c.workspace, "projects", projectIDOrAlias, "models"}
+	}
+	return []string{"api", "projects", projectIDOrAlias, "models"}
+}
+
+func (c *CMS) pathModelByKey(projectKey, modelKey string) []string {
+	if c.useNewAPI() {
+		return []string{c.workspace, "projects", projectKey, "models", modelKey}
+	}
+	return []string{"api", "projects", projectKey, "models", modelKey}
+}
+
+func (c *CMS) pathItemsByKey(projectIDOrAlias, modelIDOrAlias string) []string {
+	if c.useNewAPI() {
+		return []string{c.workspace, "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}
+	}
+	return []string{"api", "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}
+}
+
+func (c *CMS) pathAssets(projectID string) []string {
+	if c.useNewAPI() {
+		return []string{c.workspace, "projects", projectID, "assets"}
+	}
+	return []string{"api", "projects", projectID, "assets"}
+}
+
+func (c *CMS) pathAssetUploads(projectID string) []string {
+	if c.useNewAPI() {
+		return []string{c.workspace, "projects", projectID, "assets", "uploads"}
+	}
+	return []string{"api", "projects", projectID, "assets", "uploads"}
+}
+
 func (c *CMS) GetModel(ctx context.Context, modelID string) (*Model, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	b, err := c.send(ctx, http.MethodGet, []string{"api", "models", modelID}, "", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get an model: %w", err)
@@ -110,7 +166,7 @@ func (c *CMS) GetModel(ctx context.Context, modelID string) (*Model, error) {
 }
 
 func (c *CMS) GetModelByKey(ctx context.Context, projectKey, modelKey string) (*Model, error) {
-	b, err := c.send(ctx, http.MethodGet, []string{"api", "projects", projectKey, "models", modelKey}, "", nil)
+	b, err := c.send(ctx, http.MethodGet, c.pathModelByKey(projectKey, modelKey), "", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get an model: %w", err)
 	}
@@ -125,7 +181,7 @@ func (c *CMS) GetModelByKey(ctx context.Context, projectKey, modelKey string) (*
 }
 
 func (c *CMS) GetModelsPartially(ctx context.Context, projectIDOrAlias string, page, perPage int) (*Models, error) {
-	b, err := c.send(ctx, http.MethodGet, []string{"api", "projects", projectIDOrAlias, "models"}, "", paginationQuery(page, perPage))
+	b, err := c.send(ctx, http.MethodGet, c.pathModels(projectIDOrAlias), "", paginationQuery(page, perPage))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get models: %w", err)
 	}
@@ -197,6 +253,9 @@ func (c *CMS) GetModelsInParallel(ctx context.Context, modelID string, limit int
 }
 
 func (c *CMS) GetItem(ctx context.Context, itemID string, asset bool) (*Item, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	b, err := c.send(ctx, http.MethodGet, []string{"api", "items", itemID}, "", c.assetParam(asset))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get an item: %w", err)
@@ -212,6 +271,9 @@ func (c *CMS) GetItem(ctx context.Context, itemID string, asset bool) (*Item, er
 }
 
 func (c *CMS) GetItemsPartially(ctx context.Context, modelID string, page, perPage int, asset bool) (*Items, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	q := c.assetParam(asset)
 	if page >= 1 {
 		q["page"] = []string{strconv.Itoa(page)}
@@ -300,7 +362,7 @@ func (c *CMS) GetItemsPartiallyByKey(ctx context.Context, projectIDOrAlias, mode
 		q["perPage"] = []string{strconv.Itoa(perPage)}
 	}
 
-	b, err := c.send(ctx, http.MethodGet, []string{"api", "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}, "", q)
+	b, err := c.send(ctx, http.MethodGet, c.pathItemsByKey(projectIDOrAlias, modelIDOrAlias), "", q)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get items: %w", err)
 	}
@@ -377,6 +439,9 @@ func (c *CMS) GetItemsByKeyInParallel(ctx context.Context, projectIDOrAlias, mod
 }
 
 func (c *CMS) CreateItem(ctx context.Context, modelID string, fields []*Field, metadataFields []*Field) (*Item, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	rb := map[string]any{
 		"fields":         fields,
 		"metadataFields": metadataFields,
@@ -402,7 +467,7 @@ func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fi
 		"metadataFields": metadataFields,
 	}
 
-	b, err := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "models", modelID, "items"}, "", rb)
+	b, err := c.send(ctx, http.MethodPost, c.pathItemsByKey(projectID, modelID), "", rb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create an item: %w", err)
 	}
@@ -417,6 +482,9 @@ func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fi
 }
 
 func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []*Field, metadataFields []*Field) (*Item, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	rb := map[string]any{
 		"fields":         fields,
 		"metadataFields": metadataFields,
@@ -437,6 +505,9 @@ func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []*Field, me
 }
 
 func (c *CMS) DeleteItem(ctx context.Context, itemID string) error {
+	if c.useNewAPI() {
+		return ErrWorkspaceRequired
+	}
 	b, err := c.send(ctx, http.MethodDelete, []string{"api", "items", itemID}, "", nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete an item: %w", err)
@@ -450,7 +521,7 @@ func (c *CMS) UploadAsset(ctx context.Context, projectID, url string) (string, e
 		"url": url,
 	}
 
-	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, "", rb)
+	b, err2 := c.send(ctx, http.MethodPost, c.pathAssets(projectID), "", rb)
 	if err2 != nil {
 		return "", fmt.Errorf("failed to upload an asset: %w", err2)
 	}
@@ -505,7 +576,7 @@ func (c *CMS) UploadAssetDirectly(ctx context.Context, projectID, name string, d
 		_, err = io.Copy(fw, data)
 	}()
 
-	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, mw.FormDataContentType(), pr)
+	b, err2 := c.send(ctx, http.MethodPost, c.pathAssets(projectID), mw.FormDataContentType(), pr)
 	if err2 != nil {
 		return "", fmt.Errorf("failed to upload an asset with multipart: %w", err2)
 	}
@@ -573,7 +644,7 @@ func (c *CMS) CreateAssetByToken(ctx context.Context, projectID, token string) (
 		"token": token,
 	}
 
-	b, err2 := c.send(ctx, http.MethodPost, []string{"api", "projects", projectID, "assets"}, "", rb)
+	b, err2 := c.send(ctx, http.MethodPost, c.pathAssets(projectID), "", rb)
 	if err2 != nil {
 		return nil, fmt.Errorf("failed to upload an asset: %w", err2)
 	}
@@ -607,7 +678,7 @@ func (c *CMS) CreateAssetUpload(ctx context.Context, projectID, name string, opt
 	b, err2 := c.send(
 		ctx,
 		http.MethodPost,
-		[]string{"api", "projects", projectID, "assets", "uploads"},
+		c.pathAssetUploads(projectID),
 		"",
 		payload,
 	)
@@ -631,6 +702,9 @@ func (c *CMS) CreateAssetUpload(ctx context.Context, projectID, name string, opt
 }
 
 func (c *CMS) Asset(ctx context.Context, assetID string) (*Asset, error) {
+	if c.useNewAPI() {
+		return nil, ErrWorkspaceRequired
+	}
 	b, err := c.send(ctx, http.MethodGet, []string{"api", "assets", assetID}, "", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get an asset: %w", err)
@@ -646,6 +720,9 @@ func (c *CMS) Asset(ctx context.Context, assetID string) (*Asset, error) {
 }
 
 func (c *CMS) CommentToItem(ctx context.Context, itemID, content string) error {
+	if c.useNewAPI() {
+		return ErrWorkspaceRequired
+	}
 	rb := map[string]string{
 		"content": content,
 	}
@@ -660,6 +737,9 @@ func (c *CMS) CommentToItem(ctx context.Context, itemID, content string) error {
 }
 
 func (c *CMS) CommentToAsset(ctx context.Context, assetID, content string) error {
+	if c.useNewAPI() {
+		return ErrWorkspaceRequired
+	}
 	rb := map[string]string{
 		"content": content,
 	}
