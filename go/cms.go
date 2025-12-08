@@ -128,77 +128,77 @@ func (c *CMS) useNewAPI() bool {
 
 func (c *CMS) pathModels(projectIDOrAlias string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", projectIDOrAlias, "models"}
+		return []string{"api", c.workspace, "projects", projectIDOrAlias, "models"}
 	}
 	return []string{"api", "projects", projectIDOrAlias, "models"}
 }
 
 func (c *CMS) pathModelByKey(projectKey, modelKey string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", projectKey, "models", modelKey}
+		return []string{"api", c.workspace, "projects", projectKey, "models", modelKey}
 	}
 	return []string{"api", "projects", projectKey, "models", modelKey}
 }
 
 func (c *CMS) pathItemsByKey(projectIDOrAlias, modelIDOrAlias string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}
+		return []string{"api", c.workspace, "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}
 	}
 	return []string{"api", "projects", projectIDOrAlias, "models", modelIDOrAlias, "items"}
 }
 
 func (c *CMS) pathAssets(projectID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", projectID, "assets"}
+		return []string{"api", c.workspace, "projects", projectID, "assets"}
 	}
 	return []string{"api", "projects", projectID, "assets"}
 }
 
 func (c *CMS) pathAssetUploads(projectID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", projectID, "assets", "uploads"}
+		return []string{"api", c.workspace, "projects", projectID, "assets", "uploads"}
 	}
 	return []string{"api", "projects", projectID, "assets", "uploads"}
 }
 
 func (c *CMS) pathModel(modelIDOrKey string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "models", modelIDOrKey}
+		return []string{"api", c.workspace, "projects", c.project, "models", modelIDOrKey}
 	}
 	return []string{"api", "models", modelIDOrKey}
 }
 
 func (c *CMS) pathItems(modelIDOrKey string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "models", modelIDOrKey, "items"}
+		return []string{"api", c.workspace, "projects", c.project, "models", modelIDOrKey, "items"}
 	}
 	return []string{"api", "models", modelIDOrKey, "items"}
 }
 
 func (c *CMS) pathItem(itemID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "items", itemID}
+		return []string{"api", c.workspace, "projects", c.project, "items", itemID}
 	}
 	return []string{"api", "items", itemID}
 }
 
 func (c *CMS) pathAsset(assetID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "assets", assetID}
+		return []string{"api", c.workspace, "projects", c.project, "assets", assetID}
 	}
 	return []string{"api", "assets", assetID}
 }
 
 func (c *CMS) pathItemComments(itemID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "items", itemID, "comments"}
+		return []string{"api", c.workspace, "projects", c.project, "items", itemID, "comments"}
 	}
 	return []string{"api", "items", itemID, "comments"}
 }
 
 func (c *CMS) pathAssetComments(assetID string) []string {
 	if c.useNewAPI() {
-		return []string{c.workspace, "projects", c.project, "assets", assetID, "comments"}
+		return []string{"api", c.workspace, "projects", c.project, "assets", assetID, "comments"}
 	}
 	return []string{"api", "assets", assetID, "comments"}
 }
