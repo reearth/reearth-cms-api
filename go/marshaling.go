@@ -2,10 +2,10 @@ package cms
 
 import (
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/samber/lo"
-	"golang.org/x/exp/slices"
 )
 
 var marshalCMSType = reflect.TypeOf((*MarshalCMS)(nil)).Elem()

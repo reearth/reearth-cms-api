@@ -1,4 +1,4 @@
-package: cmaoapi
+package: cmsoapi
 generate:
   models: true
   client: true
