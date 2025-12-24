@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+const DefaultBaseURL = "https://api.cms.reearth.io"
+
 type Config struct {
 	BaseURL   string
 	Token     string
@@ -12,8 +14,12 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
+	baseURL := os.Getenv("REEARTH_CMS_BASE_URL")
+	if baseURL == "" {
+		baseURL = DefaultBaseURL
+	}
 	return &Config{
-		BaseURL:   os.Getenv("REEARTH_CMS_BASE_URL"),
+		BaseURL:   baseURL,
 		Token:     os.Getenv("REEARTH_CMS_TOKEN"),
 		Workspace: os.Getenv("REEARTH_CMS_WORKSPACE"),
 	}

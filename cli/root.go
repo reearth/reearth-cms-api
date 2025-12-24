@@ -19,7 +19,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgBaseURL, "base-url", "",
-		"Re:Earth CMS API base URL (or set REEARTH_CMS_BASE_URL env)")
+		"Re:Earth CMS API base URL (default: https://api.cms.reearth.io, or set REEARTH_CMS_BASE_URL env)")
 	rootCmd.PersistentFlags().StringVar(&cfgToken, "token", "",
 		"API token (or set REEARTH_CMS_TOKEN env)")
 	rootCmd.PersistentFlags().StringVarP(&cfgWorkspace, "workspace", "w", "",

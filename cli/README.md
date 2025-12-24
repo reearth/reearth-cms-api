@@ -19,11 +19,11 @@ go build -o cms ./cmd/
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `REEARTH_CMS_BASE_URL` | CMS API base URL |
-| `REEARTH_CMS_TOKEN` | API token |
-| `REEARTH_CMS_WORKSPACE` | Workspace ID (optional) |
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `REEARTH_CMS_BASE_URL` | CMS API base URL | `https://api.cms.reearth.io` |
+| `REEARTH_CMS_TOKEN` | API token | (required) |
+| `REEARTH_CMS_WORKSPACE` | Workspace ID | (optional) |
 
 ### Command-line Flags
 
@@ -64,12 +64,19 @@ cms items list -m <model-id> --page 1 --per-page 20 --asset
 cms items get <item-id>
 cms items get <item-id> --asset
 
-# Create an item
-cms items create -m <model-id> -f '[{"key":"title","type":"text","value":"Hello"}]'
-cms items create -m <model-key> -p <project-id> -f '<json>'  # key-based access
+# Create an item (use -k/-t/-v for each field)
+cms items create -m <model-id> -k title -t text -v "Hello"
+cms items create -m <model-id> -k title -t text -v "Hello" -k count -t number -v 10
+cms items create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # key-based access
+
+# Create an item with metadata fields (use -K/-T/-V for metadata)
+cms items create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
 
 # Update an item
-cms items update <item-id> -f '[{"key":"title","type":"text","value":"Updated"}]'
+cms items update <item-id> -k title -t text -v "Updated"
+
+# Update an item with metadata
+cms items update <item-id> -K status -T select -V "draft"
 
 # Delete an item
 cms items delete <item-id>
@@ -81,14 +88,14 @@ cms items delete <item-id>
 # Get an asset by ID
 cms assets get <asset-id>
 
-# Upload an asset (signed URL, recommended for large files)
-cms assets upload -p <project-id> -f /path/to/file
+# Create an asset from file (signed URL, recommended for large files)
+cms assets create -p <project-id> -f /path/to/file
 
-# Upload an asset (direct upload)
-cms assets upload -p <project-id> -f /path/to/file --direct
+# Create an asset from file (direct upload)
+cms assets create -p <project-id> -f /path/to/file --direct
 
-# Upload an asset from URL
-cms assets upload-url -p <project-id> -u https://example.com/image.png
+# Create an asset from URL
+cms assets create -p <project-id> -u https://example.com/image.png
 
 # Output asset content to stdout
 cms assets cat <asset-id>
@@ -128,8 +135,7 @@ cms models list -p my-project --json id,name,key
 ## Examples
 
 ```bash
-# Set environment variables
-export REEARTH_CMS_BASE_URL=https://api.cms.example.com
+# Set environment variables (base URL defaults to https://api.cms.reearth.io)
 export REEARTH_CMS_TOKEN=your-api-token
 
 # List all models
@@ -138,14 +144,13 @@ cms models list -p my-project
 # Get items with JSON output
 cms items list -m my-model --json id,fields
 
-# Upload a file
-cms assets upload -p my-project -f ./image.png
+# Create an asset from file
+cms assets create -p my-project -f ./image.png
 
-# Create an item with fields
-cms items create -m my-model -f '[
-  {"key": "title", "type": "text", "value": "My Title"},
-  {"key": "description", "type": "textarea", "value": "Description here"}
-]'
+# Create an item with multiple fields
+cms items create -m my-model \
+  -k title -t text -v "My Title" \
+  -k description -t textarea -v "Description here"
 ```
 
 ## License

@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	cms "github.com/reearth/reearth-cms-api/go"
@@ -48,12 +47,19 @@ var itemsDeleteCmd = &cobra.Command{
 }
 
 var (
-	itemsModelID   string
-	itemsProjectID string
-	itemsPage      int
-	itemsPerPage   int
-	itemsAsset     bool
-	itemsFields    string
+	itemsModelID     string
+	itemsProjectID   string
+	itemsPage        int
+	itemsPerPage     int
+	itemsAsset       bool
+	itemsFieldIDs    []string
+	itemsFieldKeys   []string
+	itemsFieldTypes  []string
+	itemsFieldValues []string
+	itemsMetaIDs     []string
+	itemsMetaKeys    []string
+	itemsMetaTypes   []string
+	itemsMetaValues  []string
 )
 
 func init() {
@@ -81,15 +87,41 @@ func init() {
 		"Model ID or key (required)")
 	itemsCreateCmd.Flags().StringVarP(&itemsProjectID, "project", "p", "",
 		"Project ID or alias (required when using model key)")
-	itemsCreateCmd.Flags().StringVarP(&itemsFields, "fields", "f", "",
-		"Fields as JSON array")
+	itemsCreateCmd.Flags().StringArrayVar(&itemsFieldIDs, "id", nil,
+		"Field ID (optional, use with -k, -t, -v)")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsFieldKeys, "key", "k", nil,
+		"Field key (required for each field)")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsFieldTypes, "type", "t", nil,
+		"Field type (required for each field)")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsFieldValues, "value", "v", nil,
+		"Field value (required for each field)")
+	itemsCreateCmd.Flags().StringArrayVar(&itemsMetaIDs, "meta-id", nil,
+		"Metadata field ID (optional)")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsMetaKeys, "meta-key", "K", nil,
+		"Metadata field key")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsMetaTypes, "meta-type", "T", nil,
+		"Metadata field type")
+	itemsCreateCmd.Flags().StringArrayVarP(&itemsMetaValues, "meta-value", "V", nil,
+		"Metadata field value")
 	_ = itemsCreateCmd.MarkFlagRequired("model")
-	_ = itemsCreateCmd.MarkFlagRequired("fields")
 
 	// Update flags
-	itemsUpdateCmd.Flags().StringVarP(&itemsFields, "fields", "f", "",
-		"Fields as JSON array")
-	_ = itemsUpdateCmd.MarkFlagRequired("fields")
+	itemsUpdateCmd.Flags().StringArrayVar(&itemsFieldIDs, "id", nil,
+		"Field ID (optional, use with -k, -t, -v)")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsFieldKeys, "key", "k", nil,
+		"Field key (required for each field)")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsFieldTypes, "type", "t", nil,
+		"Field type (required for each field)")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsFieldValues, "value", "v", nil,
+		"Field value (required for each field)")
+	itemsUpdateCmd.Flags().StringArrayVar(&itemsMetaIDs, "meta-id", nil,
+		"Metadata field ID (optional)")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsMetaKeys, "meta-key", "K", nil,
+		"Metadata field key")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsMetaTypes, "meta-type", "T", nil,
+		"Metadata field type")
+	itemsUpdateCmd.Flags().StringArrayVarP(&itemsMetaValues, "meta-value", "V", nil,
+		"Metadata field value")
 }
 
 func runItemsList(cmd *cobra.Command, args []string) error {
@@ -133,24 +165,72 @@ func runItemsGet(cmd *cobra.Command, args []string) error {
 	return out.OutputItem(item)
 }
 
+func parseFieldsFromFlags() ([]*cms.Field, []*cms.Field, error) {
+	if len(itemsFieldKeys) == 0 && len(itemsMetaKeys) == 0 {
+		return nil, nil, fmt.Errorf("at least one field is required (use -k, -t, -v or -K, -T, -V)")
+	}
+
+	// Parse regular fields
+	var fields []*cms.Field
+	if len(itemsFieldKeys) > 0 {
+		if len(itemsFieldKeys) != len(itemsFieldTypes) || len(itemsFieldKeys) != len(itemsFieldValues) {
+			return nil, nil, fmt.Errorf("number of -k, -t, -v flags must match")
+		}
+		fields = make([]*cms.Field, len(itemsFieldKeys))
+		for i := range itemsFieldKeys {
+			field := &cms.Field{
+				Key:   itemsFieldKeys[i],
+				Type:  itemsFieldTypes[i],
+				Value: itemsFieldValues[i],
+			}
+			if i < len(itemsFieldIDs) && itemsFieldIDs[i] != "" {
+				field.ID = itemsFieldIDs[i]
+			}
+			fields[i] = field
+		}
+	}
+
+	// Parse metadata fields
+	var metaFields []*cms.Field
+	if len(itemsMetaKeys) > 0 {
+		if len(itemsMetaKeys) != len(itemsMetaTypes) || len(itemsMetaKeys) != len(itemsMetaValues) {
+			return nil, nil, fmt.Errorf("number of -K, -T, -V flags must match")
+		}
+		metaFields = make([]*cms.Field, len(itemsMetaKeys))
+		for i := range itemsMetaKeys {
+			field := &cms.Field{
+				Key:   itemsMetaKeys[i],
+				Type:  itemsMetaTypes[i],
+				Value: itemsMetaValues[i],
+			}
+			if i < len(itemsMetaIDs) && itemsMetaIDs[i] != "" {
+				field.ID = itemsMetaIDs[i]
+			}
+			metaFields[i] = field
+		}
+	}
+
+	return fields, metaFields, nil
+}
+
 func runItemsCreate(cmd *cobra.Command, args []string) error {
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
 	}
 
-	var fields []*cms.Field
-	if err := json.Unmarshal([]byte(itemsFields), &fields); err != nil {
-		return fmt.Errorf("failed to parse fields: %w", err)
+	fields, metaFields, err := parseFieldsFromFlags()
+	if err != nil {
+		return err
 	}
 
 	ctx := context.Background()
 
 	var item *cms.Item
 	if itemsProjectID != "" {
-		item, err = client.CreateItemByKey(ctx, itemsProjectID, itemsModelID, fields, nil)
+		item, err = client.CreateItemByKey(ctx, itemsProjectID, itemsModelID, fields, metaFields)
 	} else {
-		item, err = client.CreateItem(ctx, itemsModelID, fields, nil)
+		item, err = client.CreateItem(ctx, itemsModelID, fields, metaFields)
 	}
 	if err != nil {
 		return fmt.Errorf("failed to create item: %w", err)
@@ -166,13 +246,13 @@ func runItemsUpdate(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	var fields []*cms.Field
-	if err := json.Unmarshal([]byte(itemsFields), &fields); err != nil {
-		return fmt.Errorf("failed to parse fields: %w", err)
+	fields, metaFields, err := parseFieldsFromFlags()
+	if err != nil {
+		return err
 	}
 
 	ctx := context.Background()
-	item, err := client.UpdateItem(ctx, args[0], fields, nil)
+	item, err := client.UpdateItem(ctx, args[0], fields, metaFields)
 	if err != nil {
 		return fmt.Errorf("failed to update item: %w", err)
 	}

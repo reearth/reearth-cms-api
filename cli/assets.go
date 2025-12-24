@@ -23,16 +23,10 @@ var assetsGetCmd = &cobra.Command{
 	RunE:  runAssetsGet,
 }
 
-var assetsUploadCmd = &cobra.Command{
-	Use:   "upload",
-	Short: "Upload an asset from a file",
-	RunE:  runAssetsUpload,
-}
-
-var assetsUploadURLCmd = &cobra.Command{
-	Use:   "upload-url",
-	Short: "Upload an asset from a URL",
-	RunE:  runAssetsUploadURL,
+var assetsCreateCmd = &cobra.Command{
+	Use:   "create",
+	Short: "Create an asset from a file (-f) or URL (-u)",
+	RunE:  runAssetsCreate,
 }
 
 var assetsCatCmd = &cobra.Command{
@@ -58,28 +52,21 @@ var (
 
 func init() {
 	assetsCmd.AddCommand(assetsGetCmd)
-	assetsCmd.AddCommand(assetsUploadCmd)
-	assetsCmd.AddCommand(assetsUploadURLCmd)
+	assetsCmd.AddCommand(assetsCreateCmd)
 	assetsCmd.AddCommand(assetsCatCmd)
 	assetsCmd.AddCommand(assetsCpCmd)
 
-	// Upload flags
-	assetsUploadCmd.Flags().StringVarP(&assetsProjectID, "project", "p", "",
+	// Create flags
+	assetsCreateCmd.Flags().StringVarP(&assetsProjectID, "project", "p", "",
 		"Project ID (required)")
-	assetsUploadCmd.Flags().StringVarP(&assetsFilePath, "file", "f", "",
-		"File path to upload (required)")
-	assetsUploadCmd.Flags().BoolVar(&assetsDirect, "direct", false,
-		"Use direct upload instead of signed URL upload")
-	_ = assetsUploadCmd.MarkFlagRequired("project")
-	_ = assetsUploadCmd.MarkFlagRequired("file")
-
-	// Upload URL flags
-	assetsUploadURLCmd.Flags().StringVarP(&assetsProjectID, "project", "p", "",
-		"Project ID (required)")
-	assetsUploadURLCmd.Flags().StringVarP(&assetsURL, "url", "u", "",
-		"URL to upload from (required)")
-	_ = assetsUploadURLCmd.MarkFlagRequired("project")
-	_ = assetsUploadURLCmd.MarkFlagRequired("url")
+	assetsCreateCmd.Flags().StringVarP(&assetsFilePath, "file", "f", "",
+		"File path to upload")
+	assetsCreateCmd.Flags().StringVarP(&assetsURL, "url", "u", "",
+		"URL to upload from")
+	assetsCreateCmd.Flags().BoolVar(&assetsDirect, "direct", false,
+		"Use direct upload instead of signed URL upload (only with -f)")
+	_ = assetsCreateCmd.MarkFlagRequired("project")
+	assetsCreateCmd.MarkFlagsMutuallyExclusive("file", "url")
 }
 
 func runAssetsGet(cmd *cobra.Command, args []string) error {
@@ -98,19 +85,42 @@ func runAssetsGet(cmd *cobra.Command, args []string) error {
 	return out.OutputAsset(asset)
 }
 
-func runAssetsUpload(cmd *cobra.Command, args []string) error {
+func runAssetsCreate(cmd *cobra.Command, args []string) error {
+	if assetsFilePath == "" && assetsURL == "" {
+		return fmt.Errorf("either -f (file) or -u (url) is required")
+	}
+
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
 	}
 
+	ctx := context.Background()
+
+	// URL upload
+	if assetsURL != "" {
+		assetID, err := client.UploadAsset(ctx, assetsProjectID, assetsURL)
+		if err != nil {
+			return fmt.Errorf("failed to upload asset from URL: %w", err)
+		}
+
+		asset, err := client.Asset(ctx, assetID)
+		if err != nil {
+			out := NewOutputter(outputJSON)
+			out.OutputMessage(fmt.Sprintf("Asset uploaded successfully: %s", assetID))
+			return nil
+		}
+
+		out := NewOutputter(outputJSON)
+		return out.OutputAsset(asset)
+	}
+
+	// File upload
 	file, err := os.Open(assetsFilePath)
 	if err != nil {
 		return fmt.Errorf("failed to open file: %w", err)
 	}
 	defer func() { _ = file.Close() }()
-
-	ctx := context.Background()
 
 	var asset *cms.Asset
 	if assetsDirect {
@@ -162,30 +172,6 @@ func uploadWithSignedURL(ctx context.Context, client *cms.CMS, projectID, filePa
 	}
 
 	return asset, nil
-}
-
-func runAssetsUploadURL(cmd *cobra.Command, args []string) error {
-	client, err := NewCMSClient()
-	if err != nil {
-		return err
-	}
-
-	ctx := context.Background()
-	assetID, err := client.UploadAsset(ctx, assetsProjectID, assetsURL)
-	if err != nil {
-		return fmt.Errorf("failed to upload asset from URL: %w", err)
-	}
-
-	// Fetch the created asset to display details
-	asset, err := client.Asset(ctx, assetID)
-	if err != nil {
-		out := NewOutputter(outputJSON)
-		out.OutputMessage(fmt.Sprintf("Asset uploaded successfully: %s", assetID))
-		return nil
-	}
-
-	out := NewOutputter(outputJSON)
-	return out.OutputAsset(asset)
 }
 
 func runAssetsCat(cmd *cobra.Command, args []string) error {
