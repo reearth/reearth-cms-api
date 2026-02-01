@@ -5,25 +5,28 @@ A command-line interface for interacting with Re:Earth CMS API.
 ## Installation
 
 ```bash
-go install github.com/reearth/reearth-cms-api/cli/cmd@latest
+go install github.com/reearth/reearth-cms-api/cli/reearth-cms@latest
 ```
 
 Or build from source:
 
 ```bash
 cd cli
-go build -o cms ./cmd/
+go build -o reearth-cms ./reearth-cms/
 ```
 
 ## Configuration
 
 ### Environment Variables
 
+Environment variables can also be set in a `.env` file in the current directory.
+
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `REEARTH_CMS_BASE_URL` | CMS API base URL | `https://api.cms.reearth.io` |
 | `REEARTH_CMS_TOKEN` | API token | (required) |
 | `REEARTH_CMS_WORKSPACE` | Workspace ID | (optional) |
+| `REEARTH_CMS_SAFE_MODE` | Disable destructive operations (update/delete) | `false` |
 
 ### Command-line Flags
 
@@ -72,14 +75,16 @@ cms items create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # k
 # Create an item with metadata fields (use -K/-T/-V for metadata)
 cms items create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
 
-# Update an item
+# Update an item (requires confirmation)
 cms items update <item-id> -k title -t text -v "Updated"
+cms items update <item-id> -k title -t text -v "Updated" -y  # skip confirmation
 
 # Update an item with metadata
 cms items update <item-id> -K status -T select -V "draft"
 
-# Delete an item
+# Delete an item (requires confirmation)
 cms items delete <item-id>
+cms items delete <item-id> -y  # skip confirmation
 ```
 
 ### Assets
