@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/reearth/reearth-cms-api/go v0.0.0
+	github.com/reearth/reearth-cms-api/go v0.0.1
 	github.com/spf13/cobra v1.8.0
 )
 
@@ -15,5 +15,3 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/text v0.18.0 // indirect
 )
-
-replace github.com/reearth/reearth-cms-api/go => ../go
