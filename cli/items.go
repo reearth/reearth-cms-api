@@ -1,8 +1,11 @@
 package cli
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"os"
+	"strings"
 
 	cms "github.com/reearth/reearth-cms-api/go"
 	"github.com/spf13/cobra"
@@ -60,6 +63,7 @@ var (
 	itemsMetaKeys    []string
 	itemsMetaTypes   []string
 	itemsMetaValues  []string
+	itemsYes         bool
 )
 
 func init() {
@@ -122,6 +126,14 @@ func init() {
 		"Metadata field type")
 	itemsUpdateCmd.Flags().StringArrayVarP(&itemsMetaValues, "meta-value", "V", nil,
 		"Metadata field value")
+
+	// Update flags - confirmation
+	itemsUpdateCmd.Flags().BoolVarP(&itemsYes, "yes", "y", false,
+		"Skip confirmation prompt")
+
+	// Delete flags
+	itemsDeleteCmd.Flags().BoolVarP(&itemsYes, "yes", "y", false,
+		"Skip confirmation prompt")
 }
 
 func runItemsList(cmd *cobra.Command, args []string) error {
@@ -241,6 +253,19 @@ func runItemsCreate(cmd *cobra.Command, args []string) error {
 }
 
 func runItemsUpdate(cmd *cobra.Command, args []string) error {
+	itemID := args[0]
+
+	cfg := LoadConfig()
+	if cfg.SafeMode {
+		return fmt.Errorf("update is disabled in safe mode (REEARTH_CMS_SAFE_MODE is set)")
+	}
+
+	if !itemsYes {
+		if !confirmAction(fmt.Sprintf("update item %s", itemID)) {
+			return nil
+		}
+	}
+
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
@@ -252,7 +277,7 @@ func runItemsUpdate(cmd *cobra.Command, args []string) error {
 	}
 
 	ctx := context.Background()
-	item, err := client.UpdateItem(ctx, args[0], fields, metaFields)
+	item, err := client.UpdateItem(ctx, itemID, fields, metaFields)
 	if err != nil {
 		return fmt.Errorf("failed to update item: %w", err)
 	}
@@ -262,17 +287,46 @@ func runItemsUpdate(cmd *cobra.Command, args []string) error {
 }
 
 func runItemsDelete(cmd *cobra.Command, args []string) error {
+	itemID := args[0]
+
+	cfg := LoadConfig()
+	if cfg.SafeMode {
+		return fmt.Errorf("delete is disabled in safe mode (REEARTH_CMS_SAFE_MODE is set)")
+	}
+
+	if !itemsYes {
+		if !confirmAction(fmt.Sprintf("delete item %s", itemID)) {
+			return nil
+		}
+	}
+
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
 	}
 
 	ctx := context.Background()
-	if err := client.DeleteItem(ctx, args[0]); err != nil {
+	if err := client.DeleteItem(ctx, itemID); err != nil {
 		return fmt.Errorf("failed to delete item: %w", err)
 	}
 
 	out := NewOutputter(outputJSON)
-	out.OutputMessage(fmt.Sprintf("Item %s deleted successfully", args[0]))
+	out.OutputMessage(fmt.Sprintf("Item %s deleted successfully", itemID))
 	return nil
+}
+
+func confirmAction(action string) bool {
+	fmt.Printf("Are you sure you want to %s? [y/N]: ", action)
+	reader := bufio.NewReader(os.Stdin)
+	response, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println("Failed to read response.")
+		return false
+	}
+	response = strings.TrimSpace(strings.ToLower(response))
+	if response != "y" && response != "yes" {
+		fmt.Println("Aborted.")
+		return false
+	}
+	return true
 }

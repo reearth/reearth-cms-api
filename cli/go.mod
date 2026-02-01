@@ -3,6 +3,7 @@ module github.com/reearth/reearth-cms-api/cli
 go 1.25
 
 require (
+	github.com/joho/godotenv v1.5.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/reearth/reearth-cms-api/go v0.0.1
 	github.com/spf13/cobra v1.8.0

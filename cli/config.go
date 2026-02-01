@@ -3,6 +3,9 @@ package cli
 import (
 	"errors"
 	"os"
+	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 const DefaultBaseURL = "https://api.cms.reearth.io"
@@ -11,17 +14,25 @@ type Config struct {
 	BaseURL   string
 	Token     string
 	Workspace string
+	SafeMode  bool
 }
 
 func LoadConfig() *Config {
+	// Load .env file if exists (ignore error if not found)
+	_ = godotenv.Load()
+
 	baseURL := os.Getenv("REEARTH_CMS_BASE_URL")
 	if baseURL == "" {
 		baseURL = DefaultBaseURL
 	}
+
+	safeMode := strings.ToLower(os.Getenv("REEARTH_CMS_SAFE_MODE"))
+
 	return &Config{
 		BaseURL:   baseURL,
 		Token:     os.Getenv("REEARTH_CMS_TOKEN"),
 		Workspace: os.Getenv("REEARTH_CMS_WORKSPACE"),
+		SafeMode:  safeMode == "true" || safeMode == "1" || safeMode == "yes",
 	}
 }
 
