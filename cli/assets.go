@@ -44,10 +44,9 @@ var assetsCpCmd = &cobra.Command{
 }
 
 var (
-	assetsProjectID string
-	assetsFilePath  string
-	assetsURL       string
-	assetsDirect    bool
+	assetsFilePath string
+	assetsURL      string
+	assetsDirect   bool
 )
 
 func init() {
@@ -57,15 +56,12 @@ func init() {
 	assetsCmd.AddCommand(assetsCpCmd)
 
 	// Create flags
-	assetsCreateCmd.Flags().StringVarP(&assetsProjectID, "project", "p", "",
-		"Project ID (required)")
 	assetsCreateCmd.Flags().StringVarP(&assetsFilePath, "file", "f", "",
 		"File path to upload")
 	assetsCreateCmd.Flags().StringVarP(&assetsURL, "url", "u", "",
 		"URL to upload from")
 	assetsCreateCmd.Flags().BoolVar(&assetsDirect, "direct", false,
 		"Use direct upload instead of signed URL upload (only with -f)")
-	_ = assetsCreateCmd.MarkFlagRequired("project")
 	assetsCreateCmd.MarkFlagsMutuallyExclusive("file", "url")
 }
 
@@ -86,6 +82,11 @@ func runAssetsGet(cmd *cobra.Command, args []string) error {
 }
 
 func runAssetsCreate(cmd *cobra.Command, args []string) error {
+	cfg := GetConfig()
+	if cfg.Project == "" {
+		return fmt.Errorf("project is required (use -p or set REEARTH_CMS_PROJECT)")
+	}
+
 	if assetsFilePath == "" && assetsURL == "" {
 		return fmt.Errorf("either -f (file) or -u (url) is required")
 	}
@@ -99,7 +100,7 @@ func runAssetsCreate(cmd *cobra.Command, args []string) error {
 
 	// URL upload
 	if assetsURL != "" {
-		assetID, err := client.UploadAsset(ctx, assetsProjectID, assetsURL)
+		assetID, err := client.UploadAsset(ctx, cfg.Project, assetsURL)
 		if err != nil {
 			return fmt.Errorf("failed to upload asset from URL: %w", err)
 		}
@@ -125,7 +126,7 @@ func runAssetsCreate(cmd *cobra.Command, args []string) error {
 	var asset *cms.Asset
 	if assetsDirect {
 		// Direct upload
-		assetID, err := client.UploadAssetDirectly(ctx, assetsProjectID, assetsFilePath, file)
+		assetID, err := client.UploadAssetDirectly(ctx, cfg.Project, assetsFilePath, file)
 		if err != nil {
 			return fmt.Errorf("failed to upload asset: %w", err)
 		}
@@ -137,7 +138,7 @@ func runAssetsCreate(cmd *cobra.Command, args []string) error {
 		}
 	} else {
 		// Signed URL upload (default)
-		asset, err = uploadWithSignedURL(ctx, client, assetsProjectID, assetsFilePath, file)
+		asset, err = uploadWithSignedURL(ctx, client, cfg.Project, assetsFilePath, file)
 		if err != nil {
 			return err
 		}

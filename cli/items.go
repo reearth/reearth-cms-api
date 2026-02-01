@@ -51,7 +51,6 @@ var itemsDeleteCmd = &cobra.Command{
 
 var (
 	itemsModelID     string
-	itemsProjectID   string
 	itemsPage        int
 	itemsPerPage     int
 	itemsAsset       bool
@@ -76,8 +75,6 @@ func init() {
 	// List flags
 	itemsListCmd.Flags().StringVarP(&itemsModelID, "model", "m", "",
 		"Model ID or key (required)")
-	itemsListCmd.Flags().StringVarP(&itemsProjectID, "project", "p", "",
-		"Project ID or alias (required when using model key)")
 	itemsListCmd.Flags().IntVar(&itemsPage, "page", 1, "Page number")
 	itemsListCmd.Flags().IntVar(&itemsPerPage, "per-page", 50, "Items per page")
 	itemsListCmd.Flags().BoolVar(&itemsAsset, "asset", false, "Include asset data")
@@ -89,8 +86,6 @@ func init() {
 	// Create flags
 	itemsCreateCmd.Flags().StringVarP(&itemsModelID, "model", "m", "",
 		"Model ID or key (required)")
-	itemsCreateCmd.Flags().StringVarP(&itemsProjectID, "project", "p", "",
-		"Project ID or alias (required when using model key)")
 	itemsCreateCmd.Flags().StringArrayVar(&itemsFieldIDs, "id", nil,
 		"Field ID (optional, use with -k, -t, -v)")
 	itemsCreateCmd.Flags().StringArrayVarP(&itemsFieldKeys, "key", "k", nil,
@@ -137,6 +132,7 @@ func init() {
 }
 
 func runItemsList(cmd *cobra.Command, args []string) error {
+	cfg := GetConfig()
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
@@ -145,8 +141,8 @@ func runItemsList(cmd *cobra.Command, args []string) error {
 	ctx := context.Background()
 
 	var items *cms.Items
-	if itemsProjectID != "" {
-		items, err = client.GetItemsPartiallyByKey(ctx, itemsProjectID,
+	if cfg.Project != "" {
+		items, err = client.GetItemsPartiallyByKey(ctx, cfg.Project,
 			itemsModelID, itemsPage, itemsPerPage, itemsAsset)
 	} else {
 		items, err = client.GetItemsPartially(ctx, itemsModelID,
@@ -226,6 +222,7 @@ func parseFieldsFromFlags() ([]*cms.Field, []*cms.Field, error) {
 }
 
 func runItemsCreate(cmd *cobra.Command, args []string) error {
+	cfg := GetConfig()
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
@@ -239,8 +236,8 @@ func runItemsCreate(cmd *cobra.Command, args []string) error {
 	ctx := context.Background()
 
 	var item *cms.Item
-	if itemsProjectID != "" {
-		item, err = client.CreateItemByKey(ctx, itemsProjectID, itemsModelID, fields, metaFields)
+	if cfg.Project != "" {
+		item, err = client.CreateItemByKey(ctx, cfg.Project, itemsModelID, fields, metaFields)
 	} else {
 		item, err = client.CreateItem(ctx, itemsModelID, fields, metaFields)
 	}
@@ -255,7 +252,7 @@ func runItemsCreate(cmd *cobra.Command, args []string) error {
 func runItemsUpdate(cmd *cobra.Command, args []string) error {
 	itemID := args[0]
 
-	cfg := LoadConfig()
+	cfg := GetConfig()
 	if cfg.SafeMode {
 		return fmt.Errorf("update is disabled in safe mode (REEARTH_CMS_SAFE_MODE is set)")
 	}
@@ -289,7 +286,7 @@ func runItemsUpdate(cmd *cobra.Command, args []string) error {
 func runItemsDelete(cmd *cobra.Command, args []string) error {
 	itemID := args[0]
 
-	cfg := LoadConfig()
+	cfg := GetConfig()
 	if cfg.SafeMode {
 		return fmt.Errorf("delete is disabled in safe mode (REEARTH_CMS_SAFE_MODE is set)")
 	}

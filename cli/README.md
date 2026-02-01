@@ -26,6 +26,7 @@ Environment variables can also be set in a `.env` file in the current directory.
 | `REEARTH_CMS_BASE_URL` | CMS API base URL | `https://api.cms.reearth.io` |
 | `REEARTH_CMS_TOKEN` | API token | (required) |
 | `REEARTH_CMS_WORKSPACE` | Workspace ID | (optional) |
+| `REEARTH_CMS_PROJECT` | Project ID or alias | (optional) |
 | `REEARTH_CMS_SAFE_MODE` | Disable destructive operations (update/delete) | `false` |
 
 ### Command-line Flags
@@ -33,10 +34,11 @@ Environment variables can also be set in a `.env` file in the current directory.
 All commands support global flags:
 
 ```
---base-url string    CMS API base URL
---token string       API token
+--base-url string        CMS API base URL
+--token string           API token
 -w, --workspace string   Workspace ID
---json string        Output as JSON (optionally specify fields: --json id,name)
+-p, --project string     Project ID or alias
+--json string            Output as JSON (optionally specify fields: --json id,name)
 ```
 
 ## Commands
@@ -139,23 +141,48 @@ cms models list -p my-project --json id,name,key
 
 ## Examples
 
-```bash
-# Set environment variables (base URL defaults to https://api.cms.reearth.io)
-export REEARTH_CMS_TOKEN=your-api-token
+### Using .env file
 
-# List all models
-cms models list -p my-project
+Create a `.env` file in your working directory:
+
+```bash
+REEARTH_CMS_BASE_URL=https://api.cms.reearth.io
+REEARTH_CMS_TOKEN=your-api-token
+REEARTH_CMS_PROJECT=my-project
+REEARTH_CMS_SAFE_MODE=true
+```
+
+Then run commands without specifying project each time:
+
+```bash
+# List all models (uses REEARTH_CMS_PROJECT from .env)
+cms models list
 
 # Get items with JSON output
 cms items list -m my-model --json id,fields
 
 # Create an asset from file
-cms assets create -p my-project -f ./image.png
+cms assets create -f ./image.png
 
 # Create an item with multiple fields
 cms items create -m my-model \
   -k title -t text -v "My Title" \
   -k description -t textarea -v "Description here"
+```
+
+### Using environment variables
+
+```bash
+export REEARTH_CMS_TOKEN=your-api-token
+export REEARTH_CMS_PROJECT=my-project
+
+cms models list
+```
+
+### Using command-line flags
+
+```bash
+cms models list -p my-project --token your-api-token
 ```
 
 ## License

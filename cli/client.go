@@ -7,8 +7,7 @@ import (
 )
 
 func NewCMSClient() (*cms.CMS, error) {
-	cfg := LoadConfig()
-	cfg.ApplyFlags(cfgBaseURL, cfgToken, cfgWorkspace)
+	cfg := GetConfig()
 
 	if err := cfg.Validate(); err != nil {
 		return nil, fmt.Errorf("configuration error: %w", err)
@@ -24,4 +23,10 @@ func NewCMSClient() (*cms.CMS, error) {
 	}
 
 	return client, nil
+}
+
+func GetConfig() *Config {
+	cfg := LoadConfig()
+	cfg.ApplyFlags(cfgBaseURL, cfgToken, cfgWorkspace, cfgProject)
+	return cfg
 }

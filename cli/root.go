@@ -8,6 +8,7 @@ var (
 	cfgBaseURL   string
 	cfgToken     string
 	cfgWorkspace string
+	cfgProject   string
 	outputJSON   string
 )
 
@@ -20,6 +21,7 @@ Environment variables (can also be set in .env file):
   REEARTH_CMS_BASE_URL   API base URL (default: https://api.cms.reearth.io)
   REEARTH_CMS_TOKEN      API token (required)
   REEARTH_CMS_WORKSPACE  Workspace ID
+  REEARTH_CMS_PROJECT    Project ID or alias
   REEARTH_CMS_SAFE_MODE  Set to "true" to disable destructive operations (update/delete)`,
 }
 
@@ -30,6 +32,8 @@ func init() {
 		"API token (or set REEARTH_CMS_TOKEN env)")
 	rootCmd.PersistentFlags().StringVarP(&cfgWorkspace, "workspace", "w", "",
 		"Workspace ID (or set REEARTH_CMS_WORKSPACE env)")
+	rootCmd.PersistentFlags().StringVarP(&cfgProject, "project", "p", "",
+		"Project ID or alias (or set REEARTH_CMS_PROJECT env)")
 	rootCmd.PersistentFlags().StringVar(&outputJSON, "json", "",
 		"Output as JSON. Optionally specify fields: --json id,name")
 

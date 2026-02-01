@@ -14,6 +14,7 @@ type Config struct {
 	BaseURL   string
 	Token     string
 	Workspace string
+	Project   string
 	SafeMode  bool
 }
 
@@ -32,11 +33,12 @@ func LoadConfig() *Config {
 		BaseURL:   baseURL,
 		Token:     os.Getenv("REEARTH_CMS_TOKEN"),
 		Workspace: os.Getenv("REEARTH_CMS_WORKSPACE"),
+		Project:   os.Getenv("REEARTH_CMS_PROJECT"),
 		SafeMode:  safeMode == "true" || safeMode == "1" || safeMode == "yes",
 	}
 }
 
-func (c *Config) ApplyFlags(baseURL, token, workspace string) {
+func (c *Config) ApplyFlags(baseURL, token, workspace, project string) {
 	if baseURL != "" {
 		c.BaseURL = baseURL
 	}
@@ -45,6 +47,9 @@ func (c *Config) ApplyFlags(baseURL, token, workspace string) {
 	}
 	if workspace != "" {
 		c.Workspace = workspace
+	}
+	if project != "" {
+		c.Project = project
 	}
 }
 

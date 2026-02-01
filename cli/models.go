@@ -26,33 +26,31 @@ var modelsGetCmd = &cobra.Command{
 }
 
 var (
-	modelsProjectID string
-	modelsPage      int
-	modelsPerPage   int
+	modelsPage    int
+	modelsPerPage int
 )
 
 func init() {
 	modelsCmd.AddCommand(modelsListCmd)
 	modelsCmd.AddCommand(modelsGetCmd)
 
-	modelsListCmd.Flags().StringVarP(&modelsProjectID, "project", "p", "",
-		"Project ID or alias (required)")
 	modelsListCmd.Flags().IntVar(&modelsPage, "page", 1, "Page number")
 	modelsListCmd.Flags().IntVar(&modelsPerPage, "per-page", 50, "Items per page")
-	_ = modelsListCmd.MarkFlagRequired("project")
-
-	modelsGetCmd.Flags().StringVarP(&modelsProjectID, "project", "p", "",
-		"Project ID or alias (required when using model key)")
 }
 
 func runModelsList(cmd *cobra.Command, args []string) error {
+	cfg := GetConfig()
+	if cfg.Project == "" {
+		return fmt.Errorf("project is required (use -p or set REEARTH_CMS_PROJECT)")
+	}
+
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
 	}
 
 	ctx := context.Background()
-	models, err := client.GetModelsPartially(ctx, modelsProjectID, modelsPage, modelsPerPage)
+	models, err := client.GetModelsPartially(ctx, cfg.Project, modelsPage, modelsPerPage)
 	if err != nil {
 		return fmt.Errorf("failed to get models: %w", err)
 	}
@@ -62,6 +60,7 @@ func runModelsList(cmd *cobra.Command, args []string) error {
 }
 
 func runModelsGet(cmd *cobra.Command, args []string) error {
+	cfg := GetConfig()
 	client, err := NewCMSClient()
 	if err != nil {
 		return err
@@ -78,8 +77,8 @@ func runModelsGet(cmd *cobra.Command, args []string) error {
 	}
 
 	// If failed and project is specified, try to get by key
-	if modelsProjectID != "" {
-		model, err = client.GetModelByKey(ctx, modelsProjectID, modelIDOrKey)
+	if cfg.Project != "" {
+		model, err = client.GetModelByKey(ctx, cfg.Project, modelIDOrKey)
 		if err == nil {
 			out := NewOutputter(outputJSON)
 			return out.OutputModel(model)
