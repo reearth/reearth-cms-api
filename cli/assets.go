@@ -12,7 +12,7 @@ import (
 )
 
 var assetsCmd = &cobra.Command{
-	Use:   "assets",
+	Use:   "asset",
 	Short: "Manage Re:Earth CMS assets",
 }
 

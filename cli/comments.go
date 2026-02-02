@@ -8,7 +8,7 @@ import (
 )
 
 var commentsCmd = &cobra.Command{
-	Use:   "comments",
+	Use:   "comment",
 	Short: "Manage Re:Earth CMS comments",
 }
 

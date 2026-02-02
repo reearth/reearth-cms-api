@@ -43,82 +43,82 @@ All commands support global flags:
 
 ## Commands
 
-### Models
+### Model
 
 ```bash
 # List models in a project
-cms models list -p <project-id-or-alias>
-cms models list -p <project-id-or-alias> --page 1 --per-page 20
+cms model list -p <project-id-or-alias>
+cms model list -p <project-id-or-alias> --page 1 --per-page 20
 
 # Get a model by ID
-cms models get <model-id>
+cms model get <model-id>
 
 # Get a model by key (requires project)
-cms models get <model-key> -p <project-id-or-alias>
+cms model get <model-key> -p <project-id-or-alias>
 ```
 
-### Items
+### Item
 
 ```bash
 # List items in a model
-cms items list -m <model-id>
-cms items list -m <model-key> -p <project-id>  # key-based access
-cms items list -m <model-id> --page 1 --per-page 20 --asset
+cms item list -m <model-id>
+cms item list -m <model-key> -p <project-id>  # key-based access
+cms item list -m <model-id> --page 1 --per-page 20 --asset
 
 # Get an item by ID
-cms items get <item-id>
-cms items get <item-id> --asset
+cms item get <item-id>
+cms item get <item-id> --asset
 
 # Create an item (use -k/-t/-v for each field)
-cms items create -m <model-id> -k title -t text -v "Hello"
-cms items create -m <model-id> -k title -t text -v "Hello" -k count -t number -v 10
-cms items create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # key-based access
+cms item create -m <model-id> -k title -t text -v "Hello"
+cms item create -m <model-id> -k title -t text -v "Hello" -k count -t number -v 10
+cms item create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # key-based access
 
 # Create an item with metadata fields (use -K/-T/-V for metadata)
-cms items create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
+cms item create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
 
 # Update an item (requires confirmation)
-cms items update <item-id> -k title -t text -v "Updated"
-cms items update <item-id> -k title -t text -v "Updated" -y  # skip confirmation
+cms item update <item-id> -k title -t text -v "Updated"
+cms item update <item-id> -k title -t text -v "Updated" -y  # skip confirmation
 
 # Update an item with metadata
-cms items update <item-id> -K status -T select -V "draft"
+cms item update <item-id> -K status -T select -V "draft"
 
 # Delete an item (requires confirmation)
-cms items delete <item-id>
-cms items delete <item-id> -y  # skip confirmation
+cms item delete <item-id>
+cms item delete <item-id> -y  # skip confirmation
 ```
 
-### Assets
+### Asset
 
 ```bash
 # Get an asset by ID
-cms assets get <asset-id>
+cms asset get <asset-id>
 
 # Create an asset from file (signed URL, recommended for large files)
-cms assets create -p <project-id> -f /path/to/file
+cms asset create -p <project-id> -f /path/to/file
 
 # Create an asset from file (direct upload)
-cms assets create -p <project-id> -f /path/to/file --direct
+cms asset create -p <project-id> -f /path/to/file --direct
 
 # Create an asset from URL
-cms assets create -p <project-id> -u https://example.com/image.png
+cms asset create -p <project-id> -u https://example.com/image.png
 
 # Output asset content to stdout
-cms assets cat <asset-id>
+cms asset cat <asset-id>
 
 # Copy asset content to a file
-cms assets cp <asset-id> /path/to/destination
+cms asset cp <asset-id> /path/to/destination
 ```
 
-### Comments
+### Comment
 
 ```bash
 # Add a comment to an item
-cms comments item <item-id> -c "Comment content"
+cms comment item <item-id> -c "Comment content"
 
 # Add a comment to an asset
-cms comments asset <asset-id> -c "Comment content"
+cms comment asset <asset-id> -c "Comment content"
 ```
 
 ## Output Formats
@@ -126,17 +126,17 @@ cms comments asset <asset-id> -c "Comment content"
 ### Table (default)
 
 ```bash
-cms models list -p my-project
+cms model list -p my-project
 ```
 
 ### JSON
 
 ```bash
 # Full JSON output
-cms models list -p my-project --json
+cms model list -p my-project --json
 
 # Select specific fields
-cms models list -p my-project --json id,name,key
+cms model list -p my-project --json id,name,key
 ```
 
 ## Examples
@@ -156,16 +156,16 @@ Then run commands without specifying project each time:
 
 ```bash
 # List all models (uses REEARTH_CMS_PROJECT from .env)
-cms models list
+cms model list
 
 # Get items with JSON output
-cms items list -m my-model --json id,fields
+cms item list -m my-model --json id,fields
 
 # Create an asset from file
-cms assets create -f ./image.png
+cms asset create -f ./image.png
 
 # Create an item with multiple fields
-cms items create -m my-model \
+cms item create -m my-model \
   -k title -t text -v "My Title" \
   -k description -t textarea -v "Description here"
 ```
@@ -176,13 +176,13 @@ cms items create -m my-model \
 export REEARTH_CMS_TOKEN=your-api-token
 export REEARTH_CMS_PROJECT=my-project
 
-cms models list
+cms model list
 ```
 
 ### Using command-line flags
 
 ```bash
-cms models list -p my-project --token your-api-token
+cms model list -p my-project --token your-api-token
 ```
 
 ## License

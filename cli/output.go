@@ -6,15 +6,16 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 
-	"github.com/olekukonko/tablewriter"
 	cms "github.com/reearth/reearth-cms-api/go"
+	"gopkg.in/yaml.v3"
 )
 
 type OutputFormat int
 
 const (
-	OutputTable OutputFormat = iota
+	OutputYAML OutputFormat = iota
 	OutputJSON
 )
 
@@ -39,76 +40,66 @@ func (o *Outputter) OutputModels(models *cms.Models) error {
 	if o.format == OutputJSON {
 		return o.outputJSON(models.Models)
 	}
-	return o.outputModelsTable(models)
+	return o.outputModelsYAML(models)
 }
 
 func (o *Outputter) OutputModel(model *cms.Model) error {
 	if o.format == OutputJSON {
 		return o.outputJSON(model)
 	}
-	return o.outputModelDetail(model)
+	return o.outputModelYAML(model)
 }
 
-func (o *Outputter) outputModelDetail(model *cms.Model) error {
-	_, _ = fmt.Fprintf(o.writer, "ID: %s\n", model.ID)
-	_, _ = fmt.Fprintf(o.writer, "Name: %s\n", model.Name)
-	_, _ = fmt.Fprintf(o.writer, "Key: %s\n", model.Key)
-	_, _ = fmt.Fprintf(o.writer, "Public: %v\n", model.Public)
-	_, _ = fmt.Fprintf(o.writer, "Project ID: %s\n", model.ProjectID)
-	_, _ = fmt.Fprintf(o.writer, "Schema ID: %s\n", model.SchemaID)
-	_, _ = fmt.Fprintf(o.writer, "Created At: %s\n", model.CreatedAt.Format("2006-01-02 15:04:05"))
-	_, _ = fmt.Fprintf(o.writer, "Updated At: %s\n", model.UpdatedAt.Format("2006-01-02 15:04:05"))
-	return nil
+func (o *Outputter) outputModelYAML(model *cms.Model) error {
+	data := modelToMap(model)
+	return o.outputYAML(data)
 }
 
-func (o *Outputter) outputModelsTable(models *cms.Models) error {
-	table := tablewriter.NewWriter(o.writer)
-	table.SetHeader([]string{"ID", "Name", "Key", "Public", "Created At"})
-	table.SetBorder(false)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-
+func (o *Outputter) outputModelsYAML(models *cms.Models) error {
+	items := make([]map[string]any, 0, len(models.Models))
 	for _, m := range models.Models {
-		table.Append([]string{
-			m.ID,
-			m.Name,
-			m.Key,
-			fmt.Sprintf("%v", m.Public),
-			m.CreatedAt.Format("2006-01-02 15:04:05"),
-		})
+		items = append(items, modelToMap(&m))
 	}
-	table.Render()
 
-	_, _ = fmt.Fprintf(o.writer, "\nPage %d (total: %d)\n", models.Page, models.TotalCount)
+	if err := o.outputYAML(items); err != nil {
+		return err
+	}
+
+	_, _ = fmt.Fprintf(o.writer, "\npage: %d\ntotal: %d\n", models.Page, models.TotalCount)
 	return nil
+}
+
+func modelToMap(m *cms.Model) map[string]any {
+	return map[string]any{
+		"id":        m.ID,
+		"name":      m.Name,
+		"key":       m.Key,
+		"public":    m.Public,
+		"projectId": m.ProjectID,
+		"schemaId":  m.SchemaID,
+		"createdAt": formatTime(m.CreatedAt),
+		"updatedAt": formatTime(m.UpdatedAt),
+	}
 }
 
 func (o *Outputter) OutputItems(items *cms.Items) error {
 	if o.format == OutputJSON {
 		return o.outputJSON(items.Items)
 	}
-	return o.outputItemsTable(items)
+	return o.outputItemsYAML(items)
 }
 
-func (o *Outputter) outputItemsTable(items *cms.Items) error {
-	table := tablewriter.NewWriter(o.writer)
-	table.SetHeader([]string{"ID", "Model ID", "Fields", "Created At"})
-	table.SetBorder(false)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-
+func (o *Outputter) outputItemsYAML(items *cms.Items) error {
+	list := make([]map[string]any, 0, len(items.Items))
 	for _, item := range items.Items {
-		fieldCount := len(item.Fields)
-		table.Append([]string{
-			item.ID,
-			item.ModelID,
-			fmt.Sprintf("%d fields", fieldCount),
-			item.CreatedAt.Format("2006-01-02 15:04:05"),
-		})
+		list = append(list, itemToMap(&item))
 	}
-	table.Render()
 
-	_, _ = fmt.Fprintf(o.writer, "\nPage %d (total: %d)\n", items.Page, items.TotalCount)
+	if err := o.outputYAML(list); err != nil {
+		return err
+	}
+
+	_, _ = fmt.Fprintf(o.writer, "\npage: %d\ntotal: %d\n", items.Page, items.TotalCount)
 	return nil
 }
 
@@ -116,53 +107,62 @@ func (o *Outputter) OutputItem(item *cms.Item) error {
 	if o.format == OutputJSON {
 		return o.outputJSON(item)
 	}
-	return o.outputItemDetail(item)
+	return o.outputItemYAML(item)
 }
 
-func (o *Outputter) outputItemDetail(item *cms.Item) error {
-	_, _ = fmt.Fprintf(o.writer, "ID: %s\n", item.ID)
-	_, _ = fmt.Fprintf(o.writer, "Model ID: %s\n", item.ModelID)
-	_, _ = fmt.Fprintf(o.writer, "Created At: %s\n", item.CreatedAt.Format("2006-01-02 15:04:05"))
-	_, _ = fmt.Fprintf(o.writer, "Updated At: %s\n", item.UpdatedAt.Format("2006-01-02 15:04:05"))
-	_, _ = fmt.Fprintf(o.writer, "\nFields:\n")
+func (o *Outputter) outputItemYAML(item *cms.Item) error {
+	data := itemToMap(item)
+	return o.outputYAML(data)
+}
 
-	table := tablewriter.NewWriter(o.writer)
-	table.SetHeader([]string{"Key", "Type", "Value"})
-	table.SetBorder(false)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-
+func itemToMap(item *cms.Item) map[string]any {
+	fields := make([]map[string]any, 0, len(item.Fields))
 	for _, f := range item.Fields {
-		value := fmt.Sprintf("%v", f.Value)
-		if len(value) > 50 {
-			value = value[:50] + "..."
-		}
-		table.Append([]string{f.Key, f.Type, value})
+		fields = append(fields, map[string]any{
+			"key":   f.Key,
+			"type":  f.Type,
+			"value": f.Value,
+		})
 	}
-	table.Render()
-	return nil
+
+	return map[string]any{
+		"id":        item.ID,
+		"modelId":   item.ModelID,
+		"createdAt": formatTime(item.CreatedAt),
+		"updatedAt": formatTime(item.UpdatedAt),
+		"fields":    fields,
+	}
 }
 
 func (o *Outputter) OutputAsset(asset *cms.Asset) error {
 	if o.format == OutputJSON {
 		return o.outputJSON(asset)
 	}
-	return o.outputAssetDetail(asset)
+	return o.outputAssetYAML(asset)
 }
 
-func (o *Outputter) outputAssetDetail(asset *cms.Asset) error {
-	_, _ = fmt.Fprintf(o.writer, "ID: %s\n", asset.ID)
-	_, _ = fmt.Fprintf(o.writer, "Name: %s\n", asset.Name)
-	_, _ = fmt.Fprintf(o.writer, "URL: %s\n", asset.URL)
-	_, _ = fmt.Fprintf(o.writer, "Content Type: %s\n", asset.ContentType)
-	_, _ = fmt.Fprintf(o.writer, "Project ID: %s\n", asset.ProjectID)
-	_, _ = fmt.Fprintf(o.writer, "Created At: %s\n", asset.CreatedAt.Format("2006-01-02 15:04:05"))
-	_, _ = fmt.Fprintf(o.writer, "Updated At: %s\n", asset.UpdatedAt.Format("2006-01-02 15:04:05"))
-	return nil
+func (o *Outputter) outputAssetYAML(asset *cms.Asset) error {
+	data := map[string]any{
+		"id":          asset.ID,
+		"name":        asset.Name,
+		"url":         asset.URL,
+		"contentType": asset.ContentType,
+		"projectId":   asset.ProjectID,
+		"createdAt":   formatTime(asset.CreatedAt),
+		"updatedAt":   formatTime(asset.UpdatedAt),
+	}
+	return o.outputYAML(data)
 }
 
 func (o *Outputter) OutputMessage(msg string) {
 	_, _ = fmt.Fprintln(o.writer, msg)
+}
+
+func (o *Outputter) outputYAML(data any) error {
+	enc := yaml.NewEncoder(o.writer)
+	enc.SetIndent(2)
+	defer enc.Close()
+	return enc.Encode(data)
 }
 
 func (o *Outputter) outputJSON(data any) error {
@@ -210,4 +210,11 @@ func filterMap(m map[string]any, fields []string) map[string]any {
 		}
 	}
 	return result
+}
+
+func formatTime(t time.Time) string {
+	if t.IsZero() {
+		return ""
+	}
+	return t.Format("2006-01-02 15:04:05")
 }

@@ -12,7 +12,7 @@ import (
 )
 
 var itemsCmd = &cobra.Command{
-	Use:   "items",
+	Use:   "item",
 	Short: "Manage Re:Earth CMS items",
 }
 

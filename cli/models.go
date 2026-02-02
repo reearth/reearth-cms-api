@@ -8,7 +8,7 @@ import (
 )
 
 var modelsCmd = &cobra.Command{
-	Use:   "models",
+	Use:   "model",
 	Short: "Manage Re:Earth CMS models",
 }
 
