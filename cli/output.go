@@ -116,13 +116,20 @@ func (o *Outputter) outputItemYAML(item *cms.Item) error {
 }
 
 func itemToMap(item *cms.Item) map[string]any {
-	fields := make([]map[string]any, 0, len(item.Fields))
+	// Group ID -> フィールドのマップを作成
+	groupFields := make(map[string][]*cms.Field)
 	for _, f := range item.Fields {
-		fields = append(fields, map[string]any{
-			"key":   f.Key,
-			"type":  f.Type,
-			"value": f.Value,
-		})
+		if f.Group != "" {
+			groupFields[f.Group] = append(groupFields[f.Group], f)
+		}
+	}
+
+	// トップレベルフィールドを処理
+	var topLevelFields []*cms.Field
+	for _, f := range item.Fields {
+		if f.Group == "" {
+			topLevelFields = append(topLevelFields, f)
+		}
 	}
 
 	return map[string]any{
@@ -130,8 +137,60 @@ func itemToMap(item *cms.Item) map[string]any {
 		"modelId":   item.ModelID,
 		"createdAt": formatTime(item.CreatedAt),
 		"updatedAt": formatTime(item.UpdatedAt),
-		"fields":    fields,
+		"fields":    fieldsToSlice(topLevelFields, groupFields),
 	}
+}
+
+func fieldsToSlice(fields []*cms.Field, groupFields map[string][]*cms.Field) []map[string]any {
+	result := make([]map[string]any, 0, len(fields))
+	for _, f := range fields {
+		if f.Type == "group" {
+			// groupフィールドのvalueをネストしたフィールドに置き換え
+			groupIDs := toStringSlice(f.Value)
+			groupValue := make([][]map[string]any, 0, len(groupIDs))
+			for _, gid := range groupIDs {
+				if gf, ok := groupFields[gid]; ok {
+					// 再帰的にネストしたグループを処理
+					groupValue = append(groupValue, fieldsToSlice(gf, groupFields))
+				}
+			}
+			result = append(result, map[string]any{
+				"key":   f.Key,
+				"type":  f.Type,
+				"value": groupValue,
+			})
+		} else {
+			result = append(result, map[string]any{
+				"key":   f.Key,
+				"type":  f.Type,
+				"value": f.Value,
+			})
+		}
+	}
+	return result
+}
+
+func toStringSlice(v any) []string {
+	if v == nil {
+		return nil
+	}
+	// 単一の文字列の場合
+	if s, ok := v.(string); ok {
+		return []string{s}
+	}
+	if arr, ok := v.([]any); ok {
+		result := make([]string, 0, len(arr))
+		for _, item := range arr {
+			if s, ok := item.(string); ok {
+				result = append(result, s)
+			}
+		}
+		return result
+	}
+	if arr, ok := v.([]string); ok {
+		return arr
+	}
+	return nil
 }
 
 func (o *Outputter) OutputAsset(asset *cms.Asset) error {

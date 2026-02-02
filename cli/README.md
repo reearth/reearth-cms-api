@@ -47,96 +47,95 @@ All commands support global flags:
 
 ```bash
 # List models in a project
-cms model list -p <project-id-or-alias>
-cms model list -p <project-id-or-alias> --page 1 --per-page 20
+reearth-cms model list -p <project-id-or-alias>
+reearth-cms model list -p <project-id-or-alias> --page 1 --per-page 20
 
 # Get a model by ID
-cms model get <model-id>
+reearth-cms model get <model-id>
 
 # Get a model by key (requires project)
-cms model get <model-key> -p <project-id-or-alias>
+reearth-cms model get <model-key> -p <project-id-or-alias>
 ```
 
 ### Item
 
 ```bash
 # List items in a model
-cms item list -m <model-id>
-cms item list -m <model-key> -p <project-id>  # key-based access
-cms item list -m <model-id> --page 1 --per-page 20 --asset
+reearth-cms item list -m <model-id>
+reearth-cms item list -m <model-key> -p <project-id>  # key-based access
+reearth-cms item list -m <model-id> --page 1 --per-page 20 --asset
 
-# Get an item by ID
-cms item get <item-id>
-cms item get <item-id> --asset
+# Get an item by ID (asset data is always included)
+reearth-cms item get <item-id>
 
 # Create an item (use -k/-t/-v for each field)
-cms item create -m <model-id> -k title -t text -v "Hello"
-cms item create -m <model-id> -k title -t text -v "Hello" -k count -t number -v 10
-cms item create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # key-based access
+reearth-cms item create -m <model-id> -k title -t text -v "Hello"
+reearth-cms item create -m <model-id> -k title -t text -v "Hello" -k count -t number -v 10
+reearth-cms item create -m <model-key> -p <project-id> -k title -t text -v "Hello"  # key-based access
 
 # Create an item with metadata fields (use -K/-T/-V for metadata)
-cms item create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
+reearth-cms item create -m <model-id> -k title -t text -v "Hello" -K status -T select -V "published"
 
 # Update an item (requires confirmation)
-cms item update <item-id> -k title -t text -v "Updated"
-cms item update <item-id> -k title -t text -v "Updated" -y  # skip confirmation
+reearth-cms item update <item-id> -k title -t text -v "Updated"
+reearth-cms item update <item-id> -k title -t text -v "Updated" -y  # skip confirmation
 
 # Update an item with metadata
-cms item update <item-id> -K status -T select -V "draft"
+reearth-cms item update <item-id> -K status -T select -V "draft"
 
 # Delete an item (requires confirmation)
-cms item delete <item-id>
-cms item delete <item-id> -y  # skip confirmation
+reearth-cms item delete <item-id>
+reearth-cms item delete <item-id> -y  # skip confirmation
 ```
 
 ### Asset
 
 ```bash
 # Get an asset by ID
-cms asset get <asset-id>
+reearth-cms asset get <asset-id>
 
 # Create an asset from file (signed URL, recommended for large files)
-cms asset create -p <project-id> -f /path/to/file
+reearth-cms asset create -p <project-id> -f /path/to/file
 
 # Create an asset from file (direct upload)
-cms asset create -p <project-id> -f /path/to/file --direct
+reearth-cms asset create -p <project-id> -f /path/to/file --direct
 
 # Create an asset from URL
-cms asset create -p <project-id> -u https://example.com/image.png
+reearth-cms asset create -p <project-id> -u https://example.com/image.png
 
 # Output asset content to stdout
-cms asset cat <asset-id>
+reearth-cms asset cat <asset-id>
 
 # Copy asset content to a file
-cms asset cp <asset-id> /path/to/destination
+reearth-cms asset cp <asset-id> /path/to/destination
 ```
 
 ### Comment
 
 ```bash
 # Add a comment to an item
-cms comment item <item-id> -c "Comment content"
+reearth-cms comment item <item-id> -c "Comment content"
 
 # Add a comment to an asset
-cms comment asset <asset-id> -c "Comment content"
+reearth-cms comment asset <asset-id> -c "Comment content"
 ```
 
 ## Output Formats
 
-### Table (default)
+### YAML (default)
 
 ```bash
-cms model list -p my-project
+reearth-cms model list -p my-project
 ```
 
 ### JSON
 
 ```bash
 # Full JSON output
-cms model list -p my-project --json
+reearth-cms model list -p my-project --json=1
 
 # Select specific fields
-cms model list -p my-project --json id,name,key
+reearth-cms model list -p my-project --json=id,name,key
 ```
 
 ## Examples
@@ -156,16 +155,16 @@ Then run commands without specifying project each time:
 
 ```bash
 # List all models (uses REEARTH_CMS_PROJECT from .env)
-cms model list
+reearth-cms model list
 
 # Get items with JSON output
-cms item list -m my-model --json id,fields
+reearth-cms item list -m my-model --json=id,fields
 
 # Create an asset from file
-cms asset create -f ./image.png
+reearth-cms asset create -f ./image.png
 
 # Create an item with multiple fields
-cms item create -m my-model \
+reearth-cms item create -m my-model \
   -k title -t text -v "My Title" \
   -k description -t textarea -v "Description here"
 ```
@@ -176,13 +175,13 @@ cms item create -m my-model \
 export REEARTH_CMS_TOKEN=your-api-token
 export REEARTH_CMS_PROJECT=my-project
 
-cms model list
+reearth-cms model list
 ```
 
 ### Using command-line flags
 
 ```bash
-cms model list -p my-project --token your-api-token
+reearth-cms model list -p my-project --token your-api-token
 ```
 
 ## License

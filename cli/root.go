@@ -1,6 +1,9 @@
 package cli
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +16,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "cms",
+	Use:   filepath.Base(os.Args[0]),
 	Short: "Re:Earth CMS command line interface",
 	Long: `A CLI tool for interacting with Re:Earth CMS API.
 

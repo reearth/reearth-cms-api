@@ -24,7 +24,7 @@ var itemsListCmd = &cobra.Command{
 
 var itemsGetCmd = &cobra.Command{
 	Use:   "get <item-id>",
-	Short: "Get a specific item by ID",
+	Short: "Get an item by ID (includes asset data)",
 	Args:  cobra.ExactArgs(1),
 	RunE:  runItemsGet,
 }
@@ -80,8 +80,7 @@ func init() {
 	itemsListCmd.Flags().BoolVar(&itemsAsset, "asset", false, "Include asset data")
 	_ = itemsListCmd.MarkFlagRequired("model")
 
-	// Get flags
-	itemsGetCmd.Flags().BoolVar(&itemsAsset, "asset", false, "Include asset data")
+	// Get flags - no flags needed, asset is always included
 
 	// Create flags
 	itemsCreateCmd.Flags().StringVarP(&itemsModelID, "model", "m", "",
@@ -164,7 +163,7 @@ func runItemsGet(cmd *cobra.Command, args []string) error {
 	}
 
 	ctx := context.Background()
-	item, err := client.GetItem(ctx, args[0], itemsAsset)
+	item, err := client.GetItem(ctx, args[0], true)
 	if err != nil {
 		return fmt.Errorf("failed to get item: %w", err)
 	}
