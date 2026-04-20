@@ -8,7 +8,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const sourceURL = "https://raw.githubusercontent.com/reearth/reearth-cms/main/server/schemas/integration.yml"
+const sourceURL = "https://raw.githubusercontent.com/reearth/reearth-cms/refs/heads/main/server/schemas/integration/integration.yml"
 
 func main() {
 	if err := updateSchema(); err != nil {
