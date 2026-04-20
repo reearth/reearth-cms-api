@@ -48,10 +48,19 @@ function jsonResponse(body: unknown, status = 200): Response {
 }
 
 describe("CMS constructor", () => {
-  it("requires baseURL, token, workspace", () => {
+  it("requires baseURL and token", () => {
     expect(() => new CMS({ baseURL: "", token: "t", workspace: "w" })).toThrow(/baseURL/);
     expect(() => new CMS({ baseURL: "https://x", token: "", workspace: "w" })).toThrow(/token/);
-    expect(() => new CMS({ baseURL: "https://x", token: "t", workspace: "" })).toThrow(/workspace/);
+  });
+
+  it("allows workspace to be omitted (legacy API mode)", () => {
+    const cms = new CMS({ baseURL: "https://x", token: "t" });
+    expect(cms.useNewAPI()).toBe(false);
+  });
+
+  it("uses new API when workspace is set", () => {
+    const cms = new CMS({ baseURL: "https://x", token: "t", workspace: "ws" });
+    expect(cms.useNewAPI()).toBe(true);
   });
 
   it("withProject returns a new instance with project set", () => {
@@ -317,6 +326,128 @@ describe("CMS.uploadToAssetUpload", () => {
       new Blob(["compressed-bytes"]),
     );
     expect(encoding).toBe("gzip");
+  });
+});
+
+describe("CMS legacy API (no workspace)", () => {
+  it("getItem uses flat /api/items/{id} path", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/items\/item-9$/);
+      expect(req.method).toBe("GET");
+      return jsonResponse({ id: "item-9", modelId: "m" });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    const item = await cms.getItem({ itemId: "item-9" });
+    expect(item.id).toBe("item-9");
+  });
+
+  it("updateItem uses flat /api/items/{id} PATCH", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/items\/item-9$/);
+      expect(req.method).toBe("PATCH");
+      return jsonResponse({ id: "item-9", modelId: "m" });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    await cms.updateItem({ itemId: "item-9", fields: [] });
+  });
+
+  it("deleteItem uses flat /api/items/{id} DELETE", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/items\/item-9$/);
+      expect(req.method).toBe("DELETE");
+      return new Response(null, { status: 204 });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    await cms.deleteItem({ itemId: "item-9" });
+  });
+
+  it("getAsset uses flat /api/assets/{id} path", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/assets\/asset-1$/);
+      return jsonResponse({
+        id: "asset-1",
+        projectId: "p",
+        url: "https://x/a",
+        createdAt: "",
+        updatedAt: "",
+        public: false,
+      });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    const asset = await cms.getAsset({ assetId: "asset-1" });
+    expect(asset.id).toBe("asset-1");
+  });
+
+  it("getModel with project uses /api/projects/{p}/models/{id}", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/projects\/proj\/models\/mdl$/);
+      return jsonResponse({ id: "mdl", key: "mdl" });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", project: "proj", fetch });
+    const model = await cms.getModel({ modelIdOrKey: "mdl" });
+    expect(model.id).toBe("mdl");
+  });
+
+  it("getModel without project uses flat /api/models/{id}", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/models\/mdl-id$/);
+      return jsonResponse({ id: "mdl-id" });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    const model = await cms.getModel({ modelIdOrKey: "mdl-id" });
+    expect(model.id).toBe("mdl-id");
+  });
+
+  it("getItemsPage with project uses /api/projects/{p}/models/{m}/items", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toContain("/api/projects/proj/models/mdl/items");
+      return jsonResponse({ items: [], page: 1, perPage: 10, totalCount: 0 });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", project: "proj", fetch });
+    await cms.getItemsPage({ model: "mdl", perPage: 10 });
+  });
+
+  it("getItemsPage without project uses flat /api/models/{m}/items", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toContain("/api/models/mdl-id/items");
+      return jsonResponse({ items: [], page: 1, perPage: 10, totalCount: 0 });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    await cms.getItemsPage({ model: "mdl-id", perPage: 10 });
+  });
+
+  it("uploadAsset (by URL) uses /api/projects/{p}/assets", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/projects\/proj\/assets$/);
+      expect(req.method).toBe("POST");
+      return jsonResponse({
+        id: "a1",
+        projectId: "proj",
+        url: "https://x/a",
+        createdAt: "",
+        updatedAt: "",
+        public: false,
+      });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", project: "proj", fetch });
+    await cms.uploadAsset({ url: "https://remote/file.jpg" });
+  });
+
+  it("commentToItem uses flat /api/items/{id}/comments", async () => {
+    const fetch = mockFetch((req) => {
+      expect(req.url).toMatch(/\/api\/items\/i-1\/comments$/);
+      return jsonResponse({ id: "c1", content: "hello" });
+    });
+    const cms = new CMS({ baseURL: "https://x", token: "t", fetch });
+    await cms.commentToItem({ itemId: "i-1", content: "hello" });
+  });
+});
+
+describe("CMS new API requires model", () => {
+  it("throws if model missing on getItem in new API mode", async () => {
+    const fetch = mockFetch(() => jsonResponse({}));
+    const cms = new CMS({ baseURL: "https://x", token: "t", workspace: "ws", project: "p", fetch });
+    await expect(cms.getItem({ itemId: "i" })).rejects.toThrow(/model/);
   });
 });
 

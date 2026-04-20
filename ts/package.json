@@ -1,6 +1,6 @@
 {
   "name": "@reearth/cms-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Re:Earth CMS Integration API client for TypeScript/JavaScript. Works on Cloudflare Workers, Node.js 18+, Bun, and Deno.",
   "license": "MIT",
   "repository": {

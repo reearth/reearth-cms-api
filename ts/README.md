@@ -37,7 +37,7 @@ import { CMS } from "@reearth/cms-api";
 const cms = new CMS({
   baseURL: "https://cms.example.com",
   token: process.env.CMS_TOKEN!,
-  workspace: "my-workspace",
+  workspace: "my-workspace", // omit for the legacy API
   project: "my-project", // optional default
 });
 
@@ -87,6 +87,44 @@ await cms.createAssetByToken({ token: up.token! });
 // Comments
 await cms.commentToItem({ model: "m", itemId: "i", content: "hello" });
 ```
+
+### New vs legacy API
+
+The client supports both shapes of the Integration API:
+
+- **New (workspace-scoped) API** — set `workspace` on the constructor.
+  Paths are `/{workspace}/projects/{project}/...`. `project` and, for
+  item-level operations, `model` are required.
+- **Legacy API** — omit `workspace`. Paths are the flat `/api/...` forms
+  used by older Re:Earth CMS servers. Single-item operations
+  (`getItem`, `updateItem`, `deleteItem`, `commentToItem`, `getAsset`,
+  `commentToAsset`) do not require `model`. `getModel` / `getItemsPage` /
+  `createItem` can also be called without `project` — in which case the
+  flat `/api/models/{id}` / `/api/models/{id}/items` endpoint is used
+  (the model must be addressed by ID, not key).
+
+```ts
+// Legacy API — no workspace
+const cms = new CMS({ baseURL, token });
+
+// Single-item ops: flat /api/items/{id}
+await cms.getItem({ itemId: "..." });
+await cms.updateItem({ itemId: "...", fields: [...] });
+await cms.deleteItem({ itemId: "..." });
+
+// List: /api/models/{modelId}/items (no project)
+// or   /api/projects/{p}/models/{modelKey}/items (with project)
+await cms.getItemsPage({ model: "my-model-id" });
+await cms.getItemsPage({ project: "proj", model: "my-model-key" });
+
+// You can also omit workspace+project and call getModel by ID only
+await cms.getModel({ modelIdOrKey: "my-model-id" });
+```
+
+You can inspect which API is active with `cms.useNewAPI()`.
+
+The typed `cms.api` (an `openapi-fetch` client) only supports the new
+API because the OpenAPI schema describes workspace-scoped paths.
 
 ### Streaming and buffering
 

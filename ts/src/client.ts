@@ -57,8 +57,12 @@ export interface CMSOptions {
   baseURL: string;
   /** Bearer token for the Integration API. */
   token: string;
-  /** Workspace ID or alias. Required for the new (workspace-scoped) API. */
-  workspace: string;
+  /**
+   * Workspace ID or alias. When set, the client uses the new workspace-scoped
+   * API (`/api/{workspace}/projects/...`). When omitted, the client falls back
+   * to the legacy API (`/api/...`) for compatibility with older servers.
+   */
+  workspace?: string;
   /** Default project ID or alias. Can be overridden per call. */
   project?: string;
   /** Request timeout in milliseconds. */
@@ -76,7 +80,8 @@ export interface ListResponse<T> {
 
 export interface GetItemOptions {
   project?: string;
-  model: string;
+  /** Required on the new API (when `workspace` is set). Ignored on the legacy API. */
+  model?: string;
   itemId: string;
   asset?: boolean | AssetEmbedding;
   ref?: "latest" | "public";
@@ -112,7 +117,8 @@ export interface CreateItemOptions {
 
 export interface UpdateItemOptions {
   project?: string;
-  model: string;
+  /** Required on the new API (when `workspace` is set). Ignored on the legacy API. */
+  model?: string;
   itemId: string;
   fields?: Field[];
   metadataFields?: Field[];
@@ -121,11 +127,17 @@ export interface UpdateItemOptions {
 
 export interface DeleteItemOptions {
   project?: string;
-  model: string;
+  /** Required on the new API (when `workspace` is set). Ignored on the legacy API. */
+  model?: string;
   itemId: string;
 }
 
 export interface GetModelOptions {
+  /**
+   * Project ID or alias. Required on the new API. On the legacy API it is
+   * optional: when omitted, the flat `/api/models/{modelId}` endpoint is used
+   * (model must be addressed by ID, not key).
+   */
   project?: string;
   modelIdOrKey: string;
 }
@@ -150,7 +162,8 @@ export interface GetAllModelsOptions {
 
 export interface CommentOptions {
   project?: string;
-  model: string;
+  /** Required on the new API (when `workspace` is set). Ignored on the legacy API. */
+  model?: string;
   itemId: string;
   content: string;
 }
@@ -214,15 +227,25 @@ export interface UploadToAssetUploadOptions {
   compress?: Compression;
 }
 
+type Query = Record<string, string | number | boolean | undefined>;
+
+interface SendOptions {
+  body?: unknown;
+  query?: Query;
+  contentType?: string;
+}
+
 export class CMS {
   readonly options: Readonly<CMSOptions>;
-  /** Low-level typed OpenAPI client. Exposed for advanced use cases. */
+  /**
+   * Low-level typed OpenAPI client. Requires `workspace` to be set because
+   * the schema only describes the new workspace-scoped API.
+   */
   readonly api: Client<paths>;
 
   constructor(options: CMSOptions) {
     if (!options.baseURL) throw new Error("baseURL is required");
     if (!options.token) throw new Error("token is required");
-    if (!options.workspace) throw new Error("workspace is required");
 
     this.options = { ...options };
 
@@ -239,15 +262,30 @@ export class CMS {
     return new CMS({ ...this.options, project });
   }
 
+  /** Returns a new CMS instance with the given workspace. */
+  withWorkspace(workspace: string): CMS {
+    return new CMS({ ...this.options, workspace });
+  }
+
   /** Returns a new CMS instance with the given timeout. */
   withTimeout(timeout: number): CMS {
     return new CMS({ ...this.options, timeout });
+  }
+
+  /** True when `workspace` is set; false uses the legacy API. */
+  useNewAPI(): boolean {
+    return Boolean(this.options.workspace);
   }
 
   protected requireProject(project?: string): string {
     const p = project ?? this.options.project;
     if (!p) throw new Error("project is required (pass to method or CMS constructor)");
     return p;
+  }
+
+  protected requireModel(model?: string): string {
+    if (!model) throw new Error("model is required on the new API (set via CMS.workspace)");
+    return model;
   }
 
   protected signal(): AbortSignal | undefined {
@@ -261,64 +299,183 @@ export class CMS {
     return v;
   }
 
-  protected throwIfError(response: Response, error: unknown): void {
-    if (response.ok) return;
-    const bodyStr =
-      error === undefined ? undefined : typeof error === "string" ? error : JSON.stringify(error);
-    if (response.status === 404) throw new NotFoundError(bodyStr);
-    throw new CMSError(
-      response.status,
-      `request failed: status=${response.status}${bodyStr ? ` body=${bodyStr}` : ""}`,
-      bodyStr,
-    );
+  // ---------- Path builders (new vs legacy API) ----------
+
+  private pathModel(modelIdOrKey: string, project?: string): string[] {
+    if (this.useNewAPI()) {
+      return [
+        "api",
+        this.options.workspace!,
+        "projects",
+        this.requireProject(project),
+        "models",
+        modelIdOrKey,
+      ];
+    }
+    const p = project ?? this.options.project;
+    if (p) return ["api", "projects", p, "models", modelIdOrKey];
+    return ["api", "models", modelIdOrKey];
+  }
+
+  private pathModels(project: string): string[] {
+    if (this.useNewAPI()) {
+      return ["api", this.options.workspace!, "projects", project, "models"];
+    }
+    return ["api", "projects", project, "models"];
+  }
+
+  private pathItems(model: string, project?: string): string[] {
+    if (this.useNewAPI()) {
+      return [
+        "api",
+        this.options.workspace!,
+        "projects",
+        this.requireProject(project),
+        "models",
+        model,
+        "items",
+      ];
+    }
+    const p = project ?? this.options.project;
+    if (p) return ["api", "projects", p, "models", model, "items"];
+    return ["api", "models", model, "items"];
+  }
+
+  private pathItem(itemId: string, model?: string, project?: string): string[] {
+    if (this.useNewAPI()) {
+      return [
+        "api",
+        this.options.workspace!,
+        "projects",
+        this.requireProject(project),
+        "models",
+        this.requireModel(model),
+        "items",
+        itemId,
+      ];
+    }
+    return ["api", "items", itemId];
+  }
+
+  private pathItemComments(itemId: string, model?: string, project?: string): string[] {
+    return [...this.pathItem(itemId, model, project), "comments"];
+  }
+
+  private pathAssets(project: string): string[] {
+    if (this.useNewAPI()) {
+      return ["api", this.options.workspace!, "projects", project, "assets"];
+    }
+    return ["api", "projects", project, "assets"];
+  }
+
+  private pathAssetUploads(project: string): string[] {
+    return [...this.pathAssets(project), "uploads"];
+  }
+
+  private pathAsset(assetId: string, project?: string): string[] {
+    if (this.useNewAPI()) {
+      return [
+        "api",
+        this.options.workspace!,
+        "projects",
+        this.requireProject(project),
+        "assets",
+        assetId,
+      ];
+    }
+    return ["api", "assets", assetId];
+  }
+
+  private pathAssetComments(assetId: string, project?: string): string[] {
+    return [...this.pathAsset(assetId, project), "comments"];
+  }
+
+  // ---------- Raw request ----------
+
+  protected async send<T>(method: string, segs: string[], opts: SendOptions = {}): Promise<T> {
+    const base = this.options.baseURL.replace(/\/+$/, "");
+    const url = new URL(base + "/" + segs.map((s) => encodeURIComponent(s)).join("/"));
+    if (opts.query) {
+      for (const [k, v] of Object.entries(opts.query)) {
+        if (v !== undefined) url.searchParams.set(k, String(v));
+      }
+    }
+
+    const headers: Record<string, string> = {
+      Authorization: `Bearer ${this.options.token}`,
+    };
+
+    let body: BodyInit | undefined;
+    let duplex: "half" | undefined;
+    const b = opts.body;
+    if (b !== undefined) {
+      if (b instanceof FormData) {
+        // let fetch set the multipart boundary
+        body = b;
+      } else if (isReadableStream(b)) {
+        body = b;
+        duplex = "half";
+        if (opts.contentType) headers["Content-Type"] = opts.contentType;
+      } else if (b instanceof Blob) {
+        body = b;
+        if (opts.contentType) headers["Content-Type"] = opts.contentType;
+      } else if (b instanceof ArrayBuffer || ArrayBuffer.isView(b)) {
+        body = b as BodyInit;
+        if (opts.contentType) headers["Content-Type"] = opts.contentType;
+      } else {
+        body = JSON.stringify(b);
+        headers["Content-Type"] = opts.contentType ?? "application/json";
+      }
+    }
+
+    const init: RequestInit & { duplex?: "half" } = {
+      method,
+      headers,
+      body,
+      signal: this.signal(),
+    };
+    if (duplex) init.duplex = duplex;
+
+    const fetchImpl = this.options.fetch ?? fetch;
+    const res = await fetchImpl(url.toString(), init);
+    if (!res.ok) {
+      if (res.status === 404) throw new NotFoundError();
+      const text = await res.text().catch(() => undefined);
+      throw new CMSError(res.status, `request failed: status=${res.status}`, text);
+    }
+    const ct = res.headers.get("content-type") ?? "";
+    if (!ct.includes("application/json") || res.status === 204) {
+      return undefined as unknown as T;
+    }
+    return (await res.json()) as T;
   }
 
   // ---------- Models ----------
 
   async getModel(opts: GetModelOptions): Promise<Model> {
-    const { data, error, response } = await this.api.GET(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.modelIdOrKey,
-          },
-        },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Model>("GET", this.pathModel(opts.modelIdOrKey, opts.project));
   }
 
   async getModelsPage(opts: GetModelsPageOptions = {}): Promise<ListResponse<Model>> {
-    const { data, error, response } = await this.api.GET(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-          },
-          query: {
-            page: opts.page,
-            perPage: opts.perPage,
-            keyword: opts.keyword,
-            sort: opts.sort,
-            dir: opts.dir,
-          },
-        },
-        signal: this.signal(),
+    const data = await this.send<{
+      models?: Model[];
+      page?: number;
+      perPage?: number;
+      totalCount?: number;
+    }>("GET", this.pathModels(this.requireProject(opts.project)), {
+      query: {
+        page: opts.page,
+        perPage: opts.perPage,
+        keyword: opts.keyword,
+        sort: opts.sort,
+        dir: opts.dir,
       },
-    );
-    this.throwIfError(response, error);
+    });
     return {
-      results: data!.models ?? [],
-      page: data!.page ?? opts.page ?? 1,
-      perPage: data!.perPage ?? opts.perPage ?? 0,
-      totalCount: data!.totalCount ?? 0,
+      results: data.models ?? [],
+      page: data.page ?? opts.page ?? 1,
+      perPage: data.perPage ?? opts.perPage ?? 0,
+      totalCount: data.totalCount ?? 0,
     };
   }
 
@@ -336,57 +493,33 @@ export class CMS {
   // ---------- Items ----------
 
   async getItem(opts: GetItemOptions): Promise<Item> {
-    const { data, error, response } = await this.api.GET(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-            itemId: opts.itemId,
-          },
-          query: {
-            asset: this.assetParam(opts.asset),
-            ref: opts.ref,
-          },
-        },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Item>("GET", this.pathItem(opts.itemId, opts.model, opts.project), {
+      query: { asset: this.assetParam(opts.asset), ref: opts.ref },
+    });
   }
 
   async getItemsPage(opts: GetItemsPageOptions): Promise<ListResponse<Item>> {
-    const { data, error, response } = await this.api.GET(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-          },
-          query: {
-            page: opts.page,
-            perPage: opts.perPage,
-            asset: this.assetParam(opts.asset),
-            ref: opts.ref,
-            keyword: opts.keyword,
-            sort: opts.sort,
-            dir: opts.dir,
-          },
-        },
-        signal: this.signal(),
+    const data = await this.send<{
+      items?: Item[];
+      page?: number;
+      perPage?: number;
+      totalCount?: number;
+    }>("GET", this.pathItems(opts.model, opts.project), {
+      query: {
+        page: opts.page,
+        perPage: opts.perPage,
+        asset: this.assetParam(opts.asset),
+        ref: opts.ref,
+        keyword: opts.keyword,
+        sort: opts.sort,
+        dir: opts.dir,
       },
-    );
-    this.throwIfError(response, error);
+    });
     return {
-      results: data!.items ?? [],
-      page: data!.page ?? opts.page ?? 1,
-      perPage: data!.perPage ?? opts.perPage ?? 0,
-      totalCount: data!.totalCount ?? 0,
+      results: data.items ?? [],
+      page: data.page ?? opts.page ?? 1,
+      perPage: data.perPage ?? opts.perPage ?? 0,
+      totalCount: data.totalCount ?? 0,
     };
   }
 
@@ -402,112 +535,42 @@ export class CMS {
   }
 
   async createItem(opts: CreateItemOptions): Promise<Item> {
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-          },
-        },
-        body: {
-          fields: opts.fields,
-          metadataFields: opts.metadataFields,
-        },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Item>("POST", this.pathItems(opts.model, opts.project), {
+      body: { fields: opts.fields, metadataFields: opts.metadataFields },
+    });
   }
 
   async updateItem(opts: UpdateItemOptions): Promise<Item> {
-    const { data, error, response } = await this.api.PATCH(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-            itemId: opts.itemId,
-          },
-        },
-        body: {
-          fields: opts.fields,
-          metadataFields: opts.metadataFields,
-          asset: opts.asset,
-        },
-        signal: this.signal(),
+    return this.send<Item>("PATCH", this.pathItem(opts.itemId, opts.model, opts.project), {
+      body: {
+        fields: opts.fields,
+        metadataFields: opts.metadataFields,
+        asset: opts.asset,
       },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    });
   }
 
   async deleteItem(opts: DeleteItemOptions): Promise<void> {
-    const { error, response } = await this.api.DELETE(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-            itemId: opts.itemId,
-          },
-        },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
+    await this.send<void>("DELETE", this.pathItem(opts.itemId, opts.model, opts.project));
   }
 
   // ---------- Assets ----------
 
   async getAsset(opts: GetAssetOptions): Promise<Asset> {
-    const { data, error, response } = await this.api.GET(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            assetId: opts.assetId,
-          },
-        },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Asset>("GET", this.pathAsset(opts.assetId, opts.project));
   }
 
   /**
    * Upload an asset from a public URL. The server fetches and stores it.
    */
   async uploadAsset(opts: UploadAssetByURLOptions): Promise<Asset> {
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-          },
-        },
-        body: {
-          url: opts.url,
-          contentEncoding: opts.contentEncoding,
-          skipDecompression: opts.skipDecompression ?? false,
-        },
-        signal: this.signal(),
+    return this.send<Asset>("POST", this.pathAssets(this.requireProject(opts.project)), {
+      body: {
+        url: opts.url,
+        contentEncoding: opts.contentEncoding,
+        skipDecompression: opts.skipDecompression ?? false,
       },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    });
   }
 
   /**
@@ -544,23 +607,9 @@ export class CMS {
 
     form.append("file", blob, name);
 
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-          },
-        },
-        // @ts-expect-error: body is FormData instead of the json shape
-        body: form,
-        bodySerializer: (body: unknown) => body as FormData,
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Asset>("POST", this.pathAssets(this.requireProject(opts.project)), {
+      body: form,
+    });
   }
 
   /**
@@ -569,15 +618,10 @@ export class CMS {
    * returned `token` to register the asset.
    */
   async createAssetUpload(opts: CreateAssetUploadOptions): Promise<AssetUpload> {
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/uploads",
+    return this.send<AssetUpload>(
+      "POST",
+      this.pathAssetUploads(this.requireProject(opts.project)),
       {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-          },
-        },
         body: {
           name: opts.name,
           contentType: opts.contentType,
@@ -585,11 +629,8 @@ export class CMS {
           contentLength: opts.contentLength,
           cursor: opts.cursor,
         },
-        signal: this.signal(),
       },
     );
-    this.throwIfError(response, error);
-    return data!;
   }
 
   /**
@@ -640,65 +681,28 @@ export class CMS {
    */
   async createAssetByToken(opts: CreateAssetByTokenOptions): Promise<Asset> {
     if (!opts.token) throw new Error("token is required");
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-          },
-        },
-        body: {
-          token: opts.token,
-          contentEncoding: opts.contentEncoding,
-          skipDecompression: opts.skipDecompression ?? false,
-        },
-        signal: this.signal(),
+    return this.send<Asset>("POST", this.pathAssets(this.requireProject(opts.project)), {
+      body: {
+        token: opts.token,
+        contentEncoding: opts.contentEncoding,
+        skipDecompression: opts.skipDecompression ?? false,
       },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    });
   }
 
   // ---------- Comments ----------
 
   async commentToItem(opts: CommentOptions): Promise<Comment> {
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            modelIdOrKey: opts.model,
-            itemId: opts.itemId,
-          },
-        },
-        body: { content: opts.content },
-        signal: this.signal(),
-      },
+    return this.send<Comment>(
+      "POST",
+      this.pathItemComments(opts.itemId, opts.model, opts.project),
+      { body: { content: opts.content } },
     );
-    this.throwIfError(response, error);
-    return data!;
   }
 
   async commentToAsset(opts: CommentToAssetOptions): Promise<Comment> {
-    const { data, error, response } = await this.api.POST(
-      "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments",
-      {
-        params: {
-          path: {
-            workspaceIdOrAlias: this.options.workspace,
-            projectIdOrAlias: this.requireProject(opts.project),
-            assetId: opts.assetId,
-          },
-        },
-        body: { content: opts.content },
-        signal: this.signal(),
-      },
-    );
-    this.throwIfError(response, error);
-    return data!;
+    return this.send<Comment>("POST", this.pathAssetComments(opts.assetId, opts.project), {
+      body: { content: opts.content },
+    });
   }
 }
