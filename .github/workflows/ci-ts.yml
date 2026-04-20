@@ -1,0 +1,38 @@
+name: ci-ts
+on:
+  workflow_call:
+jobs:
+  ts-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d # v2.16.1
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ts/package-lock.json
+      - name: Install
+        working-directory: ts
+        run: npm ci
+      - name: Generate schema
+        working-directory: ts
+        run: npm run generate
+      - name: Check no schema drift
+        working-directory: ts
+        run: git diff --exit-code src/generated/schema.ts
+      - name: Format check
+        working-directory: ts
+        run: npm run format:check
+      - name: Typecheck
+        working-directory: ts
+        run: npm run typecheck
+      - name: Test
+        working-directory: ts
+        run: npm test
+      - name: Build
+        working-directory: ts
+        run: npm run build
