@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: reearth-cms-api
+  namespace: reearth
+  description: Re:Earth CMS API client
+  annotations:
+    github.com/project-slug: reearth/reearth-cms-api
+  links:
+  - url: https://github.com/reearth/reearth-cms-api
+    title: GitHub
+    icon: github
+  tags:
+  - python
+spec:
+  type: service
+  lifecycle: production
+  owner: reearth/cms
