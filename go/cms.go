@@ -20,6 +20,12 @@ import (
 
 var ErrNotFound = errors.New("not found")
 
+// ErrModelRequired is returned when an item operation is called without a model
+// on a client configured with WithWorkspace. The workspace-scoped API only routes
+// items under /{workspace}/projects/{project}/models/{model}/items/{item}, so use
+// the *ByModel variants (e.g. GetItemByModel) instead.
+var ErrModelRequired = errors.New("model is required for item operations when workspace is set; use the *ByModel methods")
+
 type Interface interface {
 	GetModel(ctx context.Context, modelID string) (*Model, error)
 	GetModelByKey(ctx context.Context, proejctID, modelID string) (*Model, error)
@@ -175,11 +181,17 @@ func (c *CMS) pathItems(modelIDOrKey string) []string {
 	return []string{"api", "models", modelIDOrKey, "items"}
 }
 
-func (c *CMS) pathItem(itemID string) []string {
+// pathItem returns the path of a single item.
+// With a workspace, the model is required because the API only routes items under models.
+// Without a workspace (legacy API), the model is ignored.
+func (c *CMS) pathItem(modelIDOrKey, itemID string) ([]string, error) {
 	if c.useNewAPI() {
-		return []string{"api", c.workspace, "projects", c.project, "items", itemID}
+		if modelIDOrKey == "" {
+			return nil, ErrModelRequired
+		}
+		return []string{"api", c.workspace, "projects", c.project, "models", modelIDOrKey, "items", itemID}, nil
 	}
-	return []string{"api", "items", itemID}
+	return []string{"api", "items", itemID}, nil
 }
 
 func (c *CMS) pathAsset(assetID string) []string {
@@ -189,11 +201,12 @@ func (c *CMS) pathAsset(assetID string) []string {
 	return []string{"api", "assets", assetID}
 }
 
-func (c *CMS) pathItemComments(itemID string) []string {
-	if c.useNewAPI() {
-		return []string{"api", c.workspace, "projects", c.project, "items", itemID, "comments"}
+func (c *CMS) pathItemComments(modelIDOrKey, itemID string) ([]string, error) {
+	p, err := c.pathItem(modelIDOrKey, itemID)
+	if err != nil {
+		return nil, err
 	}
-	return []string{"api", "items", itemID, "comments"}
+	return append(p, "comments"), nil
 }
 
 func (c *CMS) pathAssetComments(assetID string) []string {
@@ -305,8 +318,21 @@ func (c *CMS) GetModelsInParallel(ctx context.Context, modelID string, limit int
 	return res2, nil
 }
 
+// GetItem gets an item by ID.
+// With a workspace, it returns ErrModelRequired; use GetItemByModel instead.
 func (c *CMS) GetItem(ctx context.Context, itemID string, asset bool) (*Item, error) {
-	b, err := c.send(ctx, http.MethodGet, c.pathItem(itemID), "", c.assetParam(asset))
+	return c.GetItemByModel(ctx, "", itemID, asset)
+}
+
+// GetItemByModel gets an item by model ID or key and item ID.
+// The model is required with a workspace and ignored without one.
+func (c *CMS) GetItemByModel(ctx context.Context, modelIDOrKey, itemID string, asset bool) (*Item, error) {
+	p, err := c.pathItem(modelIDOrKey, itemID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get an item: %w", err)
+	}
+
+	b, err := c.send(ctx, http.MethodGet, p, "", c.assetParam(asset))
 	if err != nil {
 		return nil, fmt.Errorf("failed to get an item: %w", err)
 	}
@@ -525,13 +551,26 @@ func (c *CMS) CreateItemByKey(ctx context.Context, projectID, modelID string, fi
 	return item, nil
 }
 
+// UpdateItem updates an item.
+// With a workspace, it returns ErrModelRequired; use UpdateItemByModel instead.
 func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []*Field, metadataFields []*Field) (*Item, error) {
+	return c.UpdateItemByModel(ctx, "", itemID, fields, metadataFields)
+}
+
+// UpdateItemByModel updates an item by model ID or key and item ID.
+// The model is required with a workspace and ignored without one.
+func (c *CMS) UpdateItemByModel(ctx context.Context, modelIDOrKey, itemID string, fields []*Field, metadataFields []*Field) (*Item, error) {
+	p, err := c.pathItem(modelIDOrKey, itemID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update an item: %w", err)
+	}
+
 	rb := map[string]any{
 		"fields":         fields,
 		"metadataFields": metadataFields,
 	}
 
-	b, err := c.send(ctx, http.MethodPatch, c.pathItem(itemID), "", rb)
+	b, err := c.send(ctx, http.MethodPatch, p, "", rb)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update an item: %w", err)
 	}
@@ -545,8 +584,21 @@ func (c *CMS) UpdateItem(ctx context.Context, itemID string, fields []*Field, me
 	return item, nil
 }
 
+// DeleteItem deletes an item.
+// With a workspace, it returns ErrModelRequired; use DeleteItemByModel instead.
 func (c *CMS) DeleteItem(ctx context.Context, itemID string) error {
-	b, err := c.send(ctx, http.MethodDelete, c.pathItem(itemID), "", nil)
+	return c.DeleteItemByModel(ctx, "", itemID)
+}
+
+// DeleteItemByModel deletes an item by model ID or key and item ID.
+// The model is required with a workspace and ignored without one.
+func (c *CMS) DeleteItemByModel(ctx context.Context, modelIDOrKey, itemID string) error {
+	p, err := c.pathItem(modelIDOrKey, itemID)
+	if err != nil {
+		return fmt.Errorf("failed to delete an item: %w", err)
+	}
+
+	b, err := c.send(ctx, http.MethodDelete, p, "", nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete an item: %w", err)
 	}
@@ -754,12 +806,25 @@ func (c *CMS) Asset(ctx context.Context, assetID string) (*Asset, error) {
 	return a, nil
 }
 
+// CommentToItem posts a comment to an item.
+// With a workspace, it returns ErrModelRequired; use CommentToItemByModel instead.
 func (c *CMS) CommentToItem(ctx context.Context, itemID, content string) error {
+	return c.CommentToItemByModel(ctx, "", itemID, content)
+}
+
+// CommentToItemByModel posts a comment to an item by model ID or key and item ID.
+// The model is required with a workspace and ignored without one.
+func (c *CMS) CommentToItemByModel(ctx context.Context, modelIDOrKey, itemID, content string) error {
+	p, err := c.pathItemComments(modelIDOrKey, itemID)
+	if err != nil {
+		return fmt.Errorf("failed to comment to item %s: %w", itemID, err)
+	}
+
 	rb := map[string]string{
 		"content": content,
 	}
 
-	b, err := c.send(ctx, http.MethodPost, c.pathItemComments(itemID), "", rb)
+	b, err := c.send(ctx, http.MethodPost, p, "", rb)
 	if err != nil {
 		return fmt.Errorf("failed to comment to item %s: %w", itemID, err)
 	}
