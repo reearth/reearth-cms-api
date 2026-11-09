@@ -215,14 +215,14 @@ const (
 
 // Defines values for ItemFilterParamsSort.
 const (
-	CreatedAt ItemFilterParamsSort = "createdAt"
-	UpdatedAt ItemFilterParamsSort = "updatedAt"
+	ItemFilterParamsSortCreatedAt ItemFilterParamsSort = "createdAt"
+	ItemFilterParamsSortUpdatedAt ItemFilterParamsSort = "updatedAt"
 )
 
 // Defines values for ItemFilterParamsDir.
 const (
-	Asc  ItemFilterParamsDir = "asc"
-	Desc ItemFilterParamsDir = "desc"
+	ItemFilterParamsDirAsc  ItemFilterParamsDir = "asc"
+	ItemFilterParamsDirDesc ItemFilterParamsDir = "desc"
 )
 
 // Defines values for ItemFilterParamsRef.
@@ -243,10 +243,28 @@ const (
 	ItemsAsGeoJSONParamsRefPublic ItemsAsGeoJSONParamsRef = "public"
 )
 
+// Defines values for ItemFilterPostParamsSort.
+const (
+	ItemFilterPostParamsSortCreatedAt ItemFilterPostParamsSort = "createdAt"
+	ItemFilterPostParamsSortUpdatedAt ItemFilterPostParamsSort = "updatedAt"
+)
+
+// Defines values for ItemFilterPostParamsDir.
+const (
+	ItemFilterPostParamsDirAsc  ItemFilterPostParamsDir = "asc"
+	ItemFilterPostParamsDirDesc ItemFilterPostParamsDir = "desc"
+)
+
+// Defines values for ItemFilterPostParamsRef.
+const (
+	ItemFilterPostParamsRefLatest ItemFilterPostParamsRef = "latest"
+	ItemFilterPostParamsRefPublic ItemFilterPostParamsRef = "public"
+)
+
 // Defines values for ItemGetParamsRef.
 const (
-	Latest ItemGetParamsRef = "latest"
-	Public ItemGetParamsRef = "public"
+	ItemGetParamsRefLatest ItemGetParamsRef = "latest"
+	ItemGetParamsRefPublic ItemGetParamsRef = "public"
 )
 
 // GeoJSON defines model for GeoJSON.
@@ -564,7 +582,7 @@ type ProjectFilterParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -592,7 +610,7 @@ type ProjectCreateParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -632,7 +650,7 @@ type AssetFilterParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Keyword keyword string
@@ -685,7 +703,7 @@ type GroupFilterParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -707,7 +725,7 @@ type GroupCreateParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -729,7 +747,7 @@ type ModelFilterParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -754,7 +772,7 @@ type ModelCreateParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Sort Used to define the order of the response list
@@ -792,7 +810,7 @@ type ModelImportJSONBody struct {
 
 // ModelImportMultipartBody defines parameters for ModelImport.
 type ModelImportMultipartBody struct {
-	File             *openapi_types.File              `json:"file,omitempty"`
+	File             openapi_types.File               `json:"file"`
 	Format           ModelImportMultipartBodyFormat   `json:"format"`
 	GeometryFieldKey *string                          `json:"geometryFieldKey,omitempty"`
 	MutateSchema     *bool                            `json:"mutateSchema,omitempty"`
@@ -811,11 +829,6 @@ type ModelImportMultipartBodyFormat string
 // ModelImportMultipartBodyStrategy defines parameters for ModelImport.
 type ModelImportMultipartBodyStrategy string
 
-// ItemFilterJSONBody defines parameters for ItemFilter.
-type ItemFilterJSONBody struct {
-	Filter *Condition `json:"filter,omitempty"`
-}
-
 // ItemFilterParams defines parameters for ItemFilter.
 type ItemFilterParams struct {
 	// Sort Used to define the order of the response list
@@ -827,7 +840,7 @@ type ItemFilterParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Ref Used to select a ref or ver
@@ -860,7 +873,7 @@ type ItemsAsCSVParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Ref Used to select a ref or ver
@@ -875,7 +888,7 @@ type ItemsAsGeoJSONParams struct {
 	// Page Used to select the page
 	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
 
-	// PerPage Used to select the page
+	// PerPage Used to select the number of items per page
 	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
 
 	// Ref Used to select a ref or ver
@@ -884,6 +897,44 @@ type ItemsAsGeoJSONParams struct {
 
 // ItemsAsGeoJSONParamsRef defines parameters for ItemsAsGeoJSON.
 type ItemsAsGeoJSONParamsRef string
+
+// ItemFilterPostJSONBody defines parameters for ItemFilterPost.
+type ItemFilterPostJSONBody struct {
+	Filter *Condition `json:"filter,omitempty"`
+}
+
+// ItemFilterPostParams defines parameters for ItemFilterPost.
+type ItemFilterPostParams struct {
+	// Sort Used to define the order of the response list
+	Sort *ItemFilterPostParamsSort `form:"sort,omitempty" json:"sort,omitempty"`
+
+	// Dir Used to define the order direction of the response list, will be ignored if the order is not presented
+	Dir *ItemFilterPostParamsDir `form:"dir,omitempty" json:"dir,omitempty"`
+
+	// Page Used to select the page
+	Page *PageParam `form:"page,omitempty" json:"page,omitempty"`
+
+	// PerPage Used to select the number of items per page
+	PerPage *PerPageParam `form:"perPage,omitempty" json:"perPage,omitempty"`
+
+	// Ref Used to select a ref or ver
+	Ref *ItemFilterPostParamsRef `form:"ref,omitempty" json:"ref,omitempty"`
+
+	// Asset Specifies whether asset data are embedded in the results
+	Asset *AssetParam `form:"asset,omitempty" json:"asset,omitempty"`
+
+	// Keyword keyword string
+	Keyword *KeywordParam `form:"keyword,omitempty" json:"keyword,omitempty"`
+}
+
+// ItemFilterPostParamsSort defines parameters for ItemFilterPost.
+type ItemFilterPostParamsSort string
+
+// ItemFilterPostParamsDir defines parameters for ItemFilterPost.
+type ItemFilterPostParamsDir string
+
+// ItemFilterPostParamsRef defines parameters for ItemFilterPost.
+type ItemFilterPostParamsRef string
 
 // ItemGetParams defines parameters for ItemGet.
 type ItemGetParams struct {
@@ -981,11 +1032,11 @@ type ModelImportJSONRequestBody ModelImportJSONBody
 // ModelImportMultipartRequestBody defines body for ModelImport for multipart/form-data ContentType.
 type ModelImportMultipartRequestBody ModelImportMultipartBody
 
-// ItemFilterJSONRequestBody defines body for ItemFilter for application/json ContentType.
-type ItemFilterJSONRequestBody ItemFilterJSONBody
-
 // ItemCreateJSONRequestBody defines body for ItemCreate for application/json ContentType.
 type ItemCreateJSONRequestBody ItemCreateJSONBody
+
+// ItemFilterPostJSONRequestBody defines body for ItemFilterPost for application/json ContentType.
+type ItemFilterPostJSONRequestBody ItemFilterPostJSONBody
 
 // ItemUpdateJSONRequestBody defines body for ItemUpdate for application/json ContentType.
 type ItemUpdateJSONRequestBody ItemUpdateJSONBody
@@ -1191,10 +1242,8 @@ type ClientInterface interface {
 
 	ModelImport(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ItemFilterWithBody request with any body
-	ItemFilterWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// ItemFilter request
+	ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ItemCreateWithBody request with any body
 	ItemCreateWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1206,6 +1255,11 @@ type ClientInterface interface {
 
 	// ItemsAsGeoJSON request
 	ItemsAsGeoJSON(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ItemFilterPostWithBody request with any body
+	ItemFilterPostWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	ItemFilterPost(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, body ItemFilterPostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ItemDelete request
 	ItemDelete(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, itemId ItemIdParam, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1773,20 +1827,8 @@ func (c *Client) ModelImport(ctx context.Context, workspaceIdOrAlias WorkspaceId
 	return c.Client.Do(req)
 }
 
-func (c *Client) ItemFilterWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewItemFilterRequestWithBody(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-func (c *Client) ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewItemFilterRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body)
+func (c *Client) ItemFilter(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1835,6 +1877,30 @@ func (c *Client) ItemsAsCSV(ctx context.Context, workspaceIdOrAlias WorkspaceIdO
 
 func (c *Client) ItemsAsGeoJSON(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewItemsAsGeoJSONRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemFilterPostWithBody(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterPostRequestWithBody(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ItemFilterPost(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, body ItemFilterPostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewItemFilterPostRequest(c.Server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4163,19 +4229,8 @@ func NewModelImportRequestWithBody(server string, workspaceIdOrAlias WorkspaceId
 	return req, nil
 }
 
-// NewItemFilterRequest calls the generic ItemFilter builder with application/json body
-func NewItemFilterRequest(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewItemFilterRequestWithBody(server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, "application/json", bodyReader)
-}
-
-// NewItemFilterRequestWithBody generates requests for ItemFilter with any type of body
-func NewItemFilterRequestWithBody(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader) (*http.Request, error) {
+// NewItemFilterRequest generates requests for ItemFilter
+func NewItemFilterRequest(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -4332,12 +4387,10 @@ func NewItemFilterRequestWithBody(server string, workspaceIdOrAlias WorkspaceIdO
 		queryURL.RawQuery = queryValues.Encode()
 	}
 
-	req, err := http.NewRequest("GET", queryURL.String(), body)
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
-
-	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -4603,6 +4656,185 @@ func NewItemsAsGeoJSONRequest(server string, workspaceIdOrAlias WorkspaceIdOrAli
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewItemFilterPostRequest calls the generic ItemFilterPost builder with application/json body
+func NewItemFilterPostRequest(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, body ItemFilterPostJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewItemFilterPostRequestWithBody(server, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, "application/json", bodyReader)
+}
+
+// NewItemFilterPostRequestWithBody generates requests for ItemFilterPost with any type of body
+func NewItemFilterPostRequestWithBody(server string, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "workspaceIdOrAlias", runtime.ParamLocationPath, workspaceIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "projectIdOrAlias", runtime.ParamLocationPath, projectIdOrAlias)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam2 string
+
+	pathParam2, err = runtime.StyleParamWithLocation("simple", false, "modelIdOrKey", runtime.ParamLocationPath, modelIdOrKey)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/%s/projects/%s/models/%s/items/filter", pathParam0, pathParam1, pathParam2)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Sort != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "sort", runtime.ParamLocationQuery, *params.Sort); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Dir != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "dir", runtime.ParamLocationQuery, *params.Dir); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Page != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "page", runtime.ParamLocationQuery, *params.Page); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.PerPage != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "perPage", runtime.ParamLocationQuery, *params.PerPage); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Ref != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "ref", runtime.ParamLocationQuery, *params.Ref); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Asset != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "asset", runtime.ParamLocationQuery, *params.Asset); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		if params.Keyword != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "keyword", runtime.ParamLocationQuery, *params.Keyword); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -5599,10 +5831,8 @@ type ClientWithResponsesInterface interface {
 
 	ModelImportWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, body ModelImportJSONRequestBody, reqEditors ...RequestEditorFn) (*ModelImportResponse, error)
 
-	// ItemFilterWithBodyWithResponse request with any body
-	ItemFilterWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
-
-	ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
+	// ItemFilterWithResponse request
+	ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error)
 
 	// ItemCreateWithBodyWithResponse request with any body
 	ItemCreateWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemCreateResponse, error)
@@ -5614,6 +5844,11 @@ type ClientWithResponsesInterface interface {
 
 	// ItemsAsGeoJSONWithResponse request
 	ItemsAsGeoJSONWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemsAsGeoJSONParams, reqEditors ...RequestEditorFn) (*ItemsAsGeoJSONResponse, error)
+
+	// ItemFilterPostWithBodyWithResponse request with any body
+	ItemFilterPostWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterPostResponse, error)
+
+	ItemFilterPostWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, body ItemFilterPostJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterPostResponse, error)
 
 	// ItemDeleteWithResponse request
 	ItemDeleteWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, itemId ItemIdParam, reqEditors ...RequestEditorFn) (*ItemDeleteResponse, error)
@@ -6463,6 +6698,33 @@ func (r ItemsAsGeoJSONResponse) StatusCode() int {
 	return 0
 }
 
+type ItemFilterPostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *struct {
+		Items      *[]VersionedItem `json:"items,omitempty"`
+		Page       *int             `json:"page,omitempty"`
+		PerPage    *int             `json:"perPage,omitempty"`
+		TotalCount *int             `json:"totalCount,omitempty"`
+	}
+}
+
+// Status returns HTTPResponse.Status
+func (r ItemFilterPostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ItemFilterPostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type ItemDeleteResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -7131,17 +7393,9 @@ func (c *ClientWithResponses) ModelImportWithResponse(ctx context.Context, works
 	return ParseModelImportResponse(rsp)
 }
 
-// ItemFilterWithBodyWithResponse request with arbitrary body returning *ItemFilterResponse
-func (c *ClientWithResponses) ItemFilterWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
-	rsp, err := c.ItemFilterWithBody(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseItemFilterResponse(rsp)
-}
-
-func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, body ItemFilterJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
-	rsp, err := c.ItemFilter(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body, reqEditors...)
+// ItemFilterWithResponse request returning *ItemFilterResponse
+func (c *ClientWithResponses) ItemFilterWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterParams, reqEditors ...RequestEditorFn) (*ItemFilterResponse, error) {
+	rsp, err := c.ItemFilter(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
@@ -7181,6 +7435,23 @@ func (c *ClientWithResponses) ItemsAsGeoJSONWithResponse(ctx context.Context, wo
 		return nil, err
 	}
 	return ParseItemsAsGeoJSONResponse(rsp)
+}
+
+// ItemFilterPostWithBodyWithResponse request with arbitrary body returning *ItemFilterPostResponse
+func (c *ClientWithResponses) ItemFilterPostWithBodyWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ItemFilterPostResponse, error) {
+	rsp, err := c.ItemFilterPostWithBody(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemFilterPostResponse(rsp)
+}
+
+func (c *ClientWithResponses) ItemFilterPostWithResponse(ctx context.Context, workspaceIdOrAlias WorkspaceIdOrAliasParam, projectIdOrAlias ProjectIdOrAliasParam, modelIdOrKey ModelIdOrKeyParam, params *ItemFilterPostParams, body ItemFilterPostJSONRequestBody, reqEditors ...RequestEditorFn) (*ItemFilterPostResponse, error) {
+	rsp, err := c.ItemFilterPost(ctx, workspaceIdOrAlias, projectIdOrAlias, modelIdOrKey, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseItemFilterPostResponse(rsp)
 }
 
 // ItemDeleteWithResponse request returning *ItemDeleteResponse
@@ -8242,6 +8513,37 @@ func ParseItemsAsGeoJSONResponse(rsp *http.Response) (*ItemsAsGeoJSONResponse, e
 	response := &ItemsAsGeoJSONResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseItemFilterPostResponse parses an HTTP response from a ItemFilterPostWithResponse call
+func ParseItemFilterPostResponse(rsp *http.Response) (*ItemFilterPostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ItemFilterPostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest struct {
+			Items      *[]VersionedItem `json:"items,omitempty"`
+			Page       *int             `json:"page,omitempty"`
+			PerPage    *int             `json:"perPage,omitempty"`
+			TotalCount *int             `json:"totalCount,omitempty"`
+		}
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
 	}
 
 	return response, nil

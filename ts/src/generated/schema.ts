@@ -9,7 +9,7 @@ export interface paths {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -216,7 +216,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** publish asset */
+        /** unpublish asset */
         post: operations["AssetUnpublish"];
         delete?: never;
         options?: never;
@@ -282,7 +282,7 @@ export interface paths {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -352,7 +352,7 @@ export interface paths {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -665,6 +665,33 @@ export interface paths {
         put?: never;
         /** publish item */
         post: operations["ItemPublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/filter": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description ID or alias of the workspace */
+                workspaceIdOrAlias: components["parameters"]["workspaceIdOrAliasParam"];
+                /** @description ID or alias of the project */
+                projectIdOrAlias: components["parameters"]["projectIdOrAliasParam"];
+                /** @description ID or key of the model in the project */
+                modelIdOrKey: components["parameters"]["modelIdOrKeyParam"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Returns a list of items with complex filtering.
+         * @description Returns a list of items with complex filtering in request body.
+         */
+        post: operations["ItemFilterPost"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1025,7 +1052,7 @@ export interface components {
         modelIdOrKeyParam: string;
         /** @description Used to select the page */
         pageParam: number;
-        /** @description Used to select the page */
+        /** @description Used to select the number of items per page */
         perPageParam: number;
         /** @description ID or alias of the project */
         projectIdOrAliasParam: string;
@@ -1051,7 +1078,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -1069,7 +1096,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description A JSON array of projects */
+            /** @description A JSON object containing a list of projects */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1106,7 +1133,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -1332,7 +1359,7 @@ export interface operations {
                 dir?: components["parameters"]["sortDirParam"];
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description keyword string */
                 keyword?: components["parameters"]["keywordParam"];
@@ -1348,7 +1375,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description assets list */
+            /** @description A JSON object containing a list of assets */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1501,7 +1528,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description assets list */
+            /** @description the asset */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1543,7 +1570,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description assets list */
+            /** @description the deleted asset id */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1774,7 +1801,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description assets list */
+            /** @description the published asset */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1816,7 +1843,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description assets list */
+            /** @description the unpublished asset */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1950,7 +1977,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -1968,7 +1995,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description A list of groups in the project. */
+            /** @description A JSON object containing a list of groups */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2011,7 +2038,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -2225,7 +2252,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -2245,7 +2272,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description A JSON array of user names */
+            /** @description A JSON object containing a list of models */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2288,7 +2315,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to define the order of the response list */
                 sort?: components["parameters"]["sortParam"];
@@ -2351,7 +2378,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description A JSON array of user names */
+            /** @description A JSON object of the model */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2515,7 +2542,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description A JSON object of field */
+            /** @description A JSON object of the copied model */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2570,7 +2597,7 @@ export interface operations {
                 };
                 "multipart/form-data": {
                     /** Format: binary */
-                    file?: string;
+                    file: string;
                     /** @enum {string} */
                     format: "geoJson" | "json";
                     geometryFieldKey?: string;
@@ -2630,7 +2657,7 @@ export interface operations {
                 dir?: components["parameters"]["sortDirParam"];
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to select a ref or ver */
                 ref?: components["parameters"]["refParam"];
@@ -2650,15 +2677,9 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "application/json": {
-                    filter?: components["schemas"]["condition"];
-                };
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description A JSON array of user names */
+            /** @description A JSON object containing a list of items */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2719,7 +2740,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description A JSON array of user names */
+            /** @description A JSON object of the item */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -2750,7 +2771,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to select a ref or ver */
                 ref?: components["parameters"]["refParam"];
@@ -2806,7 +2827,7 @@ export interface operations {
             query?: {
                 /** @description Used to select the page */
                 page?: components["parameters"]["pageParam"];
-                /** @description Used to select the page */
+                /** @description Used to select the number of items per page */
                 perPage?: components["parameters"]["perPageParam"];
                 /** @description Used to select a ref or ver */
                 ref?: components["parameters"]["refParam"];
@@ -3253,6 +3274,81 @@ export interface operations {
             401: components["responses"]["UnauthorizedError"];
             /** @description Not found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ItemFilterPost: {
+        parameters: {
+            query?: {
+                /** @description Used to define the order of the response list */
+                sort?: components["parameters"]["sortParam"];
+                /** @description Used to define the order direction of the response list, will be ignored if the order is not presented */
+                dir?: components["parameters"]["sortDirParam"];
+                /** @description Used to select the page */
+                page?: components["parameters"]["pageParam"];
+                /** @description Used to select the number of items per page */
+                perPage?: components["parameters"]["perPageParam"];
+                /** @description Used to select a ref or ver */
+                ref?: components["parameters"]["refParam"];
+                /** @description Specifies whether asset data are embedded in the results */
+                asset?: components["parameters"]["assetParam"];
+                /** @description keyword string */
+                keyword?: components["parameters"]["keywordParam"];
+            };
+            header?: never;
+            path: {
+                /** @description ID or alias of the workspace */
+                workspaceIdOrAlias: components["parameters"]["workspaceIdOrAliasParam"];
+                /** @description ID or alias of the project */
+                projectIdOrAlias: components["parameters"]["projectIdOrAliasParam"];
+                /** @description ID or key of the model in the project */
+                modelIdOrKey: components["parameters"]["modelIdOrKeyParam"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    filter?: components["schemas"]["condition"];
+                };
+            };
+        };
+        responses: {
+            /** @description A JSON object containing a list of items */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        items?: components["schemas"]["versionedItem"][];
+                        page?: number;
+                        perPage?: number;
+                        totalCount?: number;
+                    };
+                };
+            };
+            /** @description Invalid request parameter value */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: components["responses"]["UnauthorizedError"];
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal server error */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
