@@ -1,8 +1,12 @@
 .PHONY: update-schema gen-go gen-ts gen
 
+# REF: branch, tag or commit of reearth/reearth-cms to fetch (default: main)
+#   e.g. make update-schema REF=0123abcd
+REF ?= main
+
 update-schema:
-	@echo "Updating schemas/integration.yml from upstream..."
-	@cd tools/oapiupdater && go run . > ../../schemas/integration.yml
+	@echo "Updating schemas/integration.yml from upstream (ref: $(REF))..."
+	@cd tools/oapiupdater && REF=$(REF) go run . -o ../../schemas/integration.yml
 	@echo "Done"
 
 gen-go:
