@@ -148,18 +148,34 @@ configuration = reearthcmsapi.Configuration(
     host = "http://localhost"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization: bearerAuth
+configuration = reearthcmsapi.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
 with reearthcmsapi.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = assets_api.AssetsApi(api_client)
-    asset_id = "assetId_example" # str | ID of the selected asset
+    workspace_id_or_alias = "workspaceIdOrAlias_example" # str | ID or alias of the workspace
+project_id_or_alias = "projectIdOrAlias_example" # str | ID or alias of the project
+any_type = dict(
+        asset_ids=[
+            "asset_ids_example"
+        ],
+    ) # anyType | 
 
     try:
-        api_response = api_instance.asset_delete(asset_id)
+        # delete assets in batch
+        api_response = api_instance.asset_batch_delete(workspace_id_or_aliasproject_id_or_aliasany_type)
         pprint(api_response)
     except reearthcmsapi.ApiException as e:
-        print("Exception when calling AssetsApi->asset_delete: %s\n" % e)
+        print("Exception when calling AssetsApi->asset_batch_delete: %s\n" % e)
 ```
 
 ## Documentation for API Endpoints
@@ -168,40 +184,80 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AssetsApi* | [**asset_delete**](docs/apis/tags/AssetsApi.md#asset_delete) | **delete** /assets/{assetId} | 
-*AssetsApi* | [**asset_get**](docs/apis/tags/AssetsApi.md#asset_get) | **get** /assets/{assetId} | 
-*AssetsCommentsApi* | [**asset_comment_create**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_create) | **post** /assets/{assetId}/comments | 
-*AssetsCommentsApi* | [**asset_comment_delete**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_delete) | **delete** /assets/{assetId}/comments/{commentId} | 
-*AssetsCommentsApi* | [**asset_comment_list**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_list) | **get** /assets/{assetId}/comments | 
-*AssetsCommentsApi* | [**asset_comment_update**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_update) | **patch** /assets/{assetId}/comments/{commentId} | Update AssetComment
-*AssetsProjectApi* | [**asset_create**](docs/apis/tags/AssetsProjectApi.md#asset_create) | **post** /projects/{projectId}/assets | Create an new asset.
-*AssetsProjectApi* | [**asset_filter**](docs/apis/tags/AssetsProjectApi.md#asset_filter) | **get** /projects/{projectId}/assets | Returns a list of assets.
-*ItemsApi* | [**item_create**](docs/apis/tags/ItemsApi.md#item_create) | **post** /models/{modelId}/items | create an item
-*ItemsApi* | [**item_delete**](docs/apis/tags/ItemsApi.md#item_delete) | **delete** /items/{itemId} | delete an item
-*ItemsApi* | [**item_filter**](docs/apis/tags/ItemsApi.md#item_filter) | **get** /models/{modelId}/items | Returns a list of items.
-*ItemsApi* | [**item_get**](docs/apis/tags/ItemsApi.md#item_get) | **get** /items/{itemId} | Returns an items.
-*ItemsApi* | [**item_update**](docs/apis/tags/ItemsApi.md#item_update) | **patch** /items/{itemId} | Update an item.
-*ItemsCommentsApi* | [**item_comment_create**](docs/apis/tags/ItemsCommentsApi.md#item_comment_create) | **post** /items/{itemId}/comments | 
-*ItemsCommentsApi* | [**item_comment_delete**](docs/apis/tags/ItemsCommentsApi.md#item_comment_delete) | **delete** /items/{itemId}/comments/{commentId} | 
-*ItemsCommentsApi* | [**item_comment_list**](docs/apis/tags/ItemsCommentsApi.md#item_comment_list) | **get** /items/{itemId}/comments | 
-*ItemsCommentsApi* | [**item_comment_update**](docs/apis/tags/ItemsCommentsApi.md#item_comment_update) | **patch** /items/{itemId}/comments/{commentId} | Update Item Comment
-*ItemsProjectApi* | [**item_create_with_project**](docs/apis/tags/ItemsProjectApi.md#item_create_with_project) | **post** /projects/{projectIdOrAlias}/models/{modelIdOrKey}/items | 
-*ItemsProjectApi* | [**item_filter_with_project**](docs/apis/tags/ItemsProjectApi.md#item_filter_with_project) | **get** /projects/{projectIdOrAlias}/models/{modelIdOrKey}/items | Returns a list of items.
-*ModelsApi* | [**model_get**](docs/apis/tags/ModelsApi.md#model_get) | **get** /models/{modelId} | Returns a model.
-*ModelsApi* | [**model_get_with_project**](docs/apis/tags/ModelsApi.md#model_get_with_project) | **get** /projects/{projectIdOrAlias}/models/{modelIdOrKey} | Returns a model.
+*AssetsApi* | [**asset_batch_delete**](docs/apis/tags/AssetsApi.md#asset_batch_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets | delete assets in batch
+*AssetsApi* | [**asset_content_get**](docs/apis/tags/AssetsApi.md#asset_content_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{uuid1}/{uuid2}/{filename} | get asset content
+*AssetsApi* | [**asset_delete**](docs/apis/tags/AssetsApi.md#asset_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId} | delete asset
+*AssetsApi* | [**asset_get**](docs/apis/tags/AssetsApi.md#asset_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId} | get asset
+*AssetsApi* | [**asset_publish**](docs/apis/tags/AssetsApi.md#asset_publish) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/publish | publish asset
+*AssetsApi* | [**asset_unpublish**](docs/apis/tags/AssetsApi.md#asset_unpublish) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/unpublish | unpublish asset
+*AssetsCommentsApi* | [**asset_comment_create**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments | create asset comments
+*AssetsCommentsApi* | [**asset_comment_delete**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments/{commentId} | delete asset comments
+*AssetsCommentsApi* | [**asset_comment_list**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_list) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments | get asset comments
+*AssetsCommentsApi* | [**asset_comment_update**](docs/apis/tags/AssetsCommentsApi.md#asset_comment_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments/{commentId} | Update AssetComment
+*AssetsProjectApi* | [**asset_create**](docs/apis/tags/AssetsProjectApi.md#asset_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets | Create an new asset.
+*AssetsProjectApi* | [**asset_filter**](docs/apis/tags/AssetsProjectApi.md#asset_filter) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets | Returns a list of assets.
+*AssetsProjectApi* | [**asset_upload_create**](docs/apis/tags/AssetsProjectApi.md#asset_upload_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/uploads | Upload an asset.
+*CSVApi* | [**items_as_csv**](docs/apis/tags/CSVApi.md#items_as_csv) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items.csv | Returns a CSV that has a list of items as features.
+*FieldsApi* | [**field_create**](docs/apis/tags/FieldsApi.md#field_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/schemata/{schemaId}/fields | create a field
+*FieldsApi* | [**field_delete**](docs/apis/tags/FieldsApi.md#field_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/schemata/{schemaId}/fields/{fieldIdOrKey} | delete a field
+*FieldsApi* | [**field_update**](docs/apis/tags/FieldsApi.md#field_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/schemata/{schemaId}/fields/{fieldIdOrKey} | update a field
+*GeoJSONApi* | [**items_as_geo_json**](docs/apis/tags/GeoJSONApi.md#items_as_geo_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items.geojson | Returns a GeoJSON that has a list of items as features.
+*GroupsApi* | [**group_create**](docs/apis/tags/GroupsApi.md#group_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/groups | Create a new group in a project.
+*GroupsApi* | [**group_delete**](docs/apis/tags/GroupsApi.md#group_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/groups/{groupIdOrKey} | Delete a group within a project.
+*GroupsApi* | [**group_filter**](docs/apis/tags/GroupsApi.md#group_filter) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/groups | Returns a list of groups in a project.
+*GroupsApi* | [**group_get**](docs/apis/tags/GroupsApi.md#group_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/groups/{groupIdOrKey} | Retrieve a group within a project.
+*GroupsApi* | [**group_update**](docs/apis/tags/GroupsApi.md#group_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/groups/{groupIdOrKey} | Update a group&#x27;s details within a project.
+*ItemsApi* | [**item_create**](docs/apis/tags/ItemsApi.md#item_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items | create an item
+*ItemsApi* | [**item_delete**](docs/apis/tags/ItemsApi.md#item_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId} | delete an item
+*ItemsApi* | [**item_filter**](docs/apis/tags/ItemsApi.md#item_filter) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items | Returns a list of items.
+*ItemsApi* | [**item_filter_post**](docs/apis/tags/ItemsApi.md#item_filter_post) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/filter | Returns a list of items with complex filtering.
+*ItemsApi* | [**item_get**](docs/apis/tags/ItemsApi.md#item_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId} | Returns an item.
+*ItemsApi* | [**item_publish**](docs/apis/tags/ItemsApi.md#item_publish) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/publish | publish item
+*ItemsApi* | [**item_update**](docs/apis/tags/ItemsApi.md#item_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId} | Update an item.
+*ItemsApi* | [**items_as_geo_json**](docs/apis/tags/ItemsApi.md#items_as_geo_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items.geojson | Returns a GeoJSON that has a list of items as features.
+*ItemsCommentsApi* | [**item_comment_create**](docs/apis/tags/ItemsCommentsApi.md#item_comment_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments | create an item comment
+*ItemsCommentsApi* | [**item_comment_delete**](docs/apis/tags/ItemsCommentsApi.md#item_comment_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments/{commentId} | delete item comment
+*ItemsCommentsApi* | [**item_comment_list**](docs/apis/tags/ItemsCommentsApi.md#item_comment_list) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments | get an item comment
+*ItemsCommentsApi* | [**item_comment_update**](docs/apis/tags/ItemsCommentsApi.md#item_comment_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments/{commentId} | Update Item Comment
+*ItemsProjectApi* | [**items_as_csv**](docs/apis/tags/ItemsProjectApi.md#items_as_csv) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items.csv | Returns a CSV that has a list of items as features.
+*JSONApi* | [**metadata_schema_by_model_as_json**](docs/apis/tags/JSONApi.md#metadata_schema_by_model_as_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/metadata_schema.json | Returns a metadata schema as json by project and model ID
+*JSONApi* | [**schema_by_model_as_json**](docs/apis/tags/JSONApi.md#schema_by_model_as_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/schema.json | Returns a schema as json by project and model ID
+*MetadataSchemaApi* | [**metadata_schema_by_model_as_json**](docs/apis/tags/MetadataSchemaApi.md#metadata_schema_by_model_as_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/metadata_schema.json | Returns a metadata schema as json by project and model ID
+*ModelsApi* | [**model_copy**](docs/apis/tags/ModelsApi.md#model_copy) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/copy | Copy schema and items of a selected model
+*ModelsApi* | [**model_create**](docs/apis/tags/ModelsApi.md#model_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models | create a model
+*ModelsApi* | [**model_delete**](docs/apis/tags/ModelsApi.md#model_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey} | Delete a model.
+*ModelsApi* | [**model_filter**](docs/apis/tags/ModelsApi.md#model_filter) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models | Returns a list of models.
+*ModelsApi* | [**model_get**](docs/apis/tags/ModelsApi.md#model_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey} | Returns a model.
+*ModelsApi* | [**model_import**](docs/apis/tags/ModelsApi.md#model_import) | **put** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/import | Import data under the selected model
+*ModelsApi* | [**model_update**](docs/apis/tags/ModelsApi.md#model_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey} | Update a model.
+*ProjectsApi* | [**project_create**](docs/apis/tags/ProjectsApi.md#project_create) | **post** /{workspaceIdOrAlias}/projects | Create a project
+*ProjectsApi* | [**project_delete**](docs/apis/tags/ProjectsApi.md#project_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias} | Delete a project
+*ProjectsApi* | [**project_filter**](docs/apis/tags/ProjectsApi.md#project_filter) | **get** /{workspaceIdOrAlias}/projects | Returns a list of projects.
+*ProjectsApi* | [**project_get**](docs/apis/tags/ProjectsApi.md#project_get) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias} | Returns a project.
+*ProjectsApi* | [**project_update**](docs/apis/tags/ProjectsApi.md#project_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias} | Update a project.
+*SchemaApi* | [**schema_by_model_as_json**](docs/apis/tags/SchemaApi.md#schema_by_model_as_json) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/schema.json | Returns a schema as json by project and model ID
 
 ## Documentation For Models
 
+ - [Accessibility](docs/models/Accessibility.md)
+ - [ApiKey](docs/models/ApiKey.md)
  - [Asset](docs/models/Asset.md)
  - [AssetEmbedding](docs/models/AssetEmbedding.md)
  - [Comment](docs/models/Comment.md)
+ - [Condition](docs/models/Condition.md)
  - [Field](docs/models/Field.md)
+ - [FieldSelector](docs/models/FieldSelector.md)
  - [File](docs/models/File.md)
+ - [Group](docs/models/Group.md)
  - [Item](docs/models/Item.md)
  - [Model](docs/models/Model.md)
+ - [Project](docs/models/Project.md)
+ - [ProjectRequestRole](docs/models/ProjectRequestRole.md)
+ - [PublicationSettings](docs/models/PublicationSettings.md)
  - [RefOrVersion](docs/models/RefOrVersion.md)
  - [Schema](docs/models/Schema.md)
  - [SchemaField](docs/models/SchemaField.md)
+ - [TagResponse](docs/models/TagResponse.md)
  - [ValueType](docs/models/ValueType.md)
  - [Version](docs/models/Version.md)
  - [VersionedItem](docs/models/VersionedItem.md)
@@ -216,6 +272,14 @@ Authentication schemes defined for the API:
 
 
 ## Author
+
+
+
+
+
+
+
+
 
 
 

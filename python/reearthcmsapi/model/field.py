@@ -36,22 +36,30 @@ class Field(
     class MetaOapg:
         
         class properties:
+            group = schemas.StrSchema
             id = schemas.StrSchema
+            key = schemas.StrSchema
         
             @staticmethod
             def type() -> typing.Type['ValueType']:
                 return ValueType
             value = schemas.AnyTypeSchema
-            key = schemas.StrSchema
             __annotations__ = {
+                "group": group,
                 "id": id,
+                "key": key,
                 "type": type,
                 "value": value,
-                "key": key,
             }
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["group"]) -> MetaOapg.properties.group: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
@@ -60,18 +68,21 @@ class Field(
     def __getitem__(self, name: typing_extensions.Literal["value"]) -> MetaOapg.properties.value: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "type", "value", "key", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["group", "id", "key", "type", "value", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["group"]) -> typing.Union[MetaOapg.properties.group, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> typing.Union[MetaOapg.properties.key, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> typing.Union['ValueType', schemas.Unset]: ...
@@ -80,32 +91,31 @@ class Field(
     def get_item_oapg(self, name: typing_extensions.Literal["value"]) -> typing.Union[MetaOapg.properties.value, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> typing.Union[MetaOapg.properties.key, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "type", "value", "key", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["group", "id", "key", "type", "value", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
+        group: typing.Union[MetaOapg.properties.group, str, schemas.Unset] = schemas.unset,
         id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
         type: typing.Union['ValueType', schemas.Unset] = schemas.unset,
         value: typing.Union[MetaOapg.properties.value, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Field':
         return super().__new__(
             cls,
             *_args,
+            group=group,
             id=id,
+            key=key,
             type=type,
             value=value,
-            key=key,
             _configuration=_configuration,
             **kwargs,
         )

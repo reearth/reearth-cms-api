@@ -5,16 +5,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**item_comment_create**](#item_comment_create) | **post** /items/{itemId}/comments | 
-[**item_comment_delete**](#item_comment_delete) | **delete** /items/{itemId}/comments/{commentId} | 
-[**item_comment_list**](#item_comment_list) | **get** /items/{itemId}/comments | 
-[**item_comment_update**](#item_comment_update) | **patch** /items/{itemId}/comments/{commentId} | Update Item Comment
+[**item_comment_create**](#item_comment_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments | create an item comment
+[**item_comment_delete**](#item_comment_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments/{commentId} | delete item comment
+[**item_comment_list**](#item_comment_list) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments | get an item comment
+[**item_comment_update**](#item_comment_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/models/{modelIdOrKey}/items/{itemId}/comments/{commentId} | Update Item Comment
 
 # **item_comment_create**
 <a id="item_comment_create"></a>
-> Comment item_comment_create(item_idany_type)
+> Comment item_comment_create(workspace_id_or_aliasproject_id_or_aliasmodel_id_or_keyitem_idany_type)
 
-
+create an item comment
 
 ### Example
 
@@ -46,12 +46,16 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
+        'modelIdOrKey': "modelIdOrKey_example",
         'itemId': "itemId_example",
     }
     body = dict(
         content="content_example",
     )
     try:
+        # create an item comment
         api_response = api_instance.item_comment_create(
             path_params=path_params,
             body=body,
@@ -92,7 +96,31 @@ Key | Input Type | Accessed Type | Description | Notes
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
+modelIdOrKey | ModelIdOrKeySchema | | 
 itemId | ItemIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ModelIdOrKeySchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # ItemIdSchema
 
@@ -153,9 +181,9 @@ headers | Unset | headers were not defined |
 
 # **item_comment_delete**
 <a id="item_comment_delete"></a>
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} item_comment_delete(item_idcomment_id)
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} item_comment_delete(workspace_id_or_aliasproject_id_or_aliasmodel_id_or_keyitem_idcomment_id)
 
-
+delete item comment
 
 ### Example
 
@@ -186,10 +214,14 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
+        'modelIdOrKey': "modelIdOrKey_example",
         'itemId': "itemId_example",
         'commentId': "commentId_example",
     }
     try:
+        # delete item comment
         api_response = api_instance.item_comment_delete(
             path_params=path_params,
         )
@@ -212,8 +244,32 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
+modelIdOrKey | ModelIdOrKeySchema | | 
 itemId | ItemIdSchema | | 
 commentId | CommentIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ModelIdOrKeySchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # ItemIdSchema
 
@@ -288,9 +344,9 @@ headers | Unset | headers were not defined |
 
 # **item_comment_list**
 <a id="item_comment_list"></a>
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} item_comment_list(item_id)
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} item_comment_list(workspace_id_or_aliasproject_id_or_aliasmodel_id_or_keyitem_id)
 
-
+get an item comment
 
 ### Example
 
@@ -322,9 +378,13 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
+        'modelIdOrKey': "modelIdOrKey_example",
         'itemId': "itemId_example",
     }
     try:
+        # get an item comment
         api_response = api_instance.item_comment_list(
             path_params=path_params,
         )
@@ -347,7 +407,31 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
+modelIdOrKey | ModelIdOrKeySchema | | 
 itemId | ItemIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ModelIdOrKeySchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # ItemIdSchema
 
@@ -427,7 +511,7 @@ headers | Unset | headers were not defined |
 
 # **item_comment_update**
 <a id="item_comment_update"></a>
-> Comment item_comment_update(item_idcomment_idany_type)
+> Comment item_comment_update(workspace_id_or_aliasproject_id_or_aliasmodel_id_or_keyitem_idcomment_idany_type)
 
 Update Item Comment
 
@@ -461,6 +545,9 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
+        'modelIdOrKey': "modelIdOrKey_example",
         'itemId': "itemId_example",
         'commentId': "commentId_example",
     }
@@ -509,8 +596,32 @@ Key | Input Type | Accessed Type | Description | Notes
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
+modelIdOrKey | ModelIdOrKeySchema | | 
 itemId | ItemIdSchema | | 
 commentId | CommentIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ModelIdOrKeySchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # ItemIdSchema
 

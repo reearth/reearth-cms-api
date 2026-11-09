@@ -36,10 +36,6 @@ class File(
     class MetaOapg:
         
         class properties:
-            name = schemas.StrSchema
-            size = schemas.NumberSchema
-            contentType = schemas.StrSchema
-            path = schemas.StrSchema
             
             
             class children(
@@ -66,78 +62,82 @@ class File(
             
                 def __getitem__(self, i: int) -> 'File':
                     return super().__getitem__(i)
+            contentType = schemas.StrSchema
+            name = schemas.StrSchema
+            path = schemas.StrSchema
+            size = schemas.NumberSchema
             __annotations__ = {
-                "name": name,
-                "size": size,
-                "contentType": contentType,
-                "path": path,
                 "children": children,
+                "contentType": contentType,
+                "name": name,
+                "path": path,
+                "size": size,
             }
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["size"]) -> MetaOapg.properties.size: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["contentType"]) -> MetaOapg.properties.contentType: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["path"]) -> MetaOapg.properties.path: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["children"]) -> MetaOapg.properties.children: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["contentType"]) -> MetaOapg.properties.contentType: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["path"]) -> MetaOapg.properties.path: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["size"]) -> MetaOapg.properties.size: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "size", "contentType", "path", "children", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["children", "contentType", "name", "path", "size", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["size"]) -> typing.Union[MetaOapg.properties.size, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["children"]) -> typing.Union[MetaOapg.properties.children, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["contentType"]) -> typing.Union[MetaOapg.properties.contentType, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["path"]) -> typing.Union[MetaOapg.properties.path, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["children"]) -> typing.Union[MetaOapg.properties.children, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["size"]) -> typing.Union[MetaOapg.properties.size, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "size", "contentType", "path", "children", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["children", "contentType", "name", "path", "size", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
-        size: typing.Union[MetaOapg.properties.size, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        contentType: typing.Union[MetaOapg.properties.contentType, str, schemas.Unset] = schemas.unset,
-        path: typing.Union[MetaOapg.properties.path, str, schemas.Unset] = schemas.unset,
         children: typing.Union[MetaOapg.properties.children, list, tuple, schemas.Unset] = schemas.unset,
+        contentType: typing.Union[MetaOapg.properties.contentType, str, schemas.Unset] = schemas.unset,
+        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
+        path: typing.Union[MetaOapg.properties.path, str, schemas.Unset] = schemas.unset,
+        size: typing.Union[MetaOapg.properties.size, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'File':
         return super().__new__(
             cls,
             *_args,
-            name=name,
-            size=size,
-            contentType=contentType,
-            path=path,
             children=children,
+            contentType=contentType,
+            name=name,
+            path=path,
+            size=size,
             _configuration=_configuration,
             **kwargs,
         )

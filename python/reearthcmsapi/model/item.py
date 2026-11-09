@@ -36,8 +36,7 @@ class Item(
     class MetaOapg:
         
         class properties:
-            id = schemas.StrSchema
-            modelId = schemas.StrSchema
+            createdAt = schemas.DateTimeSchema
             
             
             class fields(
@@ -64,27 +63,103 @@ class Item(
             
                 def __getitem__(self, i: int) -> 'Field':
                     return super().__getitem__(i)
-            createdAt = schemas.DateTimeSchema
+            id = schemas.StrSchema
+            isMetadata = schemas.BoolSchema
+            
+            
+            class metadataFields(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @staticmethod
+                    def items() -> typing.Type['Field']:
+                        return Field
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['Field'], typing.List['Field']],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'metadataFields':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> 'Field':
+                    return super().__getitem__(i)
+            metadataItemId = schemas.StrSchema
+            modelId = schemas.StrSchema
+            originalItemId = schemas.StrSchema
+            
+            
+            class referencedItems(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @staticmethod
+                    def items() -> typing.Type['Item']:
+                        return Item
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['Item'], typing.List['Item']],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'referencedItems':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> 'Item':
+                    return super().__getitem__(i)
             updatedAt = schemas.DateTimeSchema
             __annotations__ = {
-                "id": id,
-                "modelId": modelId,
-                "fields": fields,
                 "createdAt": createdAt,
+                "fields": fields,
+                "id": id,
+                "isMetadata": isMetadata,
+                "metadataFields": metadataFields,
+                "metadataItemId": metadataItemId,
+                "modelId": modelId,
+                "originalItemId": originalItemId,
+                "referencedItems": referencedItems,
                 "updatedAt": updatedAt,
             }
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["modelId"]) -> MetaOapg.properties.modelId: ...
+    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["fields"]) -> MetaOapg.properties.fields: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
+    def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["isMetadata"]) -> MetaOapg.properties.isMetadata: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadataFields"]) -> MetaOapg.properties.metadataFields: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadataItemId"]) -> MetaOapg.properties.metadataItemId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["modelId"]) -> MetaOapg.properties.modelId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["originalItemId"]) -> MetaOapg.properties.originalItemId: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["referencedItems"]) -> MetaOapg.properties.referencedItems: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["updatedAt"]) -> MetaOapg.properties.updatedAt: ...
@@ -92,22 +167,37 @@ class Item(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "modelId", "fields", "createdAt", "updatedAt", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["createdAt", "fields", "id", "isMetadata", "metadataFields", "metadataItemId", "modelId", "originalItemId", "referencedItems", "updatedAt", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["modelId"]) -> typing.Union[MetaOapg.properties.modelId, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["fields"]) -> typing.Union[MetaOapg.properties.fields, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> typing.Union[MetaOapg.properties.createdAt, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["isMetadata"]) -> typing.Union[MetaOapg.properties.isMetadata, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["metadataFields"]) -> typing.Union[MetaOapg.properties.metadataFields, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["metadataItemId"]) -> typing.Union[MetaOapg.properties.metadataItemId, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["modelId"]) -> typing.Union[MetaOapg.properties.modelId, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["originalItemId"]) -> typing.Union[MetaOapg.properties.originalItemId, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["referencedItems"]) -> typing.Union[MetaOapg.properties.referencedItems, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["updatedAt"]) -> typing.Union[MetaOapg.properties.updatedAt, schemas.Unset]: ...
@@ -115,17 +205,22 @@ class Item(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "modelId", "fields", "createdAt", "updatedAt", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["createdAt", "fields", "id", "isMetadata", "metadataFields", "metadataItemId", "modelId", "originalItemId", "referencedItems", "updatedAt", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        modelId: typing.Union[MetaOapg.properties.modelId, str, schemas.Unset] = schemas.unset,
-        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
         createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, schemas.Unset] = schemas.unset,
+        fields: typing.Union[MetaOapg.properties.fields, list, tuple, schemas.Unset] = schemas.unset,
+        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
+        isMetadata: typing.Union[MetaOapg.properties.isMetadata, bool, schemas.Unset] = schemas.unset,
+        metadataFields: typing.Union[MetaOapg.properties.metadataFields, list, tuple, schemas.Unset] = schemas.unset,
+        metadataItemId: typing.Union[MetaOapg.properties.metadataItemId, str, schemas.Unset] = schemas.unset,
+        modelId: typing.Union[MetaOapg.properties.modelId, str, schemas.Unset] = schemas.unset,
+        originalItemId: typing.Union[MetaOapg.properties.originalItemId, str, schemas.Unset] = schemas.unset,
+        referencedItems: typing.Union[MetaOapg.properties.referencedItems, list, tuple, schemas.Unset] = schemas.unset,
         updatedAt: typing.Union[MetaOapg.properties.updatedAt, str, datetime, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -133,10 +228,15 @@ class Item(
         return super().__new__(
             cls,
             *_args,
-            id=id,
-            modelId=modelId,
-            fields=fields,
             createdAt=createdAt,
+            fields=fields,
+            id=id,
+            isMetadata=isMetadata,
+            metadataFields=metadataFields,
+            metadataItemId=metadataItemId,
+            modelId=modelId,
+            originalItemId=originalItemId,
+            referencedItems=referencedItems,
             updatedAt=updatedAt,
             _configuration=_configuration,
             **kwargs,

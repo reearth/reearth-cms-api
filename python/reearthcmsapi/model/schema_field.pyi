@@ -34,74 +34,109 @@ class SchemaField(
 
 
     class MetaOapg:
+        required = {
+            "multiple",
+            "name",
+            "id",
+            "type",
+            "key",
+            "required",
+        }
         
         class properties:
             id = schemas.StrSchema
+            key = schemas.StrSchema
+            multiple = schemas.BoolSchema
+            name = schemas.StrSchema
+            required = schemas.BoolSchema
         
             @staticmethod
             def type() -> typing.Type['ValueType']:
                 return ValueType
-            key = schemas.StrSchema
-            required = schemas.BoolSchema
             __annotations__ = {
                 "id": id,
-                "type": type,
                 "key": key,
+                "multiple": multiple,
+                "name": name,
                 "required": required,
+                "type": type,
             }
+    
+    multiple: MetaOapg.properties.multiple
+    name: MetaOapg.properties.name
+    id: MetaOapg.properties.id
+    type: 'ValueType'
+    key: MetaOapg.properties.key
+    required: MetaOapg.properties.required
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
+    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
+    def __getitem__(self, name: typing_extensions.Literal["multiple"]) -> MetaOapg.properties.multiple: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["required"]) -> MetaOapg.properties.required: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "type", "key", "required", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "key", "multiple", "name", "required", "type", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> typing.Union['ValueType', schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> MetaOapg.properties.key: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["key"]) -> typing.Union[MetaOapg.properties.key, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["multiple"]) -> MetaOapg.properties.multiple: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["required"]) -> typing.Union[MetaOapg.properties.required, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["required"]) -> MetaOapg.properties.required: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> 'ValueType': ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "type", "key", "required", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "key", "multiple", "name", "required", "type", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        id: typing.Union[MetaOapg.properties.id, str, schemas.Unset] = schemas.unset,
-        type: typing.Union['ValueType', schemas.Unset] = schemas.unset,
-        key: typing.Union[MetaOapg.properties.key, str, schemas.Unset] = schemas.unset,
-        required: typing.Union[MetaOapg.properties.required, bool, schemas.Unset] = schemas.unset,
+        multiple: typing.Union[MetaOapg.properties.multiple, bool, ],
+        name: typing.Union[MetaOapg.properties.name, str, ],
+        id: typing.Union[MetaOapg.properties.id, str, ],
+        type: 'ValueType',
+        key: typing.Union[MetaOapg.properties.key, str, ],
+        required: typing.Union[MetaOapg.properties.required, bool, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'SchemaField':
         return super().__new__(
             cls,
             *_args,
+            multiple=multiple,
+            name=name,
             id=id,
             type=type,
             key=key,

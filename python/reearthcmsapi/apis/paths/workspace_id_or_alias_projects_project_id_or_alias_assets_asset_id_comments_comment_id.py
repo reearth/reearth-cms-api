@@ -1,0 +1,9 @@
+from reearthcmsapi.paths.workspace_id_or_alias_projects_project_id_or_alias_assets_asset_id_comments_comment_id.delete import ApiFordelete
+from reearthcmsapi.paths.workspace_id_or_alias_projects_project_id_or_alias_assets_asset_id_comments_comment_id.patch import ApiForpatch
+
+
+class WorkspaceIdOrAliasProjectsProjectIdOrAliasAssetsAssetIdCommentsCommentId(
+    ApiFordelete,
+    ApiForpatch,
+):
+    pass
