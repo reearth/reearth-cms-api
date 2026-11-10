@@ -11,7 +11,8 @@ metadata:
     title: GitHub
     icon: github
   tags:
-  - python
+  - go
+  - typescript
 spec:
   type: service
   lifecycle: production
