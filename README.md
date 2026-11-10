@@ -4,7 +4,6 @@
 
 - [Go](go)
 - [TypeScript/JavaScript](ts)
-- [Python](python)
 
 ## CLI
 
