@@ -5,16 +5,16 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**asset_comment_create**](#asset_comment_create) | **post** /assets/{assetId}/comments | 
-[**asset_comment_delete**](#asset_comment_delete) | **delete** /assets/{assetId}/comments/{commentId} | 
-[**asset_comment_list**](#asset_comment_list) | **get** /assets/{assetId}/comments | 
-[**asset_comment_update**](#asset_comment_update) | **patch** /assets/{assetId}/comments/{commentId} | Update AssetComment
+[**asset_comment_create**](#asset_comment_create) | **post** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments | create asset comments
+[**asset_comment_delete**](#asset_comment_delete) | **delete** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments/{commentId} | delete asset comments
+[**asset_comment_list**](#asset_comment_list) | **get** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments | get asset comments
+[**asset_comment_update**](#asset_comment_update) | **patch** /{workspaceIdOrAlias}/projects/{projectIdOrAlias}/assets/{assetId}/comments/{commentId} | Update AssetComment
 
 # **asset_comment_create**
 <a id="asset_comment_create"></a>
-> Comment asset_comment_create(asset_idany_type)
+> Comment asset_comment_create(workspace_id_or_aliasproject_id_or_aliasasset_idany_type)
 
-
+create asset comments
 
 ### Example
 
@@ -46,12 +46,15 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
         'assetId': "assetId_example",
     }
     body = dict(
         content="content_example",
     )
     try:
+        # create asset comments
         api_response = api_instance.asset_comment_create(
             path_params=path_params,
             body=body,
@@ -92,7 +95,23 @@ Key | Input Type | Accessed Type | Description | Notes
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
 assetId | AssetIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # AssetIdSchema
 
@@ -153,9 +172,9 @@ headers | Unset | headers were not defined |
 
 # **asset_comment_delete**
 <a id="asset_comment_delete"></a>
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} asset_comment_delete(asset_idcomment_id)
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} asset_comment_delete(workspace_id_or_aliasproject_id_or_aliasasset_idcomment_id)
 
-
+delete asset comments
 
 ### Example
 
@@ -186,10 +205,13 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
         'assetId': "assetId_example",
         'commentId': "commentId_example",
     }
     try:
+        # delete asset comments
         api_response = api_instance.asset_comment_delete(
             path_params=path_params,
         )
@@ -212,8 +234,24 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
 assetId | AssetIdSchema | | 
 commentId | CommentIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # AssetIdSchema
 
@@ -288,9 +326,9 @@ headers | Unset | headers were not defined |
 
 # **asset_comment_list**
 <a id="asset_comment_list"></a>
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} asset_comment_list(asset_id)
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} asset_comment_list(workspace_id_or_aliasproject_id_or_aliasasset_id)
 
-
+get asset comments
 
 ### Example
 
@@ -322,9 +360,12 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
         'assetId': "assetId_example",
     }
     try:
+        # get asset comments
         api_response = api_instance.asset_comment_list(
             path_params=path_params,
         )
@@ -347,7 +388,23 @@ skip_deserialization | bool | default is False | when True, headers and body wil
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
 assetId | AssetIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # AssetIdSchema
 
@@ -427,7 +484,7 @@ headers | Unset | headers were not defined |
 
 # **asset_comment_update**
 <a id="asset_comment_update"></a>
-> Comment asset_comment_update(asset_idcomment_idany_type)
+> Comment asset_comment_update(workspace_id_or_aliasproject_id_or_aliasasset_idcomment_idany_type)
 
 Update AssetComment
 
@@ -461,6 +518,8 @@ with reearthcmsapi.ApiClient(configuration) as api_client:
 
     # example passing only required values which don't have defaults set
     path_params = {
+        'workspaceIdOrAlias': "workspaceIdOrAlias_example",
+        'projectIdOrAlias': "projectIdOrAlias_example",
         'assetId': "assetId_example",
         'commentId': "commentId_example",
     }
@@ -509,8 +568,24 @@ Key | Input Type | Accessed Type | Description | Notes
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+workspaceIdOrAlias | WorkspaceIdOrAliasSchema | | 
+projectIdOrAlias | ProjectIdOrAliasSchema | | 
 assetId | AssetIdSchema | | 
 commentId | CommentIdSchema | | 
+
+# WorkspaceIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
+
+# ProjectIdOrAliasSchema
+
+## Model Type Info
+Input Type | Accessed Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+str,  | str,  |  | 
 
 # AssetIdSchema
 

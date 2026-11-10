@@ -36,6 +36,7 @@ class Asset(
     class MetaOapg:
         required = {
             "createdAt",
+            "public",
             "id",
             "projectId",
             "url",
@@ -43,13 +44,40 @@ class Asset(
         }
         
         class properties:
+            createdAt = schemas.DateTimeSchema
             id = schemas.StrSchema
             projectId = schemas.StrSchema
-            url = schemas.StrSchema
-            createdAt = schemas.DateTimeSchema
+            public = schemas.BoolSchema
             updatedAt = schemas.DateTimeSchema
-            name = schemas.StrSchema
+            url = schemas.StrSchema
+            
+            
+            class archiveExtractionStatus(
+                schemas.EnumBase,
+                schemas.StrSchema
+            ):
+                
+                @schemas.classproperty
+                def PENDING(cls):
+                    return cls("pending")
+                
+                @schemas.classproperty
+                def IN_PROGRESS(cls):
+                    return cls("in_progress")
+                
+                @schemas.classproperty
+                def DONE(cls):
+                    return cls("done")
+                
+                @schemas.classproperty
+                def FAILED(cls):
+                    return cls("failed")
             contentType = schemas.StrSchema
+        
+            @staticmethod
+            def file() -> typing.Type['File']:
+                return File
+            name = schemas.StrSchema
             
             
             class previewType(
@@ -82,54 +110,37 @@ class Asset(
                     return cls("model_3d")
                 
                 @schemas.classproperty
+                def CSV(cls):
+                    return cls("csv")
+                
+                @schemas.classproperty
                 def UNKNOWN(cls):
                     return cls("unknown")
             totalSize = schemas.NumberSchema
-            
-            
-            class archiveExtractionStatus(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def PENDING(cls):
-                    return cls("pending")
-                
-                @schemas.classproperty
-                def IN_PROGRESS(cls):
-                    return cls("in_progress")
-                
-                @schemas.classproperty
-                def DONE(cls):
-                    return cls("done")
-                
-                @schemas.classproperty
-                def FAILED(cls):
-                    return cls("failed")
-        
-            @staticmethod
-            def file() -> typing.Type['File']:
-                return File
             __annotations__ = {
+                "createdAt": createdAt,
                 "id": id,
                 "projectId": projectId,
-                "url": url,
-                "createdAt": createdAt,
+                "public": public,
                 "updatedAt": updatedAt,
-                "name": name,
+                "url": url,
+                "archiveExtractionStatus": archiveExtractionStatus,
                 "contentType": contentType,
+                "file": file,
+                "name": name,
                 "previewType": previewType,
                 "totalSize": totalSize,
-                "archiveExtractionStatus": archiveExtractionStatus,
-                "file": file,
             }
     
     createdAt: MetaOapg.properties.createdAt
+    public: MetaOapg.properties.public
     id: MetaOapg.properties.id
     projectId: MetaOapg.properties.projectId
     url: MetaOapg.properties.url
     updatedAt: MetaOapg.properties.updatedAt
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -138,19 +149,25 @@ class Asset(
     def __getitem__(self, name: typing_extensions.Literal["projectId"]) -> MetaOapg.properties.projectId: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
+    def __getitem__(self, name: typing_extensions.Literal["public"]) -> MetaOapg.properties.public: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["updatedAt"]) -> MetaOapg.properties.updatedAt: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
+    def __getitem__(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["archiveExtractionStatus"]) -> MetaOapg.properties.archiveExtractionStatus: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["contentType"]) -> MetaOapg.properties.contentType: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["file"]) -> 'File': ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["previewType"]) -> MetaOapg.properties.previewType: ...
@@ -159,18 +176,15 @@ class Asset(
     def __getitem__(self, name: typing_extensions.Literal["totalSize"]) -> MetaOapg.properties.totalSize: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["archiveExtractionStatus"]) -> MetaOapg.properties.archiveExtractionStatus: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["file"]) -> 'File': ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "url", "createdAt", "updatedAt", "name", "contentType", "previewType", "totalSize", "archiveExtractionStatus", "file", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["createdAt", "id", "projectId", "public", "updatedAt", "url", "archiveExtractionStatus", "contentType", "file", "name", "previewType", "totalSize", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
@@ -179,19 +193,25 @@ class Asset(
     def get_item_oapg(self, name: typing_extensions.Literal["projectId"]) -> MetaOapg.properties.projectId: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["createdAt"]) -> MetaOapg.properties.createdAt: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["public"]) -> MetaOapg.properties.public: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["updatedAt"]) -> MetaOapg.properties.updatedAt: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["archiveExtractionStatus"]) -> typing.Union[MetaOapg.properties.archiveExtractionStatus, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["contentType"]) -> typing.Union[MetaOapg.properties.contentType, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["file"]) -> typing.Union['File', schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["previewType"]) -> typing.Union[MetaOapg.properties.previewType, schemas.Unset]: ...
@@ -200,15 +220,9 @@ class Asset(
     def get_item_oapg(self, name: typing_extensions.Literal["totalSize"]) -> typing.Union[MetaOapg.properties.totalSize, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["archiveExtractionStatus"]) -> typing.Union[MetaOapg.properties.archiveExtractionStatus, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["file"]) -> typing.Union['File', schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "projectId", "url", "createdAt", "updatedAt", "name", "contentType", "previewType", "totalSize", "archiveExtractionStatus", "file", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["createdAt", "id", "projectId", "public", "updatedAt", "url", "archiveExtractionStatus", "contentType", "file", "name", "previewType", "totalSize", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -216,16 +230,17 @@ class Asset(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         createdAt: typing.Union[MetaOapg.properties.createdAt, str, datetime, ],
+        public: typing.Union[MetaOapg.properties.public, bool, ],
         id: typing.Union[MetaOapg.properties.id, str, ],
         projectId: typing.Union[MetaOapg.properties.projectId, str, ],
         url: typing.Union[MetaOapg.properties.url, str, ],
         updatedAt: typing.Union[MetaOapg.properties.updatedAt, str, datetime, ],
-        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
+        archiveExtractionStatus: typing.Union[MetaOapg.properties.archiveExtractionStatus, str, schemas.Unset] = schemas.unset,
         contentType: typing.Union[MetaOapg.properties.contentType, str, schemas.Unset] = schemas.unset,
+        file: typing.Union['File', schemas.Unset] = schemas.unset,
+        name: typing.Union[MetaOapg.properties.name, str, schemas.Unset] = schemas.unset,
         previewType: typing.Union[MetaOapg.properties.previewType, str, schemas.Unset] = schemas.unset,
         totalSize: typing.Union[MetaOapg.properties.totalSize, decimal.Decimal, int, float, schemas.Unset] = schemas.unset,
-        archiveExtractionStatus: typing.Union[MetaOapg.properties.archiveExtractionStatus, str, schemas.Unset] = schemas.unset,
-        file: typing.Union['File', schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'Asset':
@@ -233,16 +248,17 @@ class Asset(
             cls,
             *_args,
             createdAt=createdAt,
+            public=public,
             id=id,
             projectId=projectId,
             url=url,
             updatedAt=updatedAt,
-            name=name,
+            archiveExtractionStatus=archiveExtractionStatus,
             contentType=contentType,
+            file=file,
+            name=name,
             previewType=previewType,
             totalSize=totalSize,
-            archiveExtractionStatus=archiveExtractionStatus,
-            file=file,
             _configuration=_configuration,
             **kwargs,
         )

@@ -50,6 +50,10 @@ class ValueType(
         return cls("markdown")
     
     @schemas.classproperty
+    def CHECKBOX(cls):
+        return cls("checkbox")
+    
+    @schemas.classproperty
     def ASSET(cls):
         return cls("asset")
     
@@ -66,12 +70,12 @@ class ValueType(
         return cls("select")
     
     @schemas.classproperty
-    def TAG(cls):
-        return cls("tag")
-    
-    @schemas.classproperty
     def INTEGER(cls):
         return cls("integer")
+    
+    @schemas.classproperty
+    def NUMBER(cls):
+        return cls("number")
     
     @schemas.classproperty
     def REFERENCE(cls):
@@ -80,3 +84,19 @@ class ValueType(
     @schemas.classproperty
     def URL(cls):
         return cls("url")
+    
+    @schemas.classproperty
+    def GROUP(cls):
+        return cls("group")
+    
+    @schemas.classproperty
+    def TAG(cls):
+        return cls("tag")
+    
+    @schemas.classproperty
+    def GEOMETRY_OBJECT(cls):
+        return cls("geometryObject")
+    
+    @schemas.classproperty
+    def GEOMETRY_EDITOR(cls):
+        return cls("geometryEditor")
