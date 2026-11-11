@@ -5,10 +5,6 @@
 - [Go](go)
 - [TypeScript/JavaScript](ts)
 
-## CLI
-
-- [CLI](cli) - Command-line interface for Re:Earth CMS
-
 ## License
 
 [MIT License](LICENSE)
