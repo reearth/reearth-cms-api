@@ -36,3 +36,7 @@ jobs:
       - name: Build
         working-directory: ts
         run: npm run build
+      - name: Docs
+        # TypeDoc treats warnings as errors, so broken doc links fail here.
+        working-directory: ts
+        run: npm run docs

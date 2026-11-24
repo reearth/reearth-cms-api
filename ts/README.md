@@ -1,5 +1,11 @@
 # @reearth/cms-api
 
+[![CI](https://github.com/reearth/reearth-cms-api/actions/workflows/ci.yml/badge.svg)](https://github.com/reearth/reearth-cms-api/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@reearth/cms-api)](https://www.npmjs.com/package/@reearth/cms-api)
+[![API reference](https://img.shields.io/badge/API_reference-TypeDoc-blue)](https://reearth.github.io/reearth-cms-api/)
+[![Node version](https://img.shields.io/node/v/@reearth/cms-api)](https://github.com/reearth/reearth-cms-api/blob/main/ts/package.json)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/reearth/reearth-cms-api/blob/main/LICENSE)
+
 Re:Earth CMS Integration API client for TypeScript/JavaScript.
 
 - Works on **Cloudflare Workers**, **Node.js 18+**, **Bun**, and **Deno**.
