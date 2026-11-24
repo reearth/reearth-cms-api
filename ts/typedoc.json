@@ -1,0 +1,19 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "@reearth/cms-api",
+  "entryPoints": ["src/index.ts", "src/webhook.ts", "src/public.ts"],
+  "out": "docs",
+  "readme": "README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "sourceLinkTemplate": "https://github.com/reearth/reearth-cms-api/blob/{gitRevision}/{path}#L{line}",
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": false
+  },
+  "excludeProtected": true,
+  "intentionallyNotExported": ["src/webhook.ts:Asset"],
+  "treatWarningsAsErrors": true
+}

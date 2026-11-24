@@ -7,6 +7,8 @@ Re:Earth CMS Integration API client for TypeScript/JavaScript.
 - Thin, dependency-light (`openapi-fetch` only).
 - Webhook verification uses the Web Crypto API — no Node `crypto` dependency.
 
+API reference: https://reearth.github.io/reearth-cms-api/
+
 ## Install
 
 ```sh
